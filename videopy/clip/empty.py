@@ -1,0 +1,2 @@
+class EmptyClip:
+    pass

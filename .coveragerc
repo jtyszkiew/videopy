@@ -1,0 +1,6 @@
+[run]
+    include =
+        videopy/*
+
+    omit =
+        /**/__init__.py

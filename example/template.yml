@@ -1,0 +1,16 @@
+templates:
+  effects:
+    example:
+      - type: "plugins.core.effects.blocks.text.typewrite"
+        time:
+          duration: 4
+        configuration:
+          duration_per_char: 0.1
+      - type: "plugins.core.effects.blocks.text.background"
+        time:
+          duration: 5
+        configuration:
+          background_color: [ 255, 255, 255 ]
+      - type: "plugins.core.effects.blocks.text.fadein"
+        time:
+          duration: 1

@@ -1,0 +1,222 @@
+#####
+## Set the basic configuration like output path, width, height, and fps
+#####
+output_path: "outputs/example.mp4"
+width: 640
+height: 960
+fps: 24
+frames:
+  #####
+  ## Frames can be images or videos that are shown in the video
+  ## You can build a video by adding multiple frames
+  ## Each frame can have multiple blocks that are shown in the frame (for example text)
+  #####
+  - type: "plugins.core.frames.image"
+    time:
+      duration: 5
+    configuration:
+      file_path: "example/assets/image/1.jpg"
+    blocks:
+      #####
+      ## Blocks are elements that are shown in the frame (for example text)
+      #####
+      - type: "plugins.core.blocks.text"
+        position: [center, bottom]
+        time:
+          duration: 5
+        configuration:
+          content: "Image 1"
+        effects:
+          #####
+          ## Effects are animations that are applied to the block
+          #####
+          - type: "plugins.template"
+            configuration:
+              file_path: "example/template.yml"
+              name: "example"
+      - type: "plugins.core.blocks.audio"
+        time:
+          duration: 5
+        configuration:
+          #####
+          ## Epic Trailer Background Music by Migfus20 -- https://freesound.org/s/560454/ -- License: Attribution 4.0
+          #####
+          file_path: "example/assets/audio/epic_sound.mp3"
+        effects:
+          - type: "plugins.core.effects.blocks.audio.play"
+            time:
+              duration: 5
+    #####
+    ## Effects can also be applied to the frame
+    #####
+    effects:
+      - type: "plugins.core.effects.frames.resize"
+        configuration:
+          mode: "center_crop"
+      - type: "plugins.core.effects.frames.fadein"
+        time:
+          duration: 1
+  - type: "plugins.core.frames.image"
+    time:
+      duration: 5
+    configuration:
+      file_path: "example/assets/image/2.jpg"
+    blocks:
+      - type: "plugins.core.blocks.text"
+        position: [center, bottom]
+        time:
+          duration: 5
+        configuration:
+          content: "Image 2"
+        effects:
+          - type: "plugins.template"
+            configuration:
+              file_path: "example/template.yml"
+              name: "example"
+          - type: "plugins.core.effects.blocks.text.fadeout"
+            time:
+              duration: 1
+      - type: "plugins.core.blocks.audio"
+        time:
+          duration: 5
+        configuration:
+          #####
+          ## Epic Trailer Background Music by Migfus20 -- https://freesound.org/s/560454/ -- License: Attribution 4.0
+          #####
+          file_path: "example/assets/audio/epic_sound.mp3"
+        effects:
+          - type: "plugins.core.effects.blocks.audio.play"
+            time:
+              duration: 5
+            configuration:
+              subclip_start: 5
+    effects:
+      - type: "plugins.core.effects.frames.resize"
+        configuration:
+          mode: "center_crop"
+      - type: "plugins.core.effects.frames.fadein"
+        time:
+          duration: 1
+  - type: "plugins.core.frames.image"
+    time:
+      duration: 5
+    configuration:
+      file_path: "example/assets/image/3.jpg"
+    blocks:
+      - type: "plugins.core.blocks.text"
+        position: [center, bottom]
+        time:
+          duration: 5
+        configuration:
+          content: "Image 3"
+        effects:
+          - type: "plugins.template"
+            configuration:
+              file_path: "example/template.yml"
+              name: "example"
+          - type: "plugins.core.effects.blocks.text.fadeout"
+            time:
+              duration: 1
+      - type: "plugins.core.blocks.audio"
+        time:
+          duration: 5
+        configuration:
+          #####
+          ## Epic Trailer Background Music by Migfus20 -- https://freesound.org/s/560454/ -- License: Attribution 4.0
+          #####
+          file_path: "example/assets/audio/epic_sound.mp3"
+        effects:
+          - type: "plugins.core.effects.blocks.audio.play"
+            time:
+              duration: 5
+            configuration:
+              subclip_start: 10
+    effects:
+      - type: "plugins.core.effects.frames.resize"
+        configuration:
+          mode: "center_crop"
+      - type: "plugins.core.effects.frames.fadein"
+        time:
+          duration: 1
+  - type: "plugins.core.frames.image"
+    time:
+      duration: 5
+    configuration:
+      file_path: "example/assets/image/4.jpg"
+    blocks:
+      - type: "plugins.core.blocks.text"
+        position: [center, bottom]
+        time:
+          duration: 5
+        configuration:
+          content: "Image 4"
+        effects:
+          - type: "plugins.template"
+            configuration:
+              file_path: "example/template.yml"
+              name: "example"
+          - type: "plugins.core.effects.blocks.text.fadeout"
+            time:
+              duration: 1
+      - type: "plugins.core.blocks.audio"
+        time:
+          duration: 5
+        configuration:
+          #####
+          ## Epic Trailer Background Music by Migfus20 -- https://freesound.org/s/560454/ -- License: Attribution 4.0
+          #####
+          file_path: "example/assets/audio/epic_sound.mp3"
+        effects:
+          - type: "plugins.core.effects.blocks.audio.play"
+            time:
+              duration: 5
+            configuration:
+              subclip_start: 15
+    effects:
+      - type: "plugins.core.effects.frames.resize"
+        configuration:
+          mode: "center_crop"
+      - type: "plugins.core.effects.frames.fadein"
+        time:
+          duration: 1
+  - type: "plugins.core.frames.image"
+    time:
+      duration: 5
+    configuration:
+      file_path: "example/assets/image/5.jpg"
+    blocks:
+      - type: "plugins.core.blocks.text"
+        position: [center, bottom]
+        time:
+          duration: 5
+        configuration:
+          content: "Image 5"
+        effects:
+          - type: "plugins.template"
+            configuration:
+              file_path: "example/template.yml"
+              name: "example"
+          - type: "plugins.core.effects.blocks.text.fadeout"
+            time:
+              duration: 1
+      - type: "plugins.core.blocks.audio"
+        time:
+          duration: 5
+        configuration:
+          #####
+          ## Epic Trailer Background Music by Migfus20 -- https://freesound.org/s/560454/ -- License: Attribution 4.0
+          #####
+          file_path: "example/assets/audio/epic_sound.mp3"
+        effects:
+          - type: "plugins.core.effects.blocks.audio.play"
+            time:
+              duration: 5
+            configuration:
+              subclip_start: 20
+    effects:
+      - type: "plugins.core.effects.frames.resize"
+        configuration:
+          mode: "center_crop"
+      - type: "plugins.core.effects.frames.fadein"
+        time:
+          duration: 1
