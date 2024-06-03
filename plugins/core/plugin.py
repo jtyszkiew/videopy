@@ -1,8 +1,8 @@
-from plugins.core.compilators.compose import ComposeCompiler
-from plugins.core.compilators.concacenate import ConcatenateCompiler
-from plugins.core.compilators.ignore import IgnoreCompiler
-from plugins.core.compilators.use_source import UseSourceCompiler
-from plugins.core.compilators.use_target import UseTargetCompiler
+from plugins.core.compilers.compose import ComposeCompiler
+from plugins.core.compilers.concacenate import ConcatenateCompiler
+from plugins.core.compilers.ignore import IgnoreCompiler
+from plugins.core.compilers.use_source import UseSourceCompiler
+from plugins.core.compilers.use_target import UseTargetCompiler
 from plugins.core.loaders.loaders import yaml_file_loader
 
 
