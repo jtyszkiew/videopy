@@ -82,8 +82,14 @@ frames:
 ## Git
 
 1. Clone the repository
-2. Install the required dependencies using `pip install -r requirements.txt`
-3. Run the application using `python videopy.py run --scenario-file example/configs/example.yaml`
+2. Install the required dependencies using
+```shell
+pip install -r requirements.txt
+```
+3. Run the application using 
+```shell
+python videopy.py run --scenario-file example/scenario.yml
+```
 
 > More installation options coming in the future
 
@@ -104,33 +110,49 @@ frames, blocks, effects, and more. Each module has a specific purpose and can be
 ### Using scenarios from plugins
 
 To list available scenarios use:
-`python video.py scenarios`
+```shell
+python video.py scenarios
+```
 
 To get more information about a specific scenario use:
-`python video.py scenario <scenario_name>`
+```shell
+python video.py scenario __scenario_name__
+```
 
 ## Frames
 
 To list available frames use:
-`python video.py frames`
+```shell
+python video.py frames
+```
 
 To get more information about a specific frame use:
-`python video.py frame <frame_name>`
+```shell
+python video.py frame __frame_name__
+```
 
 ## Blocks
 
 To list available blocks use:
-`python video.py blocks`
+```shell
+python video.py blocks
+```
 
 To get more information about a specific block use:
-`python video.py block <block_name>`
+```shell
+python video.py block __block_name__
+```
 
 ## Effects
 
 To list available effects use:
-`python video.py effects`
+```shell
+python video.py effects
+```
 
 To get more information about a specific effect use:
-`python video.py effect <effect_name>`
+```shell
+python video.py effect __effect_name__
+```
 
 > Each of the commands above will display a table containing information about given module.

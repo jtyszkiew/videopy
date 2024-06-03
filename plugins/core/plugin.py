@@ -4,6 +4,7 @@ from plugins.core.compilers.ignore import IgnoreCompiler
 from plugins.core.compilers.use_source import UseSourceCompiler
 from plugins.core.compilers.use_target import UseTargetCompiler
 from plugins.core.loaders.loaders import yaml_file_loader
+from plugins.core.templates.load_effects_template import load_effects_template
 
 
 def register_scenarios(scenarios):
@@ -334,3 +335,5 @@ def register(hooks):
     hooks.register_hook("videopy.modules.effects.register", register_effects)
     hooks.register_hook("videopy.modules.file_loaders.register", register_file_loaders)
     hooks.register_hook("videopy.modules.compilers.register", register_compilers)
+
+    hooks.register_hook("videopy.scenario.frame.block.effects.before_load", load_effects_template)

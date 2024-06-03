@@ -63,7 +63,7 @@ def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level
 
             frame.add_block(block)
 
-            hooks.run_hook("videopy.scenario.frame.block.effects.before_load", block_yml['effects'])
+            hooks.run_hook("videopy.scenario.frame.block.effects.before_load", block_yml['effects'], file_loaders)
             for effect_yml in block_yml.get('effects', []):
                 block.add_effect(__create_effect(modules, effect_yml))
 
