@@ -1,3 +1,5 @@
+import json
+
 from videopy.hooks import Hooks
 from videopy.utils.file import get_file_extension, get_file_name_without_extension
 from videopy.utils.loader import Loader
@@ -5,7 +7,7 @@ from videopy.utils.logger import Logger
 from videopy.scenario import ScenarioFactory
 
 
-def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level: str = "info"):
+def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level: str = "info", scenario_data=None):
     Logger.set_level(log_level)
 
     if scenario_file is None and scenario_name is None:
@@ -46,7 +48,14 @@ def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level
     scenario_name = get_file_name_without_extension(scenario_file)
 
     if "script" in scenario_yml:
-        Loader.load_script(scenario_yml["script"])(scenario_yml).do_run(hooks)
+        script = Loader.load_script(scenario_yml["script"])(scenario_yml)
+        data = script.collect_data(json.loads(scenario_data) if scenario_data is not None else {})
+
+        Logger.info(f"Used the following data to run the scenario:")
+        Logger.raw(json.dumps(json.dumps(data)))
+        Logger.info("Use the data above with <<--scenario-data>> option to run the scenario with the same data again")
+
+        script.do_run(hooks, data)
 
     scenario = ScenarioFactory.from_yml(modules, scenario_yml, scenario_name, hooks, compilers)
 

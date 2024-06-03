@@ -14,6 +14,13 @@ class Logger:
     provider: LoggerProvider = None
 
     @staticmethod
+    def raw(message):
+        if not Logger.enabled:
+            return
+
+        print(message)
+
+    @staticmethod
     def info(message):
         if not Logger.enabled or Logger.level == 0:
             return

@@ -19,52 +19,37 @@ presets = [
 
 class Script(AbstractScript):
 
-    def __get_images(self):
-        directory = self.ask("Enter the directory of the images", "images")
+    def __init__(self, scenario_yml):
+        super().__init__(scenario_yml)
 
-        images = self.__find_images(directory)
-        if not images:
-            raise ValueError(f"No images with extension {image_extensions} found in directory {directory}")
+    def collect_data(self, data):
+        if 'directory' not in data:
+            data['directory'] = self.ask("Enter the directory of the images", "images")
 
-        self.sayInfo(f"Found <<{len(images)}>> images in directory <<{directory}>>")
+        if 'resolution' not in data:
+            data['resolution'] = self.__get_resolution()
 
-        return images, directory
+        if 'fps' not in data:
+            data['fps'] = self.ask("Enter the FPS of the video", 24)
 
-    def __get_resolution(self):
-        resolution = self.ask(
-            "Enter the resolution of the video (or type 'p' for presets, or type the preset number)",
-            "1920x1080"
-        )
+        if 'output_path' not in data:
+            data['output_path'] = self.__get_output_path('x'.join(data['resolution']), data['fps'])
 
-        if resolution == 'p':
-            self.sayInfo("Presets:")
+        if 'frame_duration' not in data:
+            data['frame_duration'] = self.ask("How long each image should be displayed (in seconds)", 2)
 
-            for index, preset in enumerate(presets):
-                self.sayInfo(f"{index + 1}. {preset}")
+        if 'audio' not in data:
+            data['audio'] = self.ask("Audio path", "")
 
-            resolution = self.ask("Enter the preset number", presets[0])
+        return data
 
-            resolution = presets[int(resolution) - 1]
-        elif 'x' not in resolution:
-            try:
-                resolution = presets[int(resolution) - 1]
-            except IndexError:
-                raise ValueError("Invalid preset number")
-
-        return resolution.split('x')
-
-    def __get_output_path(self, resolution, fps):
-        output_path = self.ask("Enter the output path of the video",
-                               f"outputs/output_{resolution}_{fps}.mp4")
-        return output_path
-
-    def run(self, hooks):
-        images, directory = self.__get_images()
-        resolution = self.__get_resolution()
-        fps = self.ask("Enter the FPS of the video", 24)
-        output_path = self.__get_output_path("x".join(resolution), fps)
-        seconds_per_image = self.ask("How long each image should be displayed (in seconds)", 2)
-        audio = self.ask("Audio path", "")
+    def run(self, hooks, data):
+        images, directory = self.__get_images(data['directory'])
+        resolution = data['resolution']
+        fps = data['fps']
+        output_path = data['output_path']
+        frame_duration = data['frame_duration']
+        audio = data['audio']
 
         self.set_width(int(resolution[0]))
         self.set_height(int(resolution[1]))
@@ -96,17 +81,17 @@ class Script(AbstractScript):
                         "file_path": audio
                     },
                     "time": {
-                        "duration": seconds_per_image
+                        "duration": frame_duration
                     },
                     "effects": [
                         {
                             "type": "plugins.core.effects.blocks.audio.play",
                             "configuration": {
-                                "subclip_start": index * seconds_per_image,
+                                "subclip_start": index * frame_duration,
                                 "cut_to_block_duration": True
                             },
                             "time": {
-                                "duration": seconds_per_image
+                                "duration": frame_duration
                             }
                         }
                     ]
@@ -119,14 +104,14 @@ class Script(AbstractScript):
                 },
                 "time": {
                     "start": 0,
-                    "duration": seconds_per_image
+                    "duration": frame_duration
                 },
                 "effects": frame_effects,
                 "blocks": blocks + [
                     {
                         "type": "plugins.core.blocks.text",
                         "time": {
-                            "duration": seconds_per_image
+                            "duration": frame_duration
                         },
                         "position": ['center', 'bottom'],
                         "configuration": {
@@ -136,7 +121,7 @@ class Script(AbstractScript):
                             {
                                 "type": "plugins.core.effects.blocks.text.typewrite",
                                 "time": {
-                                    "duration": seconds_per_image
+                                    "duration": frame_duration
                                 },
                                 "configuration": {
                                     "duration_per_char": 0.1
@@ -145,7 +130,7 @@ class Script(AbstractScript):
                             {
                                 "type": "plugins.core.effects.blocks.text.background",
                                 "time": {
-                                    "duration": seconds_per_image
+                                    "duration": frame_duration
                                 },
                                 "configuration": {
                                     "background_color": [255, 255, 255]
@@ -161,6 +146,43 @@ class Script(AbstractScript):
                     }
                 ]
             })
+
+    def __get_images(self, directory):
+        images = self.__find_images(directory)
+        if not images:
+            raise ValueError(f"No images with extension {image_extensions} found in directory {directory}")
+
+        self.say_info(f"Found <<{len(images)}>> images in directory <<{directory}>>")
+
+        return images, directory
+
+    def __get_resolution(self):
+        resolution = self.ask(
+            "Enter the resolution of the video (or type 'p' for presets, or type the preset number)",
+            "1920x1080"
+        )
+
+        if resolution == 'p':
+            self.say_info("Presets:")
+
+            for index, preset in enumerate(presets):
+                self.say_info(f"{index + 1}. {preset}")
+
+            resolution = self.ask("Enter the preset number", presets[0])
+
+            resolution = presets[int(resolution) - 1]
+        elif 'x' not in resolution:
+            try:
+                resolution = presets[int(resolution) - 1]
+            except IndexError:
+                raise ValueError("Invalid preset number")
+
+        return resolution.split('x')
+
+    def __get_output_path(self, resolution, fps):
+        output_path = self.ask("Enter the output path of the video",
+                               f"outputs/output_{resolution}_{fps}.mp4")
+        return output_path
 
     @staticmethod
     def __find_images(directory):

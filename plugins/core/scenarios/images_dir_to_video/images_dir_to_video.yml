@@ -1,2 +1,2 @@
-script: "plugins.core.scenarios.images_dir_to_video"
+script: "plugins.core.scenarios.images_dir_to_video.images_dir_to_video"
 description: "Will load all images from provided directory and create a video from them."

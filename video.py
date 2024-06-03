@@ -26,8 +26,9 @@ Logger.provider = type('RichLoggerProvider', (LoggerProvider,), {'print': log})(
 def run(scenario_name: Annotated[str, typer.Argument(
     help="Scenario name to use, if you want to use your own need to provide with --scenario-file option.")] = None,
         scenario_file: Annotated[
-            str, typer.Option(help="If you don't want to use auto discovered scenarios use this option")] = None):
-    run_scenario(scenario_name, scenario_file)
+            str, typer.Option(help="If you don't want to use auto discovered scenarios use this option")] = None,
+        scenario_data: Annotated[str, typer.Option(help="Data to pass to scenario")] = None):
+    run_scenario(scenario_name, scenario_file, "info", scenario_data)
 
 
 @app.command()

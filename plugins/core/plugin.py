@@ -8,7 +8,7 @@ from plugins.core.templates.load_effects_template import load_effects_template
 
 
 def register_scenarios(scenarios):
-    scenarios["images_dir_to_video"] = "plugins/core/scenarios/images_dir_to_video.yml"
+    scenarios["images_dir_to_video"] = "plugins/core/scenarios/images_dir_to_video/images_dir_to_video.yml"
 
 
 def register_frames(frames):
