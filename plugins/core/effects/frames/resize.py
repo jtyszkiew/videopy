@@ -58,7 +58,7 @@ def shrink(effect, clip):
 
 
 def center_crop(effect, clip):
-    width, height = effect.frame.scenario.width, effect.frame.scenario.height
+    width, height = effect.frame.scenario.size
 
     # Resize while maintaining aspect ratio, then crop to fill the size
     aspect_ratio_clip = clip.w / clip.h

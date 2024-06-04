@@ -14,8 +14,7 @@ class Scenario:
 
         self.hooks = hooks
         self.output_path = output_path
-        self.width = width
-        self.height = height
+        self.size = (width, height)
         self.fps = fps
         self.modules_yml = modules_yml
         self.scenario_yml = scenario_yml

@@ -23,8 +23,7 @@ class TestScenario(unittest.TestCase):
 
         assert scenario.name == "test_scenario"
         assert scenario.output_path == "video_yml.output.mp4"
-        assert scenario.width == 1920
-        assert scenario.height == 1080
+        assert scenario.size == (1920, 1080)
         assert scenario.fps == 24
         assert len(scenario.frames) == 0
         assert len(scenario.audio) == 0

@@ -62,9 +62,10 @@ class AbstractBlock:
                     raise NoneValueError(f"Compilation of effect [{effect.type}] returned None")
                 if isinstance(result, EmptyClip):
                     continue
-                if result.duration > self.time.duration:
-                    raise DurationNotMatchedError(f"Effect [{effect.type}] duration [{result.duration}] "
-                                                  f"does not match the clip duration [{effect.time.duration}]")
+                if result.duration > self.time.start + self.time.duration:
+                    print(self)
+                    raise DurationNotMatchedError(f"Effect [{effect.type}] duration [{result.duration}] does not "
+                                                  f"match the provided effect duration [{effect.time.duration}]")
 
                 clip = result
             else:

@@ -1,11 +1,9 @@
 templates:
   effects:
     example:
-      - type: "plugins.core.effects.blocks.text.typewrite"
+      - type: "plugins.core.effects.blocks.text.write"
         time:
           duration: 4
-        configuration:
-          duration_per_char: 0.1
       - type: "plugins.core.effects.blocks.text.background"
         time:
           duration: 5

@@ -3,7 +3,7 @@ from plugins.core.compilers.concacenate import ConcatenateCompiler
 from plugins.core.compilers.ignore import IgnoreCompiler
 from plugins.core.compilers.use_source import UseSourceCompiler
 from plugins.core.compilers.use_target import UseTargetCompiler
-from plugins.core.loaders.loaders import yaml_file_loader
+from plugins.core.loaders.yaml import yaml_file_loader
 from plugins.core.templates.load_effects_template import load_effects_template
 
 
@@ -82,13 +82,13 @@ def register_blocks(blocks):
             "margin": {
                 "description": "The margin of the text.",
                 "type": "float",
-                "default": 0,
+                "default": 30,
                 "required": False
             },
             "padding": {
                 "description": "The padding of the text.",
                 "type": "float",
-                "default": 10,
+                "default": 20,
                 "required": False
             }
         }
@@ -142,12 +142,6 @@ def register_effects(effects):
                 "description": "The color of the background.",
                 "type": "string",
                 "default": "black",
-                "required": False
-            },
-            "padding": {
-                "description": "The padding of the background.",
-                "type": "float",
-                "default": 10,
                 "required": False
             },
             "opacity": {

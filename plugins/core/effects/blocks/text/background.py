@@ -1,10 +1,7 @@
-from moviepy.editor import CompositeVideoClip, TextClip
-
 from videopy.compilation import Compilation
 from videopy.effect import AbstractEffectFactory, AbstractBlockEffect
 from videopy.utils import rounded_background
 from videopy.utils.time import Time
-from videopy.utils.utils import get_position_with_padding
 
 
 class Effect(AbstractBlockEffect):
@@ -15,33 +12,20 @@ class Effect(AbstractBlockEffect):
         self.configuration = configuration
 
     def render_on_block(self, clip):
-        content = self.block.configuration['content']
-        font = self.block.configuration['font']
-        size = self.block.configuration['size']
-        color = self.block.configuration['color']
-        padding = self.configuration['padding']
+        txt_width, txt_height = self.block.get_text_size()
+        position = self.block.get_text_position()
 
-        txt_width, txt_height = TextClip(txt=content, font=font, fontsize=size, color=color).size
-
-        # Internal padding for text
-        bg_width = txt_width + 2 * padding
-        bg_height = txt_height + 2 * padding  # Changed from margin to padding for consistency
-
-        position = get_position_with_padding(
-            position=self.block.position,
-            clip_size=(self.block.frame.scenario.width, self.block.frame.scenario.height),
-            padding_percent=padding,
-            bg_width=bg_width,
-            bg_height=bg_height
-        )
+        bg_width = txt_width + 2 * self.block.configuration['padding']
+        bg_height = txt_height + 2 * self.block.configuration['padding']
 
         bg_color = tuple(self.configuration['background_color'])  # Ensure color is a tuple
         radius = self.configuration['border_radius']
         bg_clip = rounded_background(bg_width, bg_height, bg_color, radius).set_duration(self.time.duration)
-        bg_clip = bg_clip.set_position(position).set_start(self.time.start)
+        bg_clip = (bg_clip.set_position((position[0] - self.block.configuration['padding'],
+                                        position[1] - self.block.configuration['padding']))
+                   .set_start(self.block.time.start + self.time.start))
 
-        return Compilation(bg_clip, clip, "compose",
-                           {"size": (self.block.frame.scenario.width, self.block.frame.scenario.height)})
+        return Compilation(bg_clip, clip, "compose", {"size": self.block.frame.scenario.size})
 
 
 class EffectFactory(AbstractEffectFactory):

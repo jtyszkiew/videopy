@@ -21,19 +21,31 @@ frames:
       ## Blocks are elements that are shown in the frame (for example text)
       #####
       - type: "plugins.core.blocks.text"
-        position: [center, bottom]
+        position: [ center, bottom ]
         time:
-          duration: 5
+          start: 1
+          duration: 4
         configuration:
-          content: "Image 1"
+          content: "This is description for image 1"
+          size: 30
         effects:
           #####
           ## Effects are animations that are applied to the block
           #####
-          - type: "plugins.template"
+          - type: "plugins.core.effects.blocks.text.write"
+            time:
+              duration: 4
+          - type: "plugins.core.effects.blocks.text.background"
+            time:
+              duration: 4
             configuration:
-              file_path: "example/template.yml"
-              name: "example"
+              background_color: [ 255, 255, 255 ]
+          - type: "plugins.core.effects.blocks.text.fadein"
+            time:
+              duration: 1
+          - type: "plugins.core.effects.blocks.text.fadeout"
+            time:
+              duration: 1
       - type: "plugins.core.blocks.audio"
         time:
           duration: 5
@@ -63,16 +75,40 @@ frames:
       file_path: "example/assets/image/2.jpg"
     blocks:
       - type: "plugins.core.blocks.text"
-        position: [center, bottom]
+        position: [ center, top ]
         time:
           duration: 5
         configuration:
-          content: "Image 2"
+          content: "Text can be displayed anywhere in video"
+          size: 30
         effects:
           - type: "plugins.template"
             configuration:
               file_path: "example/template.yml"
               name: "example"
+          - type: "plugins.core.effects.blocks.text.fadeout"
+            time:
+              duration: 1
+      - type: "plugins.core.blocks.text"
+        position: [ center, bottom ]
+        time:
+          start: 3
+          duration: 2
+        configuration:
+          content: "As many times you want :)"
+          size: 30
+        effects:
+          - type: "plugins.core.effects.blocks.text.write"
+            time:
+              duration: 2
+          - type: "plugins.core.effects.blocks.text.background"
+            time:
+              duration: 2
+            configuration:
+              background_color: [ 255, 255, 255 ]
+          - type: "plugins.core.effects.blocks.text.fadein"
+            time:
+              duration: 1
           - type: "plugins.core.effects.blocks.text.fadeout"
             time:
               duration: 1
@@ -104,11 +140,12 @@ frames:
       file_path: "example/assets/image/3.jpg"
     blocks:
       - type: "plugins.core.blocks.text"
-        position: [center, bottom]
+        position: [ left, center ]
         time:
           duration: 5
         configuration:
-          content: "Image 3"
+          content: "You can define it using words or numbers"
+          size: 30
         effects:
           - type: "plugins.template"
             configuration:
@@ -145,11 +182,12 @@ frames:
       file_path: "example/assets/image/4.jpg"
     blocks:
       - type: "plugins.core.blocks.text"
-        position: [center, bottom]
+        position: [ center, bottom ]
         time:
           duration: 5
         configuration:
-          content: "Image 4"
+          content: "Add the \\n to break the line \n anywhere you like"
+          size: 30
         effects:
           - type: "plugins.template"
             configuration:
@@ -186,11 +224,12 @@ frames:
       file_path: "example/assets/image/5.jpg"
     blocks:
       - type: "plugins.core.blocks.text"
-        position: [center, bottom]
+        position: [ center, bottom ]
         time:
           duration: 5
         configuration:
           content: "Image 5"
+          size: 30
         effects:
           - type: "plugins.template"
             configuration:

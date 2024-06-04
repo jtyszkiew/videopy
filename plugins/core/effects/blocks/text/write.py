@@ -3,7 +3,6 @@ from moviepy.editor import TextClip
 from videopy.compilation import Compilation
 from videopy.effect import AbstractEffectFactory, AbstractBlockEffect
 from videopy.utils.time import Time
-from videopy.utils.utils import get_position_with_padding
 
 
 class Effect(AbstractBlockEffect):
@@ -22,23 +21,12 @@ class Effect(AbstractBlockEffect):
             color=self.block.configuration['color']
         )
 
-        txt_width, txt_height = clip.size
-        position = self.block.position
-        size = (self.block.frame.scenario.width, self.block.frame.scenario.height)
-        padding = self.block.configuration['padding']
-
-        position = get_position_with_padding(
-            position=position,
-            clip_size=size,
-            padding_percent=padding,
-            bg_width=txt_width + 2 * padding,
-            bg_height=txt_height + 2 * padding
-        )
+        position = self.block.get_text_position()
 
         clip = clip \
             .set_duration(self.time.duration) \
-            .set_start(self.time.start) \
-            .set_position((position[0] + padding, position[1] + padding))
+            .set_start(self.block.time.start + self.time.start) \
+            .set_position((position[0], position[1]))
 
         return Compilation(clip, mode="use_source")
 
