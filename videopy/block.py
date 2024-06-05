@@ -63,7 +63,6 @@ class AbstractBlock:
                 if isinstance(result, EmptyClip):
                     continue
                 if result.duration > self.time.start + self.time.duration:
-                    print(self)
                     raise DurationNotMatchedError(f"Effect [{effect.type}] duration [{result.duration}] does not "
                                                   f"match the provided effect duration [{effect.time.duration}]")
 

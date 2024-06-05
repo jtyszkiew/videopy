@@ -42,7 +42,7 @@ frames:
               background_color: [ 255, 255, 255 ]
           - type: "plugins.core.effects.blocks.text.fadein"
             time:
-              duration: 1
+              duration: 2
           - type: "plugins.core.effects.blocks.text.fadeout"
             time:
               duration: 1
@@ -144,7 +144,7 @@ frames:
         time:
           duration: 5
         configuration:
-          content: "You can define it using words or numbers"
+          content: "Define position using words or pixels"
           size: 30
         effects:
           - type: "plugins.template"

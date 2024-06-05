@@ -51,11 +51,11 @@ class AbstractFrame:
         self.effects.append(effect)
 
     def do_render(self, relative_start_time):
-        clip = self.render(relative_start_time)
+        frame_clip = self.render(relative_start_time)
 
-        self.clip = clip
+        self.clip = frame_clip
 
-        if clip is None:
+        if frame_clip is None:
             raise NoneValueError(f"Frame of type {self.get_type()} did not return a clip")
 
         self.scenario.hooks.run_hook("videopy.scenario.frame.effects.before_load", self.effects)
@@ -64,7 +64,7 @@ class AbstractFrame:
             Logger.debug(f"Rendering <<effect>> of type <<{effect.type}>>")
 
             if issubclass(type(effect), AbstractFrameEffect):
-                compilation = effect.render(self, clip)
+                compilation = effect.render(self, frame_clip)
 
                 if not issubclass(type(compilation), Compilation):
                     raise InvalidTypeError(f"Effect of type [{effect.type}] did not return a compilation")
@@ -79,7 +79,7 @@ class AbstractFrame:
                     raise DurationNotMatchedError(f"Effect duration [{result.duration}] does not match "
                                                   f"the clip duration [{effect.time.duration}]")
 
-                clip = result
+                frame_clip = result
             else:
                 raise InvalidTypeError(f"Trying to use effect of type [{effect.type}] on frame")
 
@@ -100,9 +100,9 @@ class AbstractFrame:
                 raise DurationNotMatchedError(f"Block duration [{result.duration}] does not match "
                                               f"the clip duration [{block.time.duration}]")
 
-            clip = CompositeVideoClip([clip, result])
+            frame_clip = CompositeVideoClip([frame_clip, result])
 
-        return clip
+        return frame_clip
 
 
 class AbstractFrameFactory:

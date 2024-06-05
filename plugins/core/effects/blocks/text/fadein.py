@@ -2,6 +2,7 @@ from videopy.compilation import Compilation
 from videopy.effect import AbstractEffectFactory, AbstractBlockEffect
 from videopy.utils.logger import Logger
 from videopy.utils.time import Time
+from moviepy.video.compositing.transitions import crossfadein
 
 
 class Effect(AbstractBlockEffect):
@@ -15,7 +16,13 @@ class Effect(AbstractBlockEffect):
         if clip is None:
             raise ValueError("fadein effect requires something to fade in (can't be first effect)")
 
-        return Compilation(clip.crossfadein(self.time.duration), mode="use_source")
+        # Create a clip that fades in from the specified start time
+        faded_clip = crossfadein(clip.subclip(self.block.time.start), self.time.duration)
+        # Create a clip that plays normally before the start time
+        initial_clip = clip.subclip(0, self.block.time.start)
+
+        # Combine the initial part and the faded part
+        return Compilation(source=initial_clip, target=faded_clip.set_start(self.block.time.start), mode="compose")
 
 
 class EffectFactory(AbstractEffectFactory):
