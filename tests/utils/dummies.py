@@ -1,5 +1,5 @@
 from videopy.block import AbstractBlock
-from videopy.compilation import Compiler, Compilation
+from videopy.compilation import AbstractCompiler, Compilation
 from videopy.effect import AbstractFrameEffect, AbstractBlockEffect
 from videopy.frame import AbstractFrame
 from moviepy.editor import TextClip
@@ -56,13 +56,13 @@ class DummyBlock(AbstractBlock):
         return "dummy"
 
 
-class DummyCompiler(Compiler):
+class DummyCompiler(AbstractCompiler):
 
     def compile(self, compilation):
         return compilation.target
 
 
-class DummyCompilerReturningNone(Compiler):
+class DummyCompilerReturningNone(AbstractCompiler):
 
     def compile(self, compilation):
         return None

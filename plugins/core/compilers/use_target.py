@@ -1,7 +1,7 @@
-from videopy.compilation import Compiler
+from videopy.compilation import AbstractCompiler
 
 
-class UseTargetCompiler(Compiler):
+class UseTargetCompiler(AbstractCompiler):
 
     def compile(self, compilation):
         """ This type of compiler will replace the source clip with the target clip.

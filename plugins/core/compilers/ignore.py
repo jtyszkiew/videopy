@@ -1,8 +1,8 @@
 from videopy.clip.empty import EmptyClip
-from videopy.compilation import Compiler
+from videopy.compilation import AbstractCompiler
 
 
-class IgnoreCompiler(Compiler):
+class IgnoreCompiler(AbstractCompiler):
 
     def compile(self, compilation):
         return EmptyClip()

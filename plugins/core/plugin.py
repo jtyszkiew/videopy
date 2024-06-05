@@ -8,7 +8,10 @@ from plugins.core.templates.load_effects_template import load_effects_template
 
 
 def register_scenarios(scenarios):
-    scenarios["images_dir_to_video"] = "plugins/core/scenarios/images_dir_to_video/images_dir_to_video.yml"
+    scenarios["images_dir_to_video"] = {
+        "file_path": "plugins/core/scenarios/images_dir_to_video/images_dir_to_video.yml",
+        "description": "This scenario will convert images from a directory to a video.",
+    }
 
 
 def register_frames(frames):
@@ -17,7 +20,7 @@ def register_frames(frames):
         "configuration": {
             "file_path": {
                 "description": "The path to the image.",
-                "type": "string",
+                "type": "str",
                 "required": True
             }
         }
@@ -27,7 +30,7 @@ def register_frames(frames):
         "configuration": {
             "file_path": {
                 "description": "The path to the video.",
-                "type": "string",
+                "type": "str",
                 "required": True
             },
             "mute": {
@@ -58,12 +61,12 @@ def register_blocks(blocks):
         "configuration": {
             "content": {
                 "description": "The text content.",
-                "type": "string",
+                "type": "str",
                 "required": True
             },
             "font": {
                 "description": "The font of the text.",
-                "type": "string",
+                "type": "str",
                 "default": "Arial",
                 "required": False
             },
@@ -75,7 +78,7 @@ def register_blocks(blocks):
             },
             "color": {
                 "description": "The color of the text.",
-                "type": "string",
+                "type": "str",
                 "default": "black",
                 "required": False
             },
@@ -98,7 +101,7 @@ def register_blocks(blocks):
         "configuration": {
             "file_path": {
                 "description": "The path to the audio file.",
-                "type": "string",
+                "type": "str",
                 "required": True
             }
         }
@@ -140,7 +143,7 @@ def register_effects(effects):
         "configuration": {
             "color": {
                 "description": "The color of the background.",
-                "type": "string",
+                "type": "str",
                 "default": "black",
                 "required": False
             },
@@ -201,6 +204,7 @@ def register_effects(effects):
             "subclip_start": {
                 "description": "Setting the subclip will start the audio from the given time.",
                 "type": "float",
+                "default": 0,
                 "required": False,
             },
             "cut_to_block_duration": {
@@ -259,6 +263,7 @@ def register_effects(effects):
             "subclip_start": {
                 "description": "Setting the subclip will start the audio from the given time.",
                 "type": "float",
+                "default": 0,
                 "required": False,
             }
         }

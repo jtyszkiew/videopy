@@ -1,10 +1,41 @@
 import json
 
 from videopy.hooks import Hooks
+from videopy.module_validators import validate_frame, validate_block, validate_effect, validate_file_loader, \
+    validate_compiler, validate_scenario
 from videopy.utils.file import get_file_extension, get_file_name_without_extension
 from videopy.utils.loader import Loader
 from videopy.utils.logger import Logger
 from videopy.scenario import ScenarioFactory
+
+
+def register_modules(hooks):
+    scenarios, blocks, effects, frames, file_loaders, compilers = {}, {}, {}, {}, {}, {}
+
+    hooks.run_hook("videopy.modules.frames.register", frames)
+    for key, frame in frames.items():
+        validate_frame(frame)
+
+    hooks.run_hook("videopy.modules.blocks.register", blocks)
+    for key, block in blocks.items():
+        validate_block(block)
+
+    hooks.run_hook("videopy.modules.effects.register", effects)
+    for key, effect in effects.items():
+        validate_effect(effect)
+
+    hooks.run_hook("videopy.modules.file_loaders.register", file_loaders)
+    validate_file_loader(file_loaders)
+
+    hooks.run_hook("videopy.modules.compilers.register", compilers)
+    for key, compiler in compilers.items():
+        validate_compiler(compiler)
+
+    hooks.run_hook("videopy.modules.scenarios.register", scenarios)
+    for key, scenario in scenarios.items():
+        validate_scenario(scenario)
+
+    return scenarios, blocks, effects, frames, file_loaders, compilers
 
 
 def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level: str = "info", scenario_data=None):
@@ -14,25 +45,18 @@ def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level
         raise ValueError("You need to provide either --scenario-file or --scenario-name")
 
     hooks = Hooks()
-    scenarios, blocks, effects, frames, file_loaders, compilers = {}, {}, {}, {}, {}, {}
 
     Loader.load_plugins("plugins", hooks)
+
+    scenarios, blocks, effects, frames, file_loaders, compilers = register_modules(hooks)
 
     if scenario_file is None:
         Logger.debug(f"Scenario file not provided, trying to auto discover scenario by name: <<{scenario_name}>>")
 
-        hooks.run_hook("videopy.modules.scenarios.register", scenarios)
-
         for key, value in scenarios.items():
             if key == scenario_name:
-                scenario_file = value
+                scenario_file = value['file_path']
                 break
-
-    hooks.run_hook("videopy.modules.frames.register", frames)
-    hooks.run_hook("videopy.modules.blocks.register", blocks)
-    hooks.run_hook("videopy.modules.effects.register", effects)
-    hooks.run_hook("videopy.modules.file_loaders.register", file_loaders)
-    hooks.run_hook("videopy.modules.compilers.register", compilers)
 
     modules = {
         "blocks": blocks,

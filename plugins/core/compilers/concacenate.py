@@ -1,8 +1,8 @@
-from videopy.compilation import Compiler
+from videopy.compilation import AbstractCompiler
 from moviepy.editor import concatenate_videoclips
 
 
-class ConcatenateCompiler(Compiler):
+class ConcatenateCompiler(AbstractCompiler):
 
     def compile(self, compilation):
         """ This type of compiler will concatenate clips.

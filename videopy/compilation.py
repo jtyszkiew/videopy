@@ -13,7 +13,7 @@ class Compilation:
         return f"Compilation(source={self.source}, target={self.target}, mode={self.mode}, configuration={self.configuration})"
 
 
-class Compiler:
+class AbstractCompiler:
 
     @abstractmethod
     def compile(self, compilation):

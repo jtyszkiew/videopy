@@ -1,10 +1,10 @@
 from types import NoneType
 
-from videopy.compilation import Compilation, Compiler
+from videopy.compilation import Compilation, AbstractCompiler
 from moviepy.editor import CompositeVideoClip
 
 
-class ComposeCompiler(Compiler):
+class ComposeCompiler(AbstractCompiler):
 
     def compile(self, compilation: Compilation):
         """ This type of compiler will compose/stack clips on top of each other.
