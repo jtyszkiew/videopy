@@ -1,5 +1,6 @@
 import json
 
+from videopy.form import Form
 from videopy.hooks import Hooks
 from videopy.module_validators import validate_frame, validate_block, validate_effect, validate_file_loader, \
     validate_compiler, validate_scenario
@@ -10,7 +11,7 @@ from videopy.scenario import ScenarioFactory
 
 
 def register_modules(hooks):
-    scenarios, blocks, effects, frames, file_loaders, compilers = {}, {}, {}, {}, {}, {}
+    scenarios, blocks, effects, frames, file_loaders, compilers, fields = {}, {}, {}, {}, {}, {}, {}
 
     hooks.run_hook("videopy.modules.frames.register", frames)
     for key, frame in frames.items():
@@ -35,7 +36,9 @@ def register_modules(hooks):
     for key, scenario in scenarios.items():
         validate_scenario(scenario)
 
-    return scenarios, blocks, effects, frames, file_loaders, compilers
+    hooks.run_hook("videopy.modules.forms.fields.register", fields)
+
+    return scenarios, blocks, effects, frames, file_loaders, compilers, fields
 
 
 def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level: str = "info", scenario_data=None):
@@ -48,7 +51,7 @@ def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level
 
     Loader.load_plugins("plugins", hooks)
 
-    scenarios, blocks, effects, frames, file_loaders, compilers = register_modules(hooks)
+    scenarios, blocks, effects, frames, file_loaders, compilers, fields = register_modules(hooks)
 
     if scenario_file is None:
         Logger.debug(f"Scenario file not provided, trying to auto discover scenario by name: <<{scenario_name}>>")
@@ -61,7 +64,8 @@ def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level
     modules = {
         "blocks": blocks,
         "effects": effects,
-        "frames": frames
+        "frames": frames,
+        "fields": fields,
     }
 
     if file_loaders[get_file_extension(scenario_file)]:
@@ -70,10 +74,27 @@ def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level
         raise ValueError(f"File loader for extension [{get_file_extension(scenario_file)}] not found")
 
     scenario_name = get_file_name_without_extension(scenario_file)
+    form = None
+
+    if "form" in scenario_yml:
+        form = Form()
+
+        for key, value in scenario_yml["form"]["fields"].items():
+            field = __create_field(modules, key, value, form)
+            form.add_field(field)
+
+        form.render()
 
     if "script" in scenario_yml:
+
+        input_data = {}
+        for field in form.fields:
+            input_data[field.name] = field.get_value()
+
+        print(input_data)
+
         script = Loader.load_script(scenario_yml["script"])(scenario_yml)
-        data = script.collect_data(json.loads(scenario_data) if scenario_data is not None else {})
+        data = script.collect_data(json.loads(scenario_data) if scenario_data is not None else input_data)
 
         Logger.info(f"Used the following data to run the scenario:")
         Logger.raw(json.dumps(json.dumps(data)))
@@ -133,3 +154,15 @@ def __create_frame(modules, frame_yml, scenario):
     factory = Loader.get_frame_factory(frame_type)
 
     return factory().from_yml(frame_yml, scenario)
+
+
+def __create_field(modules, name, field_yml, form):
+    field_type = field_yml['type']
+    field_yml['configuration'] = field_yml['configuration'] if 'configuration' in field_yml else {}
+
+    if 'configuration' in modules['fields'][field_type]:
+        Loader.load_defaults(field_yml['configuration'], modules['fields'][field_type]['configuration'])
+
+    factory = Loader.get_field_factory(field_type)
+
+    return factory().from_yml(field_yml, name, form)

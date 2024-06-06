@@ -315,6 +315,55 @@ def register_effects(effects):
     }
 
 
+def register_fields(fields):
+    fields["plugins.core.fields.directory"] = {
+        "description": "The path to the directory.",
+    }
+
+    fields["plugins.core.fields.resolution"] = {
+        "description": "The path to the directory.",
+        "configuration": {
+            "resolutions": {
+                "required": False,
+                "default": [
+                    "1920x1080", "1280x720", "720x480", "640x480", "320x240",
+                    "1080x1920", "720x1280", "480x720", "480x640", "240x320"
+                ],
+                "type": "list",
+                "description": "List of resolutions to choose from."
+            }
+        }
+    }
+
+    fields["plugins.core.fields.resolution"] = {
+        "description": "Video resolution selector.",
+        "configuration": {
+            "resolutions": {
+                "required": False,
+                "default": [
+                    "1920x1080", "1280x720", "720x480", "640x480", "320x240",
+                    "1080x1920", "720x1280", "480x720", "480x640", "240x320"
+                ],
+                "type": "list",
+                "description": "List of resolutions to choose from."
+            }
+        }
+    }
+
+    fields["plugins.core.fields.fps"] = {
+        "description": "Video FPS selector.",
+        "configuration": {
+            "fps": {
+                "required": False,
+                "default": ["24 (Movie)", "25 (PAL / SECAM)", "30 (NTSC)", "50 (HDTV PAL)", "60 (HDTV NTSC)",
+                            "120 (HFR)"],
+                "type": "list",
+                "description": "List of fps to choose from."
+            }
+        }
+    }
+
+
 def register_file_loaders(file_loaders):
     file_loaders["yml"] = yaml_file_loader
 
@@ -334,5 +383,6 @@ def register(hooks):
     hooks.register_hook("videopy.modules.effects.register", register_effects)
     hooks.register_hook("videopy.modules.file_loaders.register", register_file_loaders)
     hooks.register_hook("videopy.modules.compilers.register", register_compilers)
+    hooks.register_hook("videopy.modules.forms.fields.register", register_fields)
 
     hooks.register_hook("videopy.scenario.frame.block.effects.before_load", load_effects_template)

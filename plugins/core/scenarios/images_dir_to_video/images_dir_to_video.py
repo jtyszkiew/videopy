@@ -44,7 +44,7 @@ class Script(AbstractScript):
         return data
 
     def run(self, hooks, data):
-        images, directory = self.__get_images(data['directory'])
+        images, directory = self.__find_images_and_texts(data['directory'])
         resolution = data['resolution']
         fps = data['fps']
         output_path = data['output_path']
@@ -71,7 +71,7 @@ class Script(AbstractScript):
             }
         ]
 
-        for index, image in enumerate(images):
+        for index, (image, text) in enumerate(images.items()):
             blocks = []
 
             if audio:
@@ -97,6 +97,46 @@ class Script(AbstractScript):
                     ]
                 })
 
+            text_content = text if text is not None else f"Image {index + 1}/{len(images)}"
+
+            if text is not None:
+                blocks.append({
+                    "type": "plugins.core.blocks.text",
+                    "time": {
+                        "duration": frame_duration
+                    },
+                    "position": ['center', 'bottom'],
+                    "configuration": {
+                        "content": text_content,
+                    },
+                    "effects": [
+                        {
+                            "type": "plugins.core.effects.blocks.text.typewrite",
+                            "time": {
+                                "duration": frame_duration
+                            },
+                            "configuration": {
+                                "duration_per_char": 0.1
+                            }
+                        },
+                        {
+                            "type": "plugins.core.effects.blocks.text.background",
+                            "time": {
+                                "duration": frame_duration
+                            },
+                            "configuration": {
+                                "background_color": [255, 255, 255]
+                            }
+                        },
+                        {
+                            "type": "plugins.core.effects.blocks.text.fadein",
+                            "time": {
+                                "duration": 1
+                            }
+                        }
+                    ]
+                })
+
             self.scenario_yml['frames'].append({
                 "type": "plugins.core.frames.image",
                 "configuration": {
@@ -107,44 +147,7 @@ class Script(AbstractScript):
                     "duration": frame_duration
                 },
                 "effects": frame_effects,
-                "blocks": blocks + [
-                    {
-                        "type": "plugins.core.blocks.text",
-                        "time": {
-                            "duration": frame_duration
-                        },
-                        "position": ['center', 'bottom'],
-                        "configuration": {
-                            "content": f"Image {index + 1}/{len(images)}",
-                        },
-                        "effects": [
-                            {
-                                "type": "plugins.core.effects.blocks.text.typewrite",
-                                "time": {
-                                    "duration": frame_duration
-                                },
-                                "configuration": {
-                                    "duration_per_char": 0.1
-                                }
-                            },
-                            {
-                                "type": "plugins.core.effects.blocks.text.background",
-                                "time": {
-                                    "duration": frame_duration
-                                },
-                                "configuration": {
-                                    "background_color": [255, 255, 255]
-                                }
-                            },
-                            {
-                                "type": "plugins.core.effects.blocks.text.fadein",
-                                "time": {
-                                    "duration": 1
-                                }
-                            }
-                        ]
-                    }
-                ]
+                "blocks": blocks
             })
 
     def __get_images(self, directory):
@@ -184,11 +187,26 @@ class Script(AbstractScript):
                                f"outputs/output_{resolution}_{fps}.mp4")
         return output_path
 
-    @staticmethod
-    def __find_images(directory):
+    def __find_images(self, directory):
         images = []
         for file in os.listdir(directory):
             if file.split('.')[-1] in image_extensions:
                 images.append(file)
 
         return images
+
+    def __find_images_and_texts(self, directory):
+        images_and_texts = {}
+        images = self.__find_images(directory)
+
+        for image in images:
+            base_name = os.path.splitext(image)[0]
+            txt_file_path = os.path.join(directory, f"{base_name}.txt")
+
+            if os.path.exists(txt_file_path):
+                with open(txt_file_path, 'r') as file:
+                    images_and_texts[image] = file.read()
+            else:
+                images_and_texts[image] = None
+
+        return images_and_texts, directory

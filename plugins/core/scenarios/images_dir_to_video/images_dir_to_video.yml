@@ -1,1 +1,36 @@
+form:
+  fields:
+    directory:
+      label: "Directory"
+      type: "plugins.core.fields.directory"
+      description: "Directory containing images"
+      required: true
+    resolution:
+      type: "plugins.core.fields.resolution"
+      description: "Resolution of the video"
+      label: "Resolution"
+      required: true
+    fps:
+      type: "plugins.core.fields.fps"
+      label: "FPS"
+      required: true
+      description: "Frames per second"
+    output_path:
+      label: "Output path"
+      type: "plugins.core.fields.directory"
+      description: "Output path for the video"
+      required: true
+#    file_name:
+#      type: "plugins.core.fields.string"
+#      description: "Name of the output video file"
+#      default: "output"
+#    frame_duration:
+#      type: "plugins.core.fields.timer"
+#      description: "Duration of each frame in seconds"
+#      default: 5
+#    audio:
+#      type: "plugins.core.fields.file_selector"
+#      description: "Audio file to be added to the video"
+#      configuration:
+#        extensions: [ "mp3", "wav" ]
 script: "plugins.core.scenarios.images_dir_to_video.images_dir_to_video"
