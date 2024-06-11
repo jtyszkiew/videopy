@@ -16,13 +16,13 @@ class TestMain(unittest.TestCase):
                               mock_validate_effect, mock_validate_block, mock_validate_frame):
         hooks = MagicMock()
 
-        # Setting up dummy data to simulate hooks filling up the dictionaries
         frames = {'frame1': 'frame1_data'}
         blocks = {'block1': 'block1_data'}
         effects = {'effect1': 'effect1_data'}
         file_loaders = {'file_loader1': 'file_loader1_data'}
         compilers = {'compiler1': 'compiler1_data'}
         scenarios = {'scenario1': 'scenario1_data'}
+        fields = {'field1': 'field1_data'}
 
         hooks.run_hook.side_effect = lambda hook_name, module_dict: module_dict.update(
             {'videopy.modules.frames.register': frames,
@@ -30,7 +30,8 @@ class TestMain(unittest.TestCase):
              'videopy.modules.effects.register': effects,
              'videopy.modules.file_loaders.register': file_loaders,
              'videopy.modules.compilers.register': compilers,
-             'videopy.modules.scenarios.register': scenarios}[hook_name]
+             'videopy.modules.scenarios.register': scenarios,
+             'videopy.modules.forms.fields.register': fields}[hook_name]
         )
 
         register_modules(hooks)

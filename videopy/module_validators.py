@@ -26,8 +26,7 @@ def validate_configuration(configuration):
 
 
 def validate_scenario(scenario):
-    if 'description' not in scenario:
-        raise ValueError("Scenario description is required")
+    pass
 
 
 def validate_frame(frame):

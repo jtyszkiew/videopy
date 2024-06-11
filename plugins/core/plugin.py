@@ -10,7 +10,6 @@ from plugins.core.templates.load_effects_template import load_effects_template
 def register_scenarios(scenarios):
     scenarios["images_dir_to_video"] = {
         "file_path": "plugins/core/scenarios/images_dir_to_video/images_dir_to_video.yml",
-        "description": "This scenario will convert images from a directory to a video.",
     }
 
 
@@ -315,6 +314,66 @@ def register_effects(effects):
     }
 
 
+def register_fields(fields):
+    fields["plugins.core.fields.directory"] = {
+        "description": "The path to the directory.",
+    }
+
+    fields["plugins.core.fields.resolution"] = {
+        "description": "Video resolution selector.",
+        "configuration": {
+            "resolutions": {
+                "required": False,
+                "default": [
+                    "1920x1080", "1280x720", "720x480", "640x480", "320x240",
+                    "1080x1920", "720x1280", "480x720", "480x640", "240x320"
+                ],
+                "type": "list",
+                "description": "List of resolutions to choose from."
+            }
+        }
+    }
+
+    fields["plugins.core.fields.fps"] = {
+        "description": "Video FPS selector.",
+        "configuration": {
+            "fps": {
+                "required": False,
+                "default": {
+                    "24 (Movie)": 24,
+                    "25 (PAL / SECAM)": 25,
+                    "30 (NTSC)": 30,
+                    "50 (HDTV PAL)": 50,
+                    "60 (HDTV NTSC)": 60,
+                    "120 (HFR)": 120
+                },
+                "type": "list",
+                "description": "List of fps to choose from."
+            }
+        }
+    }
+
+    fields["plugins.core.fields.text"] = {
+        "description": "Simple text input",
+    }
+
+    fields["plugins.core.fields.timer"] = {
+        "description": "Time input with hours, minutes and seconds."
+    }
+
+    fields["plugins.core.fields.media_selector"] = {
+        "description": "Media selector",
+        "configuration": {
+            "extensions": {
+                "required": False,
+                "type": "str",
+                "description": "Only provided extensions will be allowed to provide as the field value.",
+                "default": ""
+            },
+        }
+    }
+
+
 def register_file_loaders(file_loaders):
     file_loaders["yml"] = yaml_file_loader
 
@@ -334,5 +393,6 @@ def register(hooks):
     hooks.register_hook("videopy.modules.effects.register", register_effects)
     hooks.register_hook("videopy.modules.file_loaders.register", register_file_loaders)
     hooks.register_hook("videopy.modules.compilers.register", register_compilers)
+    hooks.register_hook("videopy.modules.forms.fields.register", register_fields)
 
     hooks.register_hook("videopy.scenario.frame.block.effects.before_load", load_effects_template)
