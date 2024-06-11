@@ -87,20 +87,17 @@ def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level
 
     if "script" in scenario_yml:
 
-        input_data = {}
+        form_input_data = {}
         for field in form.fields:
-            input_data[field.name] = field.get_value()
-
-        print(input_data)
+            form_input_data[field.name] = field.get_value()
 
         script = Loader.load_script(scenario_yml["script"])(scenario_yml)
-        data = script.collect_data(json.loads(scenario_data) if scenario_data is not None else input_data)
 
         Logger.info(f"Used the following data to run the scenario:")
-        Logger.raw(json.dumps(json.dumps(data)))
+        Logger.raw(json.dumps(json.dumps(form_input_data)))
         Logger.info("Use the data above with <<--scenario-data>> option to run the scenario with the same data again")
 
-        script.do_run(hooks, data)
+        script.do_run(hooks, form_input_data)
 
     scenario = ScenarioFactory.from_yml(modules, scenario_yml, scenario_name, hooks, compilers)
 

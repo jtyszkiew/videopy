@@ -10,7 +10,6 @@ from plugins.core.templates.load_effects_template import load_effects_template
 def register_scenarios(scenarios):
     scenarios["images_dir_to_video"] = {
         "file_path": "plugins/core/scenarios/images_dir_to_video/images_dir_to_video.yml",
-        "description": "This scenario will convert images from a directory to a video.",
     }
 
 
@@ -321,21 +320,6 @@ def register_fields(fields):
     }
 
     fields["plugins.core.fields.resolution"] = {
-        "description": "The path to the directory.",
-        "configuration": {
-            "resolutions": {
-                "required": False,
-                "default": [
-                    "1920x1080", "1280x720", "720x480", "640x480", "320x240",
-                    "1080x1920", "720x1280", "480x720", "480x640", "240x320"
-                ],
-                "type": "list",
-                "description": "List of resolutions to choose from."
-            }
-        }
-    }
-
-    fields["plugins.core.fields.resolution"] = {
         "description": "Video resolution selector.",
         "configuration": {
             "resolutions": {
@@ -355,11 +339,37 @@ def register_fields(fields):
         "configuration": {
             "fps": {
                 "required": False,
-                "default": ["24 (Movie)", "25 (PAL / SECAM)", "30 (NTSC)", "50 (HDTV PAL)", "60 (HDTV NTSC)",
-                            "120 (HFR)"],
+                "default": {
+                    "24 (Movie)": 24,
+                    "25 (PAL / SECAM)": 25,
+                    "30 (NTSC)": 30,
+                    "50 (HDTV PAL)": 50,
+                    "60 (HDTV NTSC)": 60,
+                    "120 (HFR)": 120
+                },
                 "type": "list",
                 "description": "List of fps to choose from."
             }
+        }
+    }
+
+    fields["plugins.core.fields.text"] = {
+        "description": "Simple text input",
+    }
+
+    fields["plugins.core.fields.timer"] = {
+        "description": "Time input with hours, minutes and seconds."
+    }
+
+    fields["plugins.core.fields.media_selector"] = {
+        "description": "Media selector",
+        "configuration": {
+            "extensions": {
+                "required": False,
+                "type": "str",
+                "description": "Only provided extensions will be allowed to provide as the field value.",
+                "default": ""
+            },
         }
     }
 

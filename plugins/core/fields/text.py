@@ -1,5 +1,5 @@
 from videopy.form import AbstractField, AbstractFieldFactory
-from textual.widgets import Select
+from textual.widgets import Input
 
 
 class Field(AbstractField):
@@ -10,12 +10,15 @@ class Field(AbstractField):
         self.configuration = configuration
 
     def render(self):
-        return Select(((resolution, resolution) for resolution in self.configuration['resolutions']),
-                      allow_blank=not self.required)
+        return Input(
+            type="text",
+            name=self.name,
+        )
 
 
 class FieldFactory(AbstractFieldFactory):
     def from_yml(self, field_yml, name, form):
         configuration = field_yml['configuration'] if 'configuration' in field_yml else {}
 
-        return Field(form, field_yml['type'], name, field_yml['label'], configuration, field_yml['required'], field_yml['description'])
+        return Field(form, field_yml['type'], name, field_yml['label'], configuration, field_yml['required'],
+                     field_yml['description'])

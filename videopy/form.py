@@ -1,4 +1,6 @@
 from abc import abstractmethod
+from types import NoneType
+
 from textual.app import App, ComposeResult
 from textual.widgets import Static, Button, Header
 from textual.widget import Widget
@@ -7,15 +9,16 @@ from textual.validation import ValidationResult
 
 class AbstractField:
 
-    def __init__(self, form, field_type, name, label, required):
+    def __init__(self, form, field_type, name, label, required, description=""):
         self.widget = None
+        self.error_widget = None
 
         self.form = form
         self.type = field_type
         self.name = name
         self.label = label
-        self.error_widget = None
         self.required = required
+        self.description = description
 
     def do_render(self) -> Widget:
         self.widget = self.render()
@@ -26,6 +29,10 @@ class AbstractField:
         return self.widget.value
 
     @abstractmethod
+    def after_render(self):
+        pass
+
+    @abstractmethod
     def render(self) -> Widget:
         pass
 
@@ -33,7 +40,12 @@ class AbstractField:
         if not hasattr(self.widget, 'validate'):
             return ValidationResult.success()
 
-        return self.widget.validate(self.get_value())
+        validation = self.widget.validate(self.get_value())
+
+        if isinstance(validation, NoneType):
+            return ValidationResult.success()
+
+        return validation
 
 
 class AbstractFieldFactory:
@@ -44,7 +56,6 @@ class AbstractFieldFactory:
 
 
 class Form(App):
-
     def __init__(self):
         super().__init__()
 
@@ -85,6 +96,9 @@ class Form(App):
         yield self.submit
         yield self.exit
 
+        for field in self.fields:
+            yield Static(f"[b][{field.label}][/b] - {field.description}")
+
     def on_mount(self):
         self.title = "videopy script form"
 
@@ -92,7 +106,7 @@ class Form(App):
             label.styles.padding = 1
 
         for field in self.fields:
-            field.error_widget.styles.padding = [0, 1, 0, 1]
+            field.after_render()
 
         self.submit.styles.margin = 1
         self.exit.styles.margin = 1

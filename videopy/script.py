@@ -43,7 +43,3 @@ class AbstractScript:
     @abstractmethod
     def run(self, hooks: Hooks, data: dict):
         pass
-
-    @abstractmethod
-    def collect_data(self, data):
-        pass

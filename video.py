@@ -4,6 +4,9 @@ import typer
 from rich.table import Table
 from rich.console import Console
 from rich import print
+from rich.markdown import Markdown
+
+from moviepy.editor import TextClip
 
 from videopy.hooks import Hooks
 from videopy.main import run_scenario
@@ -41,18 +44,43 @@ def scenario(scenario_name: Annotated[str, typer.Argument(
     hooks.run_hook("videopy.modules.scenarios.register", scenarios)
     hooks.run_hook("videopy.modules.file_loaders.register", file_loaders)
 
-    table = Table("Name", "Description", show_lines=True)
-
     for key, value in scenarios.items():
         if key == scenario_name:
-            if file_loaders[get_file_extension(value)]:
-                scenario_yml = file_loaders[get_file_extension(value)](value)
+            if file_loaders[get_file_extension(value['file_path'])]:
+                scenario_yml = file_loaders[get_file_extension(value['file_path'])](value['file_path'])
             else:
-                raise ValueError(f"File loader for extension [{get_file_extension(value)}] not found")
+                raise ValueError(f"File loader for extension [{get_file_extension(value['file_path'])}] not found")
 
-            table.add_row(key, scenario_yml['description'] if 'description' in scenario_yml else "No description")
+            console = Console()
+            console.print(Markdown(f"# Description"))
+            console.print(Markdown(f"{scenario_yml['description']}"))
+            console.print(Markdown(f"# Configuration"))
 
-    console.print(table)
+            form = scenario_yml.get('form', None)
+            fields = form.get('fields', None) if form else None
+
+            if form is not None and fields is not None:
+                table = Table(
+                    "Configuration",
+                    "Description",
+                    "Type",
+                    "Required",
+                    "Default Value",
+                    show_lines=True,
+                    title=f"{scenario_name}",
+                    title_style="bold cyan"
+                )
+
+                for key, value in scenario_yml['form']['fields'].items():
+                    default_value = str(value.get('default', 'None'))
+                    table.add_row(
+                        key,
+                        value['description'],
+                        value['type'], "Yes" if value['required'] else "No",
+                        default_value
+                    )
+
+                console.print(table)
 
 
 @app.command()
@@ -67,8 +95,8 @@ def scenarios():
     table = Table("Name", "Description", show_lines=True)
 
     for key, value in scenarios.items():
-        if file_loaders[get_file_extension(value)]:
-            scenario_yml = file_loaders[get_file_extension(value)](value)
+        if file_loaders[get_file_extension(value['file_path'])]:
+            scenario_yml = file_loaders[get_file_extension(value['file_path'])](value['file_path'])
         else:
             raise ValueError(f"File loader for extension [{get_file_extension(value)}] not found")
 
@@ -138,6 +166,12 @@ def effects():
 @app.command()
 def effect(effect_name: Annotated[str, typer.Argument(help="Effect to show info about.")]):
     __display_configuration_table("effects", effect_name)
+
+
+@app.command()
+def helpers(helper_name: Annotated[str, typer.Argument(help="Helper to show info about.")]):
+    if helper_name == "fonts":
+        print(TextClip("fonts").list('font'))
 
 
 def __display_configuration_table(module: str, concrete_module_name: str):
