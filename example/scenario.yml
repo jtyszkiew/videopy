@@ -46,6 +46,11 @@ frames:
           - type: "plugins.core.effects.blocks.text.fadeout"
             time:
               duration: 1
+          - type: "plugins.core.effects.blocks.text.slidein"
+            time:
+              duration: 1
+            configuration:
+              slide_from: "bottom"
       - type: "plugins.core.blocks.audio"
         time:
           duration: 5
@@ -151,9 +156,16 @@ frames:
             configuration:
               file_path: "example/template.yml"
               name: "example"
-          - type: "plugins.core.effects.blocks.text.fadeout"
+          - type: "plugins.core.effects.blocks.text.slidein"
             time:
-              duration: 1
+              duration: 0.5
+            configuration:
+              slide_from: "top"
+          - type: "plugins.core.effects.blocks.text.slideout"
+            time:
+              duration: 0.5
+            configuration:
+              slide_to: "bottom"
       - type: "plugins.core.blocks.audio"
         time:
           duration: 5

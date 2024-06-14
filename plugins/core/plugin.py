@@ -193,6 +193,50 @@ def register_effects(effects):
         }
     }
 
+    # BLOCKS / TEXT / SLIDEIN
+    effects["plugins.core.effects.blocks.text.slidein"] = {
+        "description": "Slide in the text block from given direction into target position.",
+        "renders_on": {
+            "block": ["text"]
+        },
+        "configuration": {
+            "duration": {
+                "description": "The duration of the slide in. It's the time from the left side of block timeline.",
+                "type": "float",
+                "default": 1,
+                "required": False
+            },
+            "slide_from": {
+                "description": "The direction of the slide in.",
+                "type": "str",
+                "default": "left",
+                "required": False
+            },
+        }
+    }
+
+    # BLOCKS / TEXT / SLIDEIN
+    effects["plugins.core.effects.blocks.text.slideout"] = {
+        "description": "Slide out the text block to given direction (until it's not visible).",
+        "renders_on": {
+            "block": ["text"]
+        },
+        "configuration": {
+            "duration": {
+                "description": "The duration of the slide out. It's the time from the right side of block timeline.",
+                "type": "float",
+                "default": 1,
+                "required": False
+            },
+            "slide_to": {
+                "description": "The direction of the slide out.",
+                "type": "str",
+                "default": "left",
+                "required": False
+            },
+        }
+    }
+
     # BLOCKS / AUDIO / PLAY
     effects["plugins.core.effects.blocks.audio.play"] = {
         "description": "Play audio on block.",
