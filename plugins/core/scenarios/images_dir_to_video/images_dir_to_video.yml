@@ -15,17 +15,6 @@ form:
       label: "FPS"
       required: true
       description: "Frames per second"
-    output_path:
-      label: "Output path"
-      type: "plugins.core.fields.directory"
-      description: "Output directory"
-      required: true
-    file_name:
-      type: "plugins.core.fields.text"
-      description: "Name of the output video file"
-      default: "output.mp4"
-      label: "Output file name"
-      required: true
     frame_duration:
       type: "plugins.core.fields.timer"
       description: "Duration of each frame in seconds"
@@ -44,6 +33,11 @@ form:
       type: "plugins.core.fields.text"
       description: "Title will be shown on first frame in [center,top]"
       required: false
+    output_path:
+      label: "Output Path"
+      type: "plugins.core.fields.output_path"
+      description: "Output path should be built of directory and file name"
+      required: true
 script: "plugins.core.scenarios.images_dir_to_video.images_dir_to_video"
 description: |
   This scenario will convert images from a directory to a video. 

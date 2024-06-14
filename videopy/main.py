@@ -76,7 +76,7 @@ def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level
     scenario_name = get_file_name_without_extension(scenario_file)
     form = None
 
-    if "form" in scenario_yml:
+    if "form" in scenario_yml and scenario_data is None:
         form = Form()
 
         for key, value in scenario_yml["form"]["fields"].items():
@@ -86,10 +86,12 @@ def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level
         form.render()
 
     if "script" in scenario_yml:
-
-        form_input_data = {}
-        for field in form.fields:
-            form_input_data[field.name] = field.get_value()
+        if scenario_data is None and form is not None:
+            form_input_data = {}
+            for field in form.fields:
+                form_input_data[field.name] = field.get_value()
+        elif scenario_data is not None:
+            form_input_data = scenario_data
 
         script = Loader.load_script(scenario_yml["script"])(scenario_yml)
 

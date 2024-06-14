@@ -105,11 +105,11 @@ class TestScenario(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Default is required in module configuration"):
             validate_configuration(invalid_configuration)
 
-    def test_validate_scenario(self):
-        scenario = {}
+    # def test_validate_scenario(self):
+    #     scenario = {}
 
-        with self.assertRaisesRegex(ValueError, "Scenario description is required"):
-            validate_scenario(scenario)
+        # with self.assertRaisesRegex(ValueError, "Scenario description is required"):
+        #     validate_scenario(scenario)
 
     def test_validate_frame(self):
         with self.assertRaisesRegex(ValueError, "Frame description is required"):

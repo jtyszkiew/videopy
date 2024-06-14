@@ -28,15 +28,7 @@ class AbstractField:
     def get_value(self):
         return self.widget.value
 
-    @abstractmethod
-    def after_render(self):
-        pass
-
-    @abstractmethod
-    def render(self) -> Widget:
-        pass
-
-    def validate(self):
+    def validate(self) -> ValidationResult:
         if not hasattr(self.widget, 'validate'):
             return ValidationResult.success()
 
@@ -46,6 +38,14 @@ class AbstractField:
             return ValidationResult.success()
 
         return validation
+
+    @abstractmethod
+    def render(self) -> Widget:
+        pass
+
+    @abstractmethod
+    def after_render(self):
+        pass
 
 
 class AbstractFieldFactory:

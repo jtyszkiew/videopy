@@ -1,3 +1,5 @@
+import json
+
 from typing_extensions import Annotated
 
 import typer
@@ -31,7 +33,7 @@ def run(scenario_name: Annotated[str, typer.Argument(
         scenario_file: Annotated[
             str, typer.Option(help="If you don't want to use auto discovered scenarios use this option")] = None,
         scenario_data: Annotated[str, typer.Option(help="Data to pass to scenario")] = None):
-    run_scenario(scenario_name, scenario_file, "info", scenario_data)
+    run_scenario(scenario_name, scenario_file, "info", json.loads(scenario_data) if scenario_data else None)
 
 
 @app.command()

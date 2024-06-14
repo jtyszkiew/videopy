@@ -9,9 +9,20 @@ class Field(AbstractField):
 
         self.configuration = configuration
 
+        for resolution in self.configuration['resolutions']:
+            if not isinstance(resolution, str):
+                raise ValueError("Resolution must be a string")
+            if not resolution.count("x") == 1:
+                raise ValueError("Resolution must contain exactly one 'x' character")
+
     def render(self):
         return Select(((resolution, resolution) for resolution in self.configuration['resolutions']),
                       allow_blank=not self.required)
+
+    def get_value(self):
+        resolution = self.widget.value.split("x")
+
+        return [int(resolution[0]), int(resolution[1])]
 
 
 class FieldFactory(AbstractFieldFactory):

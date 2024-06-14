@@ -66,7 +66,7 @@ def register_blocks(blocks):
             "font": {
                 "description": "The font of the text.",
                 "type": "str",
-                "default": "Arial",
+                "default": "Roboto-Bold",
                 "required": False
             },
             "size": {
@@ -317,6 +317,10 @@ def register_effects(effects):
 def register_fields(fields):
     fields["plugins.core.fields.directory"] = {
         "description": "The path to the directory.",
+    }
+
+    fields["plugins.core.fields.output_path"] = {
+        "description": "The path to the output file.",
     }
 
     fields["plugins.core.fields.resolution"] = {

@@ -1,3 +1,4 @@
+import math
 import os
 
 from videopy.script import AbstractScript
@@ -12,9 +13,9 @@ class Script(AbstractScript):
 
     def run(self, hooks, data):
         images, directory = self.__find_images_and_texts(data['directory'])
-        resolution = self.__get_resolution(data['resolution'])
+        resolution = data['resolution']
         fps = data['fps']
-        output_path = f"{data['output_path']}/{data['file_name']}.mp4"
+        output_path = f"{data['output_path']}.mp4"
         frame_duration = data['frame_duration']
         audio = data.get('audio', None)
         title = data.get('title', None)
@@ -71,9 +72,9 @@ class Script(AbstractScript):
                 blocks.append({
                     "type": "plugins.core.blocks.text",
                     "time": {
-                        "duration": frame_duration
+                        "duration": math.floor(frame_duration * 50 / 100)
                     },
-                    "position": ['center', 'top'],
+                    "position": ['center', resolution[1] * 10 / 100],
                     "configuration": {
                         "content": title,
                     },
@@ -81,13 +82,13 @@ class Script(AbstractScript):
                         {
                             "type": "plugins.core.effects.blocks.text.write",
                             "time": {
-                                "duration": frame_duration
+                                "duration": math.floor(frame_duration * 50 / 100)
                             }
                         },
                         {
                             "type": "plugins.core.effects.blocks.text.background",
                             "time": {
-                                "duration": frame_duration
+                                "duration": math.floor(frame_duration * 50 / 100)
                             },
                             "configuration": {
                                 "background_color": [255, 255, 255]
@@ -108,7 +109,7 @@ class Script(AbstractScript):
                     "time": {
                         "duration": frame_duration
                     },
-                    "position": ['center', 'bottom'],
+                    "position": ['center', resolution[1] - (resolution[1] * 20 / 100)],
                     "configuration": {
                         "content": text_content,
                     },
