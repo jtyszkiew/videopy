@@ -39,7 +39,7 @@ frames:
             time:
               duration: 4
             configuration:
-              background_color: [ 255, 255, 255 ]
+              color: [ 255, 255, 255 ]
           - type: "plugins.core.effects.blocks.text.fadein"
             time:
               duration: 2
@@ -110,7 +110,7 @@ frames:
             time:
               duration: 2
             configuration:
-              background_color: [ 255, 255, 255 ]
+              color: [ 255, 255, 255 ]
           - type: "plugins.core.effects.blocks.text.fadein"
             time:
               duration: 1

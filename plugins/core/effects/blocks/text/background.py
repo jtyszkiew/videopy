@@ -18,7 +18,7 @@ class Effect(AbstractBlockEffect):
         bg_width = txt_width + 2 * self.block.configuration['padding']
         bg_height = txt_height + 2 * self.block.configuration['padding']
 
-        bg_color = tuple(self.configuration['background_color'])  # Ensure color is a tuple
+        bg_color = tuple(self.configuration['color'])  # Ensure color is a tuple
         radius = self.configuration['border_radius']
         bg_clip = rounded_background(bg_width, bg_height, bg_color, radius).set_duration(self.time.duration)
         bg_clip = (bg_clip.set_position((position[0] - self.block.configuration['padding'],

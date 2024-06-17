@@ -320,7 +320,7 @@ def register_effects(effects):
                                          "time": {"duration": 0.1}},
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
                                          "time": {"duration": 0.1},
-                                         "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
+                                         "configuration": {"color": [0, 0, 0], "border_radius": 10},
                                          }
                                     ]
                                 }
@@ -374,7 +374,7 @@ def register_effects(effects):
                                          "time": {"duration": 1}},
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
                                          "time": {"duration": 1},
-                                         "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
+                                         "configuration": {"color": [0, 0, 0], "border_radius": 10},
                                          },
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.fadein",
                                          "time": {"duration": 1}}
@@ -430,7 +430,7 @@ def register_effects(effects):
                                          "time": {"duration": 1}},
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
                                          "time": {"duration": 1},
-                                         "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
+                                         "configuration": {"color": [0, 0, 0], "border_radius": 10},
                                          },
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.fadeout",
                                          "time": {"duration": 1}}
@@ -492,7 +492,7 @@ def register_effects(effects):
                                          "time": {"duration": 1}},
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
                                          "time": {"duration": 1},
-                                         "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
+                                         "configuration": {"color": [0, 0, 0], "border_radius": 10},
                                          },
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.slidein",
                                          "configuration": {"slide_from": "top"}, "time": {"duration": 0.5}}
@@ -554,7 +554,7 @@ def register_effects(effects):
                                          "time": {"duration": 1}},
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
                                          "time": {"duration": 1},
-                                         "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
+                                         "configuration": {"color": [0, 0, 0], "border_radius": 10},
                                          },
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.slideout",
                                          "configuration": {"slide_to": "bottom"}, "time": {"duration": 0.5}}

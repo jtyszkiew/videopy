@@ -91,7 +91,7 @@ class Script(AbstractScript):
                                 "duration": math.floor(frame_duration * 50 / 100)
                             },
                             "configuration": {
-                                "background_color": [255, 255, 255]
+                                "color": [255, 255, 255]
                             }
                         },
                         {
@@ -126,7 +126,7 @@ class Script(AbstractScript):
                                 "duration": frame_duration
                             },
                             "configuration": {
-                                "background_color": [255, 255, 255]
+                                "color": [255, 255, 255]
                             }
                         },
                         {

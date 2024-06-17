@@ -484,13 +484,12 @@ Adds background to the frame.
                 "duration": 0.1
               },
               "configuration": {
-                "background_color": [
+                "color": [
                   0,
                   0,
                   0
                 ],
                 "border_radius": 10,
-                "color": "black",
                 "opacity": 1
               }
             }
@@ -568,13 +567,12 @@ Fade in the text block.
                 "duration": 1
               },
               "configuration": {
-                "background_color": [
+                "color": [
                   0,
                   0,
                   0
                 ],
                 "border_radius": 10,
-                "color": "black",
                 "opacity": 1
               }
             },
@@ -661,13 +659,12 @@ Fade out the text block.
                 "duration": 1
               },
               "configuration": {
-                "background_color": [
+                "color": [
                   0,
                   0,
                   0
                 ],
                 "border_radius": 10,
-                "color": "black",
                 "opacity": 1
               }
             },
@@ -754,13 +751,12 @@ Slide in the text block from given direction into target position.
                 "duration": 1
               },
               "configuration": {
-                "background_color": [
+                "color": [
                   0,
                   0,
                   0
                 ],
                 "border_radius": 10,
-                "color": "black",
                 "opacity": 1
               }
             },
@@ -848,13 +844,12 @@ Slide out the text block to given direction (until it's not visible).
                 "duration": 1
               },
               "configuration": {
-                "background_color": [
+                "color": [
                   0,
                   0,
                   0
                 ],
                 "border_radius": 10,
-                "color": "black",
                 "opacity": 1
               }
             },

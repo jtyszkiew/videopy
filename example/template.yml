@@ -8,7 +8,7 @@ templates:
         time:
           duration: 5
         configuration:
-          background_color: [ 255, 255, 255 ]
+          color: [ 255, 255, 255 ]
       - type: "plugins.core.effects.blocks.text.fadein"
         time:
           duration: 1
