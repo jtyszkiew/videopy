@@ -158,10 +158,10 @@ python video.py effect __effect_name__
 > Each of the commands above will display a table containing information about given module.
 
 # Examples:
-# Frames
-## plugins.core.frames.image
+# [Frames]
+## Type: plugins.core.frames.image
 This frame will display an image.
-### Showing Image as Frame
+### Example: Showing Image as Frame
 ![plugins.core.frames.image - This frame will display an image. - Example 0](example/generated/plugins.core.frames.image_example_0.gif)
 >This example shows how to display an image as a frame.
 
@@ -198,10 +198,10 @@ This frame will display an image.
 
 </details>
 
-# Frame Effects
-## plugins.core.effects.frames.fadein
+# [Frame Effects]
+## Type: plugins.core.effects.frames.fadein
 Fade in the frame.
-### Fade In effect on frame
+### Example: Fade In effect on frame
 ![plugins.core.effects.frames.fadein - Fade in the frame. - Example 0](example/generated/plugins.core.effects.frames.fadein_example_0.gif)
 >This example shows how to add fade in effect on frame.
 
@@ -247,9 +247,9 @@ Fade in the frame.
 
 </details>
 
-## plugins.core.effects.frames.fadeout
+## Type: plugins.core.effects.frames.fadeout
 Fade out the frame.
-### Fade Out effect on frame
+### Example: Fade Out effect on frame
 ![plugins.core.effects.frames.fadeout - Fade out the frame. - Example 0](example/generated/plugins.core.effects.frames.fadeout_example_0.gif)
 >This example shows how to add fade out effect on frame.
 
@@ -295,9 +295,9 @@ Fade out the frame.
 
 </details>
 
-## plugins.core.effects.frames.resize
+## Type: plugins.core.effects.frames.resize
 Resize the frame with given mode.
-### Resize Effect - Fit
+### Example: Resize Effect - Fit
 ![plugins.core.effects.frames.resize - Resize the frame with given mode. - Example 0](example/generated/plugins.core.effects.frames.resize_example_0.gif)
 >This example shows how to add 'fit' resize effect on frame.
 
@@ -334,7 +334,7 @@ Resize the frame with given mode.
 
 </details>
 
-### Resize Effect - Center crop
+### Example: Resize Effect - Center crop
 ![plugins.core.effects.frames.resize - Resize the frame with given mode. - Example 1](example/generated/plugins.core.effects.frames.resize_example_1.gif)
 >This example shows how to add 'center_crop' resize effect on frame.
 
@@ -371,10 +371,10 @@ Resize the frame with given mode.
 
 </details>
 
-# Blocks
-## plugins.core.blocks.text
+# [Blocks]
+## Type: plugins.core.blocks.text
 This block will display text.
-### Showing Text as Block
+### Example: Showing Text as Block
 ![plugins.core.blocks.text - This block will display text. - Example 0](example/generated/plugins.core.blocks.text_example_0.gif)
 >This example shows how to display text as a block.
 
@@ -442,10 +442,10 @@ This block will display text.
 
 </details>
 
-# Blocks Effects
-## plugins.core.effects.blocks.text.write
+# [Blocks Effects]
+## Type: plugins.core.effects.blocks.text.write
 Write text on a block. This is a base effect if you want to display text.
-### Write Effect On Text Block
+### Example: Write Effect On Text Block
 ![plugins.core.effects.blocks.text.write - Write text on a block. This is a base effect if you want to display text. - Example 0](example/generated/plugins.core.effects.blocks.text.write_example_0.gif)
 >This example shows how to add write effect on text block.
 
@@ -511,9 +511,9 @@ Write text on a block. This is a base effect if you want to display text.
 
 </details>
 
-## plugins.core.effects.blocks.text.typewrite
+## Type: plugins.core.effects.blocks.text.typewrite
 This effect will type the text one the block.
-### Typewrite Effect On Text Block
+### Example: Typewrite Effect On Text Block
 ![plugins.core.effects.blocks.text.typewrite - This effect will type the text one the block. - Example 0](example/generated/plugins.core.effects.blocks.text.typewrite_example_0.gif)
 >This example shows how to add typewrite effect on text block.
 
@@ -581,9 +581,9 @@ This effect will type the text one the block.
 
 </details>
 
-## plugins.core.effects.blocks.text.background
+## Type: plugins.core.effects.blocks.text.background
 Adds background to the frame.
-### Background Effect On Text Block
+### Example: Background Effect On Text Block
 ![plugins.core.effects.blocks.text.background - Adds background to the frame. - Example 0](example/generated/plugins.core.effects.blocks.text.background_example_0.gif)
 >This example shows how to add background effect on text block.
 
@@ -665,9 +665,9 @@ Adds background to the frame.
 
 </details>
 
-## plugins.core.effects.blocks.text.fadein
+## Type: plugins.core.effects.blocks.text.fadein
 Fade in the text block.
-### Fade In Effect On Text Block
+### Example: Fade In Effect On Text Block
 ![plugins.core.effects.blocks.text.fadein - Fade in the text block. - Example 0](example/generated/plugins.core.effects.blocks.text.fadein_example_0.gif)
 >This example shows how to add fade in effect on text block.
 
@@ -758,9 +758,9 @@ Fade in the text block.
 
 </details>
 
-## plugins.core.effects.blocks.text.fadeout
+## Type: plugins.core.effects.blocks.text.fadeout
 Fade out the text block.
-### Fade Out Effect On Text Block
+### Example: Fade Out Effect On Text Block
 ![plugins.core.effects.blocks.text.fadeout - Fade out the text block. - Example 0](example/generated/plugins.core.effects.blocks.text.fadeout_example_0.gif)
 >This example shows how to add fade out effect on text block.
 
@@ -851,9 +851,9 @@ Fade out the text block.
 
 </details>
 
-## plugins.core.effects.blocks.text.slidein
+## Type: plugins.core.effects.blocks.text.slidein
 Slide in the text block from given direction into target position.
-### Text Block Slide In Effect
+### Example: Text Block Slide In Effect
 ![plugins.core.effects.blocks.text.slidein - Slide in the text block from given direction into target position. - Example 0](example/generated/plugins.core.effects.blocks.text.slidein_example_0.gif)
 >This example shows how to add slide in effect on text block.
 
@@ -945,9 +945,9 @@ Slide in the text block from given direction into target position.
 
 </details>
 
-## plugins.core.effects.blocks.text.slideout
+## Type: plugins.core.effects.blocks.text.slideout
 Slide out the text block to given direction (until it's not visible).
-### Text Block Slide Out Effect
+### Example: Text Block Slide Out Effect
 ![plugins.core.effects.blocks.text.slideout - Slide out the text block to given direction (until it's not visible). - Example 0](example/generated/plugins.core.effects.blocks.text.slideout_example_0.gif)
 >This example shows how to add slide out effect on text block.
 

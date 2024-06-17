@@ -193,20 +193,20 @@ def helpers(helper_name: Annotated[str, typer.Argument(help="Helper to show info
         hooks.run_hook("videopy.modules.compilers.register", compilers)
         hooks.run_hook("videopy.modules.forms.fields.register", fields)
 
-        md_file += "# Frames \n"
+        md_file += "# [Frames] \n"
         for key, frame in frames.items():
             md_file = __print_example_container(md_file, key, frame)
 
-        md_file += "# Frame Effects \n"
+        md_file += "# [Frame Effects] \n"
         for key, effect in effects.items():
             if 'frame' in effect['renders_on']:
                 md_file = __print_example_container(md_file, key, effect)
 
-        md_file += "# Blocks \n"
+        md_file += "# [Blocks] \n"
         for key, block in blocks.items():
             md_file = __print_example_container(md_file, key, block)
 
-        md_file += "# Blocks Effects \n"
+        md_file += "# [Blocks Effects] \n"
         for key, effect in effects.items():
             if 'block' in effect['renders_on']:
                 md_file = __print_example_container(md_file, key, effect)
@@ -258,7 +258,7 @@ def __print_example_container(md_file, key, module):
     return md_file
 
 def __print_example_header(md_file, key, frame):
-    md_file += f"## {key}\n"
+    md_file += f"## Type: {key}\n"
     md_file += f"{frame['description']}\n"
 
     return md_file
@@ -268,7 +268,7 @@ def __print_example(md_file, key, frame, example, index, tips=None):
     if tips is None:
         tips = []
 
-    md_file += f"### {example['name']}\n"
+    md_file += f"### Example: {example['name']}\n"
     md_file += f"![{key} - {frame['description']} - Example {index}](example/generated/{key}_example_{index}.gif)\n"
     md_file += f">{example['description']}\n\n"
     for tip in tips:
