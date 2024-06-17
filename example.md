@@ -17,7 +17,7 @@ This frame will display an image.
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 0.1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -57,7 +57,7 @@ Fade in the frame.
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 2
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -72,7 +72,7 @@ Fade in the frame.
         {
           "type": "plugins.core.effects.frames.fadein",
           "time": {
-            "duration": 4
+            "duration": 1
           },
           "configuration": {
             "duration": 1
@@ -105,7 +105,7 @@ Fade out the frame.
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 2
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -120,7 +120,7 @@ Fade out the frame.
         {
           "type": "plugins.core.effects.frames.fadeout",
           "time": {
-            "duration": 4
+            "duration": 1
           },
           "configuration": {
             "duration": 1
@@ -153,7 +153,7 @@ Resize the frame with given mode.
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 0.1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -190,7 +190,7 @@ Resize the frame with given mode.
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 0.1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -232,7 +232,7 @@ This block will display text.
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 0.1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -249,7 +249,7 @@ This block will display text.
         {
           "type": "plugins.core.blocks.text",
           "time": {
-            "duration": 5
+            "duration": 0.1
           },
           "position": [
             "center",
@@ -267,7 +267,7 @@ This block will display text.
             {
               "type": "plugins.core.effects.blocks.text.write",
               "time": {
-                "duration": 5
+                "duration": 0.1
               },
               "configuration": {}
             }
@@ -301,7 +301,7 @@ Write text on a block. This is a base effect if you want to display text.
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 0.1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -318,7 +318,7 @@ Write text on a block. This is a base effect if you want to display text.
         {
           "type": "plugins.core.blocks.text",
           "time": {
-            "duration": 5
+            "duration": 0.1
           },
           "position": [
             "center",
@@ -336,7 +336,7 @@ Write text on a block. This is a base effect if you want to display text.
             {
               "type": "plugins.core.effects.blocks.text.write",
               "time": {
-                "duration": 5
+                "duration": 0.1
               },
               "configuration": {}
             }
@@ -369,7 +369,7 @@ This effect will type the text one the block.
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -386,7 +386,7 @@ This effect will type the text one the block.
         {
           "type": "plugins.core.blocks.text",
           "time": {
-            "duration": 5
+            "duration": 1
           },
           "position": [
             "center",
@@ -404,7 +404,7 @@ This effect will type the text one the block.
             {
               "type": "plugins.core.effects.blocks.text.typewrite",
               "time": {
-                "duration": 5
+                "duration": 1
               },
               "configuration": {
                 "duration_per_char": 0
@@ -439,7 +439,7 @@ Adds background to the frame.
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 0.1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -456,7 +456,7 @@ Adds background to the frame.
         {
           "type": "plugins.core.blocks.text",
           "time": {
-            "duration": 5
+            "duration": 0.1
           },
           "position": [
             "center",
@@ -474,14 +474,14 @@ Adds background to the frame.
             {
               "type": "plugins.core.effects.blocks.text.write",
               "time": {
-                "duration": 5
+                "duration": 0.1
               },
               "configuration": {}
             },
             {
               "type": "plugins.core.effects.blocks.text.background",
               "time": {
-                "duration": 5
+                "duration": 0.1
               },
               "configuration": {
                 "background_color": [
@@ -523,7 +523,7 @@ Fade in the text block.
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -540,7 +540,7 @@ Fade in the text block.
         {
           "type": "plugins.core.blocks.text",
           "time": {
-            "duration": 5
+            "duration": 1
           },
           "position": [
             "center",
@@ -558,14 +558,14 @@ Fade in the text block.
             {
               "type": "plugins.core.effects.blocks.text.write",
               "time": {
-                "duration": 5
+                "duration": 1
               },
               "configuration": {}
             },
             {
               "type": "plugins.core.effects.blocks.text.background",
               "time": {
-                "duration": 5
+                "duration": 1
               },
               "configuration": {
                 "background_color": [
@@ -581,7 +581,7 @@ Fade in the text block.
             {
               "type": "plugins.core.effects.blocks.text.fadein",
               "time": {
-                "duration": 2
+                "duration": 1
               },
               "configuration": {
                 "duration": 1
@@ -616,7 +616,7 @@ Fade out the text block.
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -633,7 +633,7 @@ Fade out the text block.
         {
           "type": "plugins.core.blocks.text",
           "time": {
-            "duration": 5
+            "duration": 1
           },
           "position": [
             "center",
@@ -651,14 +651,14 @@ Fade out the text block.
             {
               "type": "plugins.core.effects.blocks.text.write",
               "time": {
-                "duration": 5
+                "duration": 1
               },
               "configuration": {}
             },
             {
               "type": "plugins.core.effects.blocks.text.background",
               "time": {
-                "duration": 5
+                "duration": 1
               },
               "configuration": {
                 "background_color": [
@@ -674,7 +674,7 @@ Fade out the text block.
             {
               "type": "plugins.core.effects.blocks.text.fadeout",
               "time": {
-                "duration": 2
+                "duration": 1
               },
               "configuration": {
                 "duration": 1
@@ -709,7 +709,7 @@ Slide in the text block from given direction into target position.
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -726,7 +726,7 @@ Slide in the text block from given direction into target position.
         {
           "type": "plugins.core.blocks.text",
           "time": {
-            "duration": 5
+            "duration": 1
           },
           "position": [
             "center",
@@ -744,14 +744,14 @@ Slide in the text block from given direction into target position.
             {
               "type": "plugins.core.effects.blocks.text.write",
               "time": {
-                "duration": 5
+                "duration": 1
               },
               "configuration": {}
             },
             {
               "type": "plugins.core.effects.blocks.text.background",
               "time": {
-                "duration": 5
+                "duration": 1
               },
               "configuration": {
                 "background_color": [
@@ -771,7 +771,7 @@ Slide in the text block from given direction into target position.
                 "duration": 1
               },
               "time": {
-                "duration": 2
+                "duration": 0.5
               }
             }
           ]
@@ -803,7 +803,7 @@ Slide out the text block to given direction (until it's not visible).
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 5
+        "duration": 1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -820,7 +820,7 @@ Slide out the text block to given direction (until it's not visible).
         {
           "type": "plugins.core.blocks.text",
           "time": {
-            "duration": 5
+            "duration": 1
           },
           "position": [
             "center",
@@ -838,14 +838,14 @@ Slide out the text block to given direction (until it's not visible).
             {
               "type": "plugins.core.effects.blocks.text.write",
               "time": {
-                "duration": 5
+                "duration": 1
               },
               "configuration": {}
             },
             {
               "type": "plugins.core.effects.blocks.text.background",
               "time": {
-                "duration": 5
+                "duration": 1
               },
               "configuration": {
                 "background_color": [
@@ -865,7 +865,7 @@ Slide out the text block to given direction (until it's not visible).
                 "duration": 1
               },
               "time": {
-                "duration": 2
+                "duration": 0.5
               }
             }
           ]

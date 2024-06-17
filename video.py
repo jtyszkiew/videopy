@@ -12,7 +12,6 @@ from moviepy.editor import TextClip
 
 from videopy.hooks import Hooks
 from videopy.main import run_scenario
-from videopy.module_validators import validate_frame
 from videopy.utils.file import get_file_extension
 from videopy.utils.loader import Loader
 from videopy.utils.logger import Logger, LoggerProvider

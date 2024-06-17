@@ -9,7 +9,7 @@ from plugins.core.templates.load_effects_template import load_effects_template
 __EFFECT_RESIZE_CENTER_CROP = {"type": f"plugins.core.effects.frames.resize", "configuration": {"mode": "center_crop"}}
 
 __BASIC_SCENARIO = {"width": 640, "height": 240, "fps": 24}
-__BASIC_DURATION = {"duration": 5}
+__BASIC_DURATION = {"duration": 2}
 __BASIC_IMAGE = "example/assets/image/1.jpg"
 
 __PLUGIN_PREFIX = "plugins.core"
@@ -42,7 +42,7 @@ def register_frames(frames):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 0.1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP]
                         }
@@ -136,13 +136,13 @@ def register_blocks(blocks):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 0.1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": __BASIC_DURATION,
+                                    "time": {"duration": 0.1},
                                     "position": ["center", "center"],
                                     "configuration": {
                                         "content": "Hello, World!",
@@ -150,7 +150,7 @@ def register_blocks(blocks):
                                     },
                                     "effects": [
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": __BASIC_DURATION},
+                                         "time": {"duration": 0.1}},
                                     ]
                                 }
                             ]
@@ -190,13 +190,13 @@ def register_effects(effects):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 0.1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": __BASIC_DURATION,
+                                    "time": {"duration": 0.1},
                                     "position": ["center", "center"],
                                     "configuration": {
                                         "content": "Hello, World!",
@@ -204,7 +204,7 @@ def register_effects(effects):
                                     },
                                     "effects": [
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": __BASIC_DURATION},
+                                         "time": {"duration": 0.1}},
                                     ]
                                 }
                             ]
@@ -241,13 +241,13 @@ def register_effects(effects):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": __BASIC_DURATION,
+                                    "time": {"duration": 1},
                                     "position": ["center", "center"],
                                     "configuration": {
                                         "content": "Hello, World!",
@@ -255,7 +255,7 @@ def register_effects(effects):
                                     },
                                     "effects": [
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.typewrite",
-                                         "time": __BASIC_DURATION},
+                                         "time": {"duration": 1}},
                                     ]
                                 }
                             ]
@@ -303,13 +303,13 @@ def register_effects(effects):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 0.1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": __BASIC_DURATION,
+                                    "time": {"duration": 0.1},
                                     "position": ["center", "center"],
                                     "configuration": {
                                         "content": "Hello, World!",
@@ -317,9 +317,9 @@ def register_effects(effects):
                                     },
                                     "effects": [
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": __BASIC_DURATION},
+                                         "time": {"duration": 0.1}},
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
-                                         "time": __BASIC_DURATION,
+                                         "time": {"duration": 0.1},
                                          "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
                                          }
                                     ]
@@ -357,13 +357,13 @@ def register_effects(effects):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": __BASIC_DURATION,
+                                    "time": {"duration": 1},
                                     "position": ["center", "center"],
                                     "configuration": {
                                         "content": "Hello, World!",
@@ -371,13 +371,13 @@ def register_effects(effects):
                                     },
                                     "effects": [
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": __BASIC_DURATION},
+                                         "time": {"duration": 1}},
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
-                                         "time": __BASIC_DURATION,
+                                         "time": {"duration": 1},
                                          "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
                                          },
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.fadein",
-                                         "time": {"duration": 2}}
+                                         "time": {"duration": 1}}
                                     ]
                                 }
                             ]
@@ -413,13 +413,13 @@ def register_effects(effects):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": __BASIC_DURATION,
+                                    "time": {"duration": 1},
                                     "position": ["center", "center"],
                                     "configuration": {
                                         "content": "Hello, World!",
@@ -427,13 +427,13 @@ def register_effects(effects):
                                     },
                                     "effects": [
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": __BASIC_DURATION},
+                                         "time": {"duration": 1}},
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
-                                         "time": __BASIC_DURATION,
+                                         "time": {"duration": 1},
                                          "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
                                          },
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.fadeout",
-                                         "time": {"duration": 2}}
+                                         "time": {"duration": 1}}
                                     ]
                                 }
                             ]
@@ -475,13 +475,13 @@ def register_effects(effects):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": __BASIC_DURATION,
+                                    "time": {"duration": 1},
                                     "position": ["center", "center"],
                                     "configuration": {
                                         "content": "Hello, World!",
@@ -489,13 +489,13 @@ def register_effects(effects):
                                     },
                                     "effects": [
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": __BASIC_DURATION},
+                                         "time": {"duration": 1}},
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
-                                         "time": __BASIC_DURATION,
+                                         "time": {"duration": 1},
                                          "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
                                          },
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.slidein",
-                                         "configuration": {"slide_from": "top"}, "time": {"duration": 2}}
+                                         "configuration": {"slide_from": "top"}, "time": {"duration": 0.5}}
                                     ]
                                 }
                             ]
@@ -537,13 +537,13 @@ def register_effects(effects):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": __BASIC_DURATION,
+                                    "time": {"duration": 1},
                                     "position": ["center", "center"],
                                     "configuration": {
                                         "content": "Hello, World!",
@@ -551,13 +551,13 @@ def register_effects(effects):
                                     },
                                     "effects": [
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": __BASIC_DURATION},
+                                         "time": {"duration": 1}},
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
-                                         "time": __BASIC_DURATION,
+                                         "time": {"duration": 1},
                                          "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
                                          },
                                         {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.slideout",
-                                         "configuration": {"slide_to": "bottom"}, "time": {"duration": 2}}
+                                         "configuration": {"slide_to": "bottom"}, "time": {"duration": 0.5}}
                                     ]
                                 }
                             ]
@@ -619,7 +619,7 @@ def register_effects(effects):
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [
                                 __EFFECT_RESIZE_CENTER_CROP,
-                                {"type": f"{__PLUGIN_PREFIX}.effects.frames.fadein", "time": {"duration": 4}}
+                                {"type": f"{__PLUGIN_PREFIX}.effects.frames.fadein", "time": {"duration": 1}}
                             ]
                         }
                     ]
@@ -657,7 +657,7 @@ def register_effects(effects):
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [
                                 __EFFECT_RESIZE_CENTER_CROP,
-                                {"type": f"{__PLUGIN_PREFIX}.effects.frames.fadeout", "time": {"duration": 4}}
+                                {"type": f"{__PLUGIN_PREFIX}.effects.frames.fadeout", "time": {"duration": 1}}
                             ]
                         }
                     ]
@@ -712,7 +712,7 @@ def register_effects(effects):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 0.1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [
                                 {"type": f"{__PLUGIN_PREFIX}.effects.frames.resize", "configuration": {"mode": "fit"}},
@@ -731,7 +731,7 @@ def register_effects(effects):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 0.1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP]
                         }
