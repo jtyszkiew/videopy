@@ -20,7 +20,7 @@ def create_dummy_scenario(compiler=None):
         "debug": False
     }
 
-    return ScenarioFactory.from_yml([], scenario, "test_scenario", Hooks(), {'dummy': compiler})
+    return ScenarioFactory.from_yml([], scenario, Hooks(), {'dummy': compiler})
 
 
 class DummyFrame(AbstractFrame):

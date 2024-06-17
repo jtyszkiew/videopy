@@ -19,9 +19,8 @@ class TestScenario(unittest.TestCase):
             "debug": False
         }
 
-        scenario = ScenarioFactory.from_yml([], scenario, "test_scenario", Hooks(), [])
+        scenario = ScenarioFactory.from_yml([], scenario, Hooks(), [])
 
-        assert scenario.name == "test_scenario"
         assert scenario.output_path == "video_yml.output.mp4"
         assert scenario.size == (1920, 1080)
         assert scenario.fps == 24
@@ -38,7 +37,7 @@ class TestScenario(unittest.TestCase):
             "debug": False
         }
 
-        scenario = ScenarioFactory.from_yml([], scenario, "test_scenario", Hooks(), [])
+        scenario = ScenarioFactory.from_yml([], scenario, Hooks(), [])
         frame = DummyFrame(Time(0, 1), scenario)
 
         with patch.object(DummyFrame, "render", return_value=TextClip("dummy").set_duration(1)) as mock_render:

@@ -6,68 +6,7 @@ VideoPy is an application built on top of the MoviePy library, designed to strea
 through the use of YAML files. By defining video scenarios in YAML, VideoPy allows users to automate common video
 creation tasks, making it accessible even to those with minimal programming experience.
 
-## How Does It Work?
-
-With VideoPy, you can define aspects of your video in a simple, human-readable YAML file. Here’s an example:
-
-```yaml
-output_path: "outputs/example.mp4"
-width: 640
-height: 960
-fps: 24
-frames:
-  - type: "plugins.core.frames.image"
-    time:
-      duration: 5
-    configuration:
-      file_path: "example/assets/image/1.jpg"
-    blocks:
-      - type: "plugins.core.blocks.text"
-        position: [ center, bottom ]
-        time:
-          duration: 5
-        configuration:
-          content: "Image 1"
-        effects:
-          - type: "plugins.core.effects.blocks.text.typewrite"
-            time:
-              duration: 4
-            configuration:
-              duration_per_char: 0.1
-          - type: "plugins.core.effects.blocks.text.background"
-            time:
-              duration: 5
-            configuration:
-              background_color: [ 255, 255, 255 ]
-          - type: "plugins.core.effects.blocks.text.fadein"
-            time:
-              duration: 1
-      - type: "plugins.core.blocks.audio"
-        time:
-          duration: 5
-        configuration:
-          file_path: "example/assets/audio/epic_sound.mp3"
-        effects:
-          - type: "plugins.core.effects.blocks.audio.play"
-            time:
-              duration: 5
-    effects:
-      - type: "plugins.core.effects.frames.resize"
-        configuration:
-          mode: "center_crop"
-      - type: "plugins.core.effects.frames.fadein"
-        time:
-          duration: 1
-```      
-
-### In this scenario, the resulting video will:
-
-- Have dimensions of **640x960** pixels and a frame rate of **24 fps**.
-- Include a single **frame** displaying an image (`example/assets/image/1.jpg`).
-- Display the block of type `text` containing the text: "Image 1" positioned at the bottom center and displayed with the "typewrite" **effect**.
-- Play audio (`example/assets/audio/epic_sound.mp3`) for the duration of the **frame**.
-- Apply a fade-in **effect** at the start.
-- Resize the image to fit centrally.
+You can jump to the [Examples](#examples) section to see some examples of how to use VideoPy.
 
 ## Why Use VideoPy?
 

@@ -59,7 +59,7 @@ class Scenario:
         if format == "gif":
             final_video.write_gif(f"{self.output_path}.gif", fps=self.fps)
         else:
-            final_video.write_videofile(f"{self.output_path}.mp4", fps=self.fps)
+            final_video.write_videofile(self.output_path, fps=self.fps)
 
     def get_compiler(self, name):
         compiler = self.compilers[name]
