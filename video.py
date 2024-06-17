@@ -12,6 +12,7 @@ from moviepy.editor import TextClip
 
 from videopy.hooks import Hooks
 from videopy.main import run_scenario
+from videopy.module_validators import validate_frame
 from videopy.utils.file import get_file_extension
 from videopy.utils.loader import Loader
 from videopy.utils.logger import Logger, LoggerProvider
@@ -32,8 +33,10 @@ def run(scenario_name: Annotated[str, typer.Argument(
     help="Scenario name to use, if you want to use your own need to provide with --scenario-file option.")] = None,
         scenario_file: Annotated[
             str, typer.Option(help="If you don't want to use auto discovered scenarios use this option")] = None,
-        scenario_data: Annotated[str, typer.Option(help="Data to pass to scenario")] = None):
-    run_scenario(scenario_name, scenario_file, "info", json.loads(scenario_data) if scenario_data else None)
+        scenario_data: Annotated[str, typer.Option(help="Data to pass to scenario")] = None,
+        scenario_content: Annotated[str, typer.Option(help="You can use this option insted of yaml file")] = None):
+    run_scenario(scenario_name, scenario_file, scenario_content, "info",
+                 json.loads(scenario_data) if scenario_data else None)
 
 
 @app.command()
@@ -175,6 +178,42 @@ def helpers(helper_name: Annotated[str, typer.Argument(help="Helper to show info
     if helper_name == "fonts":
         print(TextClip("fonts").list('font'))
 
+    if helper_name == "examples":
+        print("Starting to generate examples")
+        hooks = Hooks()
+        Loader.load_plugins("plugins", hooks)
+        md_file = ""
+
+        blocks, effects, frames, file_loaders, compilers, fields = {}, {}, {}, {}, {}, {}
+
+        hooks.run_hook("videopy.modules.frames.register", frames)
+        hooks.run_hook("videopy.modules.blocks.register", blocks)
+        hooks.run_hook("videopy.modules.effects.register", effects)
+        hooks.run_hook("videopy.modules.file_loaders.register", file_loaders)
+        hooks.run_hook("videopy.modules.compilers.register", compilers)
+        hooks.run_hook("videopy.modules.forms.fields.register", fields)
+
+        md_file += "# Frames \n"
+        for key, frame in frames.items():
+            md_file = __print_example_container(md_file, key, frame)
+
+        md_file += "# Frame Effects \n"
+        for key, effect in effects.items():
+            if 'frame' in effect['renders_on']:
+                md_file = __print_example_container(md_file, key, effect)
+
+        md_file += "# Blocks \n"
+        for key, block in blocks.items():
+            md_file = __print_example_container(md_file, key, block)
+
+        md_file += "# Blocks Effects \n"
+        for key, effect in effects.items():
+            if 'block' in effect['renders_on']:
+                md_file = __print_example_container(md_file, key, effect)
+
+        with open("example.md", "w") as f:
+            f.write(md_file)
+
 
 def __display_configuration_table(module: str, concrete_module_name: str):
     Logger.enabled = False
@@ -205,6 +244,39 @@ def __display_configuration_table(module: str, concrete_module_name: str):
         )
 
     console.print(table)
+
+def __print_example_container(md_file, key, module):
+    if module.get('examples', None):
+        md_file = __print_example_header(md_file, key, module)
+
+        for index, example in enumerate(module['examples']):
+            module['examples'][index]['scenario']['output_path'] = f"example/generated/{key}_example_{index}"
+            run_scenario(scenario_content=module['examples'][index]['scenario'], format="gif")
+
+            md_file = __print_example(md_file, key, module, example, index, example.get('tips', []))
+
+    return md_file
+
+def __print_example_header(md_file, key, frame):
+    md_file += f"## {key}\n"
+    md_file += f"{frame['description']}\n"
+
+    return md_file
+
+
+def __print_example(md_file, key, frame, example, index, tips=None):
+    if tips is None:
+        tips = []
+
+    md_file += f"### {example['name']}\n"
+    md_file += f"![{key} - {frame['description']} - Example {index}](example/generated/{key}_example_{index}.gif)\n"
+    md_file += f">{example['description']}\n\n"
+    for tip in tips:
+        md_file += f"> {tip}\n\n"
+    md_file += "\n"
+    md_file += f"<details><summary>Example code</summary>\n\n```yaml\n{json.dumps(example['scenario'], indent=2)}\n```\n\n</details>\n\n"
+
+    return md_file
 
 
 if __name__ == "__main__":

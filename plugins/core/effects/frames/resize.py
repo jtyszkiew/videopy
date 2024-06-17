@@ -14,8 +14,8 @@ class Effect(AbstractFrameEffect):
         clip = self.frame.clip
 
         resizers = {
-            'shrink': {
-                'handler': shrink
+            'fit': {
+                'handler': fit
             },
             'center_crop': {
                 'handler': center_crop
@@ -51,8 +51,8 @@ class EffectFactory(AbstractEffectFactory):
         return Effect(Time(0, 0), configuration)
 
 
-def shrink(effect, clip):
-    width, height = effect.frame.scenario.width, effect.frame.scenario.height
+def fit(effect, clip):
+    width, height = effect.frame.scenario.size
 
     return clip.resize(newsize=[width, height])  # Shrink to fit
 
@@ -75,4 +75,4 @@ def center_crop(effect, clip):
 
 
 def default(effect, clip):
-    return clip.resize(effect.time.duration)
+    return clip.resize(effect.frame.scenario.size)

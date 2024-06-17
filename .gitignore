@@ -4,4 +4,4 @@ venv
 out
 outputs
 .coverage
-assets
+./assets

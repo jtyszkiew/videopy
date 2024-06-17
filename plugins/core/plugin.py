@@ -6,6 +6,14 @@ from plugins.core.compilers.use_target import UseTargetCompiler
 from plugins.core.loaders.yaml import yaml_file_loader
 from plugins.core.templates.load_effects_template import load_effects_template
 
+__EFFECT_RESIZE_CENTER_CROP = {"type": f"plugins.core.effects.frames.resize", "configuration": {"mode": "center_crop"}}
+
+__BASIC_SCENARIO = {"width": 640, "height": 240, "fps": 24}
+__BASIC_DURATION = {"duration": 5}
+__BASIC_IMAGE = "example/assets/image/1.jpg"
+
+__PLUGIN_PREFIX = "plugins.core"
+
 
 def register_scenarios(scenarios):
     scenarios["images_dir_to_video"] = {
@@ -14,7 +22,7 @@ def register_scenarios(scenarios):
 
 
 def register_frames(frames):
-    frames["plugins.core.frames.image"] = {
+    frames[f"{__PLUGIN_PREFIX}.frames.image"] = {
         "description": "This frame will display an image.",
         "configuration": {
             "file_path": {
@@ -22,9 +30,29 @@ def register_frames(frames):
                 "type": "str",
                 "required": True
             }
-        }
+        },
+        "examples": [
+            {
+                "name": "Showing Image as Frame",
+                "description": "This example shows how to display an image as a frame.",
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [__EFFECT_RESIZE_CENTER_CROP]
+                        }
+                    ]
+                },
+            }
+        ]
     }
-    frames["plugins.core.frames.video"] = {
+
+    frames[f"{__PLUGIN_PREFIX}.frames.video"] = {
         "description": "This frame will display an video.",
         "configuration": {
             "file_path": {
@@ -55,7 +83,7 @@ def register_frames(frames):
 
 
 def register_blocks(blocks):
-    blocks["plugins.core.blocks.text"] = {
+    blocks[f"{__PLUGIN_PREFIX}.blocks.text"] = {
         "description": "This block will display text.",
         "configuration": {
             "content": {
@@ -93,9 +121,46 @@ def register_blocks(blocks):
                 "default": 20,
                 "required": False
             }
-        }
+        },
+        "examples": [
+            {
+                "name": "Showing Text as Block",
+                "description": "This example shows how to display text as a block.",
+                "tips": [
+                    "Don't forget to use some display effect on text block to make it visible. (write, typewrite, etc.)"
+                ],
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "blocks": [
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.text",
+                                    "time": __BASIC_DURATION,
+                                    "position": ["center", "center"],
+                                    "configuration": {
+                                        "content": "Hello, World!",
+                                        "color": "white",
+                                    },
+                                    "effects": [
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
+                                         "time": __BASIC_DURATION},
+                                    ]
+                                }
+                            ]
+                        },
+                    ]
+                },
+            }
+        ]
     }
-    blocks["plugins.core.blocks.audio"] = {
+    blocks[f"{__PLUGIN_PREFIX}.blocks.audio"] = {
         "description": "This is base block to manage audio on frame",
         "configuration": {
             "file_path": {
@@ -109,15 +174,49 @@ def register_blocks(blocks):
 
 def register_effects(effects):
     # BLOCKS / TEXT / WRITE
-    effects["plugins.core.effects.blocks.text.write"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.blocks.text.write"] = {
         "description": "Write text on a block. This is a base effect if you want to display text.",
         "renders_on": {
             "block": ["text"]
         },
+        "examples": [
+            {
+                "name": "Write Effect On Text Block",
+                "description": "This example shows how to add write effect on text block.",
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "blocks": [
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.text",
+                                    "time": __BASIC_DURATION,
+                                    "position": ["center", "center"],
+                                    "configuration": {
+                                        "content": "Hello, World!",
+                                        "color": "white",
+                                    },
+                                    "effects": [
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
+                                         "time": __BASIC_DURATION},
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+            }
+        ]
     }
 
     # BLOCKS / TEXT / TYPEWRITE
-    effects["plugins.core.effects.blocks.text.typewrite"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.blocks.text.typewrite"] = {
         "description": "This effect will type the text one the block.",
         "renders_on": {
             "block": ["text"]
@@ -130,11 +229,45 @@ def register_effects(effects):
                 "default": 0,
                 "required": False
             }
-        }
+        },
+        "examples": [
+            {
+                "name": "Typewrite Effect On Text Block",
+                "description": "This example shows how to add typewrite effect on text block.",
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "blocks": [
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.text",
+                                    "time": __BASIC_DURATION,
+                                    "position": ["center", "center"],
+                                    "configuration": {
+                                        "content": "Hello, World!",
+                                        "color": "white",
+                                    },
+                                    "effects": [
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.typewrite",
+                                         "time": __BASIC_DURATION},
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+            }
+        ]
     }
 
     # BLOCKS / TEXT / BACKGROUND
-    effects["plugins.core.effects.blocks.text.background"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.blocks.text.background"] = {
         "description": "Adds background to the frame.",
         "renders_on": {
             "block": ["text"]
@@ -158,11 +291,49 @@ def register_effects(effects):
                 "default": 10,
                 "required": False
             }
-        }
+        },
+        "examples": [
+            {
+                "name": "Background Effect On Text Block",
+                "description": "This example shows how to add background effect on text block.",
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "blocks": [
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.text",
+                                    "time": __BASIC_DURATION,
+                                    "position": ["center", "center"],
+                                    "configuration": {
+                                        "content": "Hello, World!",
+                                        "color": "white",
+                                    },
+                                    "effects": [
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
+                                         "time": __BASIC_DURATION},
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
+                                         "time": __BASIC_DURATION,
+                                         "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
+                                         }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+            }
+        ]
     }
 
     # BLOCKS / TEXT / FADEIN
-    effects["plugins.core.effects.blocks.text.fadein"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.blocks.text.fadein"] = {
         "description": "Fade in the text block.",
         "renders_on": {
             "block": ["text"]
@@ -174,11 +345,51 @@ def register_effects(effects):
                 "default": 1,
                 "required": False
             }
-        }
+        },
+        "examples": [
+            {
+                "name": "Fade In Effect On Text Block",
+                "description": "This example shows how to add fade in effect on text block.",
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "blocks": [
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.text",
+                                    "time": __BASIC_DURATION,
+                                    "position": ["center", "center"],
+                                    "configuration": {
+                                        "content": "Hello, World!",
+                                        "color": "white",
+                                    },
+                                    "effects": [
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
+                                         "time": __BASIC_DURATION},
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
+                                         "time": __BASIC_DURATION,
+                                         "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
+                                         },
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.fadein",
+                                         "time": {"duration": 2}}
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+            },
+        ]
     }
 
     # BLOCKS / TEXT / FADEOUT
-    effects["plugins.core.effects.blocks.text.fadeout"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.blocks.text.fadeout"] = {
         "description": "Fade out the text block.",
         "renders_on": {
             "block": ["text"]
@@ -190,11 +401,51 @@ def register_effects(effects):
                 "default": 1,
                 "required": False
             }
-        }
+        },
+        "examples": [
+            {
+                "name": "Fade Out Effect On Text Block",
+                "description": "This example shows how to add fade out effect on text block.",
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "blocks": [
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.text",
+                                    "time": __BASIC_DURATION,
+                                    "position": ["center", "center"],
+                                    "configuration": {
+                                        "content": "Hello, World!",
+                                        "color": "white",
+                                    },
+                                    "effects": [
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
+                                         "time": __BASIC_DURATION},
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
+                                         "time": __BASIC_DURATION,
+                                         "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
+                                         },
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.fadeout",
+                                         "time": {"duration": 2}}
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+            },
+        ]
     }
 
     # BLOCKS / TEXT / SLIDEIN
-    effects["plugins.core.effects.blocks.text.slidein"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.blocks.text.slidein"] = {
         "description": "Slide in the text block from given direction into target position.",
         "renders_on": {
             "block": ["text"]
@@ -212,11 +463,51 @@ def register_effects(effects):
                 "default": "left",
                 "required": False
             },
-        }
+        },
+        "examples": [
+            {
+                "name": "Text Block Slide In Effect",
+                "description": "This example shows how to add slide in effect on text block.",
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "blocks": [
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.text",
+                                    "time": __BASIC_DURATION,
+                                    "position": ["center", "center"],
+                                    "configuration": {
+                                        "content": "Hello, World!",
+                                        "color": "white",
+                                    },
+                                    "effects": [
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
+                                         "time": __BASIC_DURATION},
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
+                                         "time": __BASIC_DURATION,
+                                         "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
+                                         },
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.slidein",
+                                         "configuration": {"slide_from": "top"}, "time": {"duration": 2}}
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+            }
+        ]
     }
 
     # BLOCKS / TEXT / SLIDEIN
-    effects["plugins.core.effects.blocks.text.slideout"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.blocks.text.slideout"] = {
         "description": "Slide out the text block to given direction (until it's not visible).",
         "renders_on": {
             "block": ["text"]
@@ -234,11 +525,51 @@ def register_effects(effects):
                 "default": "left",
                 "required": False
             },
-        }
+        },
+        "examples": [
+            {
+                "name": "Text Block Slide Out Effect",
+                "description": "This example shows how to add slide out effect on text block.",
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "blocks": [
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.text",
+                                    "time": __BASIC_DURATION,
+                                    "position": ["center", "center"],
+                                    "configuration": {
+                                        "content": "Hello, World!",
+                                        "color": "white",
+                                    },
+                                    "effects": [
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
+                                         "time": __BASIC_DURATION},
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
+                                         "time": __BASIC_DURATION,
+                                         "configuration": {"background_color": [0, 0, 0], "border_radius": 10},
+                                         },
+                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.slideout",
+                                         "configuration": {"slide_to": "bottom"}, "time": {"duration": 2}}
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+            }
+        ]
     }
 
     # BLOCKS / AUDIO / PLAY
-    effects["plugins.core.effects.blocks.audio.play"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.blocks.audio.play"] = {
         "description": "Play audio on block.",
         "renders_on": {
             "block": ["audio"]
@@ -260,7 +591,7 @@ def register_effects(effects):
     }
 
     # FRAMES / FADEIN
-    effects["plugins.core.effects.frames.fadein"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.frames.fadein"] = {
         "description": "Fade in the frame.",
         "renders_on": {
             "frame": ["image"],
@@ -272,11 +603,33 @@ def register_effects(effects):
                 "default": 1,
                 "required": False
             }
-        }
+        },
+        "examples": [
+            {
+                "name": "Fade In effect on frame",
+                "description": "This example shows how to add fade in effect on frame.",
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [
+                                __EFFECT_RESIZE_CENTER_CROP,
+                                {"type": f"{__PLUGIN_PREFIX}.effects.frames.fadein", "time": {"duration": 4}}
+                            ]
+                        }
+                    ]
+                },
+            }
+        ]
     }
 
     # FRAMES / FADEOUT
-    effects["plugins.core.effects.frames.fadeout"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.frames.fadeout"] = {
         "description": "Fade out the frame.",
         "renders_on": {
             "frame": ["image"],
@@ -288,11 +641,33 @@ def register_effects(effects):
                 "default": 1,
                 "required": False
             }
-        }
+        },
+        "examples": [
+            {
+                "name": "Fade Out effect on frame",
+                "description": "This example shows how to add fade out effect on frame.",
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [
+                                __EFFECT_RESIZE_CENTER_CROP,
+                                {"type": f"{__PLUGIN_PREFIX}.effects.frames.fadeout", "time": {"duration": 4}}
+                            ]
+                        }
+                    ]
+                },
+            }
+        ]
     }
 
     # FRAMES / AUDIO
-    effects["plugins.core.effects.frames.audio"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.frames.audio"] = {
         "description": "Adds audio effect on frame.",
         "renders_on": {
             "frame": ["image"],
@@ -313,7 +688,7 @@ def register_effects(effects):
     }
 
     # FRAMES / RESIZE
-    effects["plugins.core.effects.frames.resize"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.frames.resize"] = {
         "description": "Resize the frame with given mode.",
         "renders_on": {
             "frame": ["image"],
@@ -325,11 +700,49 @@ def register_effects(effects):
                 "required": False,
                 "default": "default",
             },
-        }
+        },
+        "examples": [
+            {
+                "name": "Resize Effect - Fit",
+                "description": "This example shows how to add 'fit' resize effect on frame.",
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [
+                                {"type": f"{__PLUGIN_PREFIX}.effects.frames.resize", "configuration": {"mode": "fit"}},
+                            ]
+                        }
+                    ]
+                },
+            },
+            {
+                "name": "Resize Effect - Center crop",
+                "description": "This example shows how to add 'center_crop' resize effect on frame.",
+                "scenario": {
+                    "width": 640,
+                    "height": 240,
+                    "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __BASIC_DURATION,
+                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "effects": [__EFFECT_RESIZE_CENTER_CROP]
+                        }
+                    ]
+                },
+            }
+        ]
     }
 
     # FRAMES / BOUNCEIN
-    effects["plugins.core.effects.frames.bouncein"] = {
+    effects[f"{__PLUGIN_PREFIX}.effects.frames.bouncein"] = {
         "description": "Bounce in the frame.",
         "renders_on": {
             "frame": ["image"],
@@ -359,15 +772,15 @@ def register_effects(effects):
 
 
 def register_fields(fields):
-    fields["plugins.core.fields.directory"] = {
+    fields[f"{__PLUGIN_PREFIX}.fields.directory"] = {
         "description": "The path to the directory.",
     }
 
-    fields["plugins.core.fields.output_path"] = {
+    fields[f"{__PLUGIN_PREFIX}.fields.output_path"] = {
         "description": "The path to the output file.",
     }
 
-    fields["plugins.core.fields.resolution"] = {
+    fields[f"{__PLUGIN_PREFIX}.fields.resolution"] = {
         "description": "Video resolution selector.",
         "configuration": {
             "resolutions": {
@@ -382,7 +795,7 @@ def register_fields(fields):
         }
     }
 
-    fields["plugins.core.fields.fps"] = {
+    fields[f"{__PLUGIN_PREFIX}.fields.fps"] = {
         "description": "Video FPS selector.",
         "configuration": {
             "fps": {
@@ -401,15 +814,15 @@ def register_fields(fields):
         }
     }
 
-    fields["plugins.core.fields.text"] = {
+    fields[f"{__PLUGIN_PREFIX}.fields.text"] = {
         "description": "Simple text input",
     }
 
-    fields["plugins.core.fields.timer"] = {
+    fields[f"{__PLUGIN_PREFIX}.fields.timer"] = {
         "description": "Time input with hours, minutes and seconds."
     }
 
-    fields["plugins.core.fields.media_selector"] = {
+    fields[f"{__PLUGIN_PREFIX}.fields.media_selector"] = {
         "description": "Media selector",
         "configuration": {
             "extensions": {

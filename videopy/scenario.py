@@ -6,7 +6,7 @@ from videopy.utils.logger import Logger
 
 
 class Scenario:
-    def __init__(self, modules_yml, scenario_yml, name, hooks, compilers,
+    def __init__(self, modules_yml, scenario_yml, hooks, compilers,
                  output_path="video_yml.output.mp4", width=1920, height=1080, fps=24):
         self.frames = []
         self.audio = []
@@ -18,7 +18,6 @@ class Scenario:
         self.fps = fps
         self.modules_yml = modules_yml
         self.scenario_yml = scenario_yml
-        self.name = name
         self.compilers = compilers
 
     def add_frame(self, frame):
@@ -29,7 +28,7 @@ class Scenario:
     def add_audio(self, audio):
         self.audio.append(audio)
 
-    def render(self):
+    def render(self, format="mp4"):
         Logger.debug(f"Rendering scenario with <<{len(self.frames)}>> frames "
                      f"with a total time of <<{self.total_time}>> seconds")
 
@@ -57,7 +56,10 @@ class Scenario:
             audio = concatenate_audioclips(self.audio)
             final_video = final_video.set_audio(audio)
 
-        final_video.write_videofile(self.output_path, fps=self.fps)
+        if format == "gif":
+            final_video.write_gif(f"{self.output_path}.gif", fps=self.fps)
+        else:
+            final_video.write_videofile(f"{self.output_path}.mp4", fps=self.fps)
 
     def get_compiler(self, name):
         compiler = self.compilers[name]
@@ -70,6 +72,6 @@ class Scenario:
 
 class ScenarioFactory:
     @staticmethod
-    def from_yml(modules_yml, scenario_yml, name, hooks, compilers):
-        return Scenario(modules_yml, scenario_yml, name, hooks, compilers, scenario_yml['output_path'],
+    def from_yml(modules_yml, scenario_yml, hooks, compilers):
+        return Scenario(modules_yml, scenario_yml, hooks, compilers, scenario_yml['output_path'],
                         scenario_yml['width'], scenario_yml['height'], scenario_yml['fps'])

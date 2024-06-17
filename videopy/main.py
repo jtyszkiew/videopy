@@ -41,11 +41,18 @@ def register_modules(hooks):
     return scenarios, blocks, effects, frames, file_loaders, compilers, fields
 
 
-def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level: str = "info", scenario_data=None):
+def run_scenario(
+        scenario_name: str = None,
+        scenario_file: str = None,
+        scenario_content: dict = None,
+        log_level: str = "info",
+        scenario_data=None,
+        format: str = "mp4"
+):
     Logger.set_level(log_level)
 
-    if scenario_file is None and scenario_name is None:
-        raise ValueError("You need to provide either --scenario-file or --scenario-name")
+    if scenario_file is None and scenario_name is None and scenario_content is None:
+        raise ValueError("You need to provide one of: --scenario-file, --scenario-name, --scenario-content")
 
     hooks = Hooks()
 
@@ -68,12 +75,14 @@ def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level
         "fields": fields,
     }
 
-    if file_loaders[get_file_extension(scenario_file)]:
-        scenario_yml = file_loaders[get_file_extension(scenario_file)](scenario_file)
+    if scenario_content is None:
+        if file_loaders[get_file_extension(scenario_file)]:
+            scenario_yml = file_loaders[get_file_extension(scenario_file)](scenario_file)
+        else:
+            raise ValueError(f"File loader for extension [{get_file_extension(scenario_file)}] not found")
     else:
-        raise ValueError(f"File loader for extension [{get_file_extension(scenario_file)}] not found")
+        scenario_yml = scenario_content
 
-    scenario_name = get_file_name_without_extension(scenario_file)
     form = None
 
     if "form" in scenario_yml and scenario_data is None:
@@ -101,7 +110,7 @@ def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level
 
         script.do_run(hooks, form_input_data)
 
-    scenario = ScenarioFactory.from_yml(modules, scenario_yml, scenario_name, hooks, compilers)
+    scenario = ScenarioFactory.from_yml(modules, scenario_yml, hooks, compilers)
 
     for frame_yml in scenario_yml['frames']:
         frame = __create_frame(modules, frame_yml, scenario)
@@ -121,7 +130,7 @@ def run_scenario(scenario_name: str = None, scenario_file: str = None, log_level
                 block.add_effect(__create_effect(modules, effect_yml))
 
         scenario.add_frame(frame)
-    scenario.render()
+    scenario.render(format)
 
 
 def __create_effect(modules, effect_yml):
