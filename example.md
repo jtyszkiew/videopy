@@ -3,6 +3,7 @@
 This frame will display an image.
 ### Example: Showing Image as Frame
 ![plugins.core.frames.image - This frame will display an image. - Example 0](example/generated/plugins.core.frames.image_example_0.gif)
+> [!TIP]
 >This example shows how to display an image as a frame.
 
 
@@ -43,7 +44,9 @@ This frame will display an image.
 Fade in the frame.
 ### Example: Fade In effect on frame
 ![plugins.core.effects.frames.fadein - Fade in the frame. - Example 0](example/generated/plugins.core.effects.frames.fadein_example_0.gif)
->This example shows how to add fade in effect on frame.
+
+> [!TIP]
+> This example shows how to add fade in effect on frame.
 
 
 <details><summary>Example code</summary>
@@ -91,6 +94,7 @@ Fade in the frame.
 Fade out the frame.
 ### Example: Fade Out effect on frame
 ![plugins.core.effects.frames.fadeout - Fade out the frame. - Example 0](example/generated/plugins.core.effects.frames.fadeout_example_0.gif)
+> [!TIP]
 >This example shows how to add fade out effect on frame.
 
 
@@ -139,6 +143,7 @@ Fade out the frame.
 Resize the frame with given mode.
 ### Example: Resize Effect - Fit
 ![plugins.core.effects.frames.resize - Resize the frame with given mode. - Example 0](example/generated/plugins.core.effects.frames.resize_example_0.gif)
+> [!TIP]
 >This example shows how to add 'fit' resize effect on frame.
 
 
@@ -176,6 +181,7 @@ Resize the frame with given mode.
 
 ### Example: Resize Effect - Center crop
 ![plugins.core.effects.frames.resize - Resize the frame with given mode. - Example 1](example/generated/plugins.core.effects.frames.resize_example_1.gif)
+> [!TIP]
 >This example shows how to add 'center_crop' resize effect on frame.
 
 
@@ -216,8 +222,10 @@ Resize the frame with given mode.
 This block will display text.
 ### Example: Showing Text as Block
 ![plugins.core.blocks.text - This block will display text. - Example 0](example/generated/plugins.core.blocks.text_example_0.gif)
+> [!TIP]
 >This example shows how to display text as a block.
 
+> [!TIP]
 > Don't forget to use some display effect on text block to make it visible. (write, typewrite, etc.)
 
 
@@ -287,6 +295,7 @@ This block will display text.
 Write text on a block. This is a base effect if you want to display text.
 ### Example: Write Effect On Text Block
 ![plugins.core.effects.blocks.text.write - Write text on a block. This is a base effect if you want to display text. - Example 0](example/generated/plugins.core.effects.blocks.text.write_example_0.gif)
+> [!TIP]
 >This example shows how to add write effect on text block.
 
 
@@ -355,6 +364,7 @@ Write text on a block. This is a base effect if you want to display text.
 This effect will type the text one the block.
 ### Example: Typewrite Effect On Text Block
 ![plugins.core.effects.blocks.text.typewrite - This effect will type the text one the block. - Example 0](example/generated/plugins.core.effects.blocks.text.typewrite_example_0.gif)
+> [!TIP]
 >This example shows how to add typewrite effect on text block.
 
 
@@ -425,6 +435,7 @@ This effect will type the text one the block.
 Adds background to the frame.
 ### Example: Background Effect On Text Block
 ![plugins.core.effects.blocks.text.background - Adds background to the frame. - Example 0](example/generated/plugins.core.effects.blocks.text.background_example_0.gif)
+> [!TIP]
 >This example shows how to add background effect on text block.
 
 
@@ -509,6 +520,7 @@ Adds background to the frame.
 Fade in the text block.
 ### Example: Fade In Effect On Text Block
 ![plugins.core.effects.blocks.text.fadein - Fade in the text block. - Example 0](example/generated/plugins.core.effects.blocks.text.fadein_example_0.gif)
+> [!TIP]
 >This example shows how to add fade in effect on text block.
 
 
@@ -602,6 +614,7 @@ Fade in the text block.
 Fade out the text block.
 ### Example: Fade Out Effect On Text Block
 ![plugins.core.effects.blocks.text.fadeout - Fade out the text block. - Example 0](example/generated/plugins.core.effects.blocks.text.fadeout_example_0.gif)
+> [!TIP]
 >This example shows how to add fade out effect on text block.
 
 
@@ -695,6 +708,7 @@ Fade out the text block.
 Slide in the text block from given direction into target position.
 ### Example: Text Block Slide In Effect
 ![plugins.core.effects.blocks.text.slidein - Slide in the text block from given direction into target position. - Example 0](example/generated/plugins.core.effects.blocks.text.slidein_example_0.gif)
+> [!TIP]
 >This example shows how to add slide in effect on text block.
 
 
@@ -789,6 +803,7 @@ Slide in the text block from given direction into target position.
 Slide out the text block to given direction (until it's not visible).
 ### Example: Text Block Slide Out Effect
 ![plugins.core.effects.blocks.text.slideout - Slide out the text block to given direction (until it's not visible). - Example 0](example/generated/plugins.core.effects.blocks.text.slideout_example_0.gif)
+> [!TIP]
 >This example shows how to add slide out effect on text block.
 
 

@@ -269,8 +269,10 @@ def __print_example(md_file, key, frame, example, index, tips=None):
 
     md_file += f"### Example: {example['name']}\n"
     md_file += f"![{key} - {frame['description']} - Example {index}](example/generated/{key}_example_{index}.gif)\n"
+    md_file += "> [!TIP]\n"
     md_file += f">{example['description']}\n\n"
     for tip in tips:
+        md_file += "> [!TIP]\n"
         md_file += f"> {tip}\n\n"
     md_file += "\n"
     md_file += f"<details><summary>Example code</summary>\n\n```yaml\n{json.dumps(example['scenario'], indent=2)}\n```\n\n</details>\n\n"
