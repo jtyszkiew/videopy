@@ -10,9 +10,6 @@ This frame will display an image.
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
@@ -32,6 +29,9 @@ This frame will display an image.
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.frames.image_example_0"
 }
 ```
@@ -50,14 +50,11 @@ Fade in the frame.
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 2
+        "duration": 1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -72,7 +69,7 @@ Fade in the frame.
         {
           "type": "plugins.core.effects.frames.fadein",
           "time": {
-            "duration": 1
+            "duration": 0.5
           },
           "configuration": {
             "duration": 1
@@ -81,6 +78,9 @@ Fade in the frame.
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.effects.frames.fadein_example_0"
 }
 ```
@@ -98,14 +98,11 @@ Fade out the frame.
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
       "time": {
-        "duration": 2
+        "duration": 1
       },
       "configuration": {
         "file_path": "example/assets/image/1.jpg"
@@ -120,7 +117,7 @@ Fade out the frame.
         {
           "type": "plugins.core.effects.frames.fadeout",
           "time": {
-            "duration": 1
+            "duration": 0.5
           },
           "configuration": {
             "duration": 1
@@ -129,6 +126,9 @@ Fade out the frame.
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.effects.frames.fadeout_example_0"
 }
 ```
@@ -146,9 +146,6 @@ Resize the frame with given mode.
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
@@ -168,6 +165,9 @@ Resize the frame with given mode.
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.effects.frames.resize_example_0"
 }
 ```
@@ -183,9 +183,6 @@ Resize the frame with given mode.
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
@@ -205,6 +202,9 @@ Resize the frame with given mode.
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.effects.frames.resize_example_1"
 }
 ```
@@ -225,9 +225,6 @@ This block will display text.
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
@@ -276,6 +273,9 @@ This block will display text.
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.blocks.text_example_0"
 }
 ```
@@ -294,9 +294,6 @@ Write text on a block. This is a base effect if you want to display text.
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
@@ -345,6 +342,9 @@ Write text on a block. This is a base effect if you want to display text.
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.effects.blocks.text.write_example_0"
 }
 ```
@@ -362,9 +362,6 @@ This effect will type the text one the block.
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
@@ -415,6 +412,9 @@ This effect will type the text one the block.
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.effects.blocks.text.typewrite_example_0"
 }
 ```
@@ -422,9 +422,9 @@ This effect will type the text one the block.
 </details>
 
 ## Type: plugins.core.effects.blocks.text.background
-Adds background to the frame.
+Adds background to the block.
 ### Example: Background Effect On Text Block
-![plugins.core.effects.blocks.text.background - Adds background to the frame. - Example 0](example/generated/plugins.core.effects.blocks.text.background_example_0.gif)
+![plugins.core.effects.blocks.text.background - Adds background to the block. - Example 0](example/generated/plugins.core.effects.blocks.text.background_example_0.gif)
 >This example shows how to add background effect on text block.
 
 
@@ -432,9 +432,6 @@ Adds background to the frame.
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
@@ -498,6 +495,9 @@ Adds background to the frame.
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.effects.blocks.text.background_example_0"
 }
 ```
@@ -515,9 +515,6 @@ Fade in the text block.
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
@@ -590,6 +587,9 @@ Fade in the text block.
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.effects.blocks.text.fadein_example_0"
 }
 ```
@@ -607,9 +607,6 @@ Fade out the text block.
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
@@ -682,6 +679,9 @@ Fade out the text block.
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.effects.blocks.text.fadeout_example_0"
 }
 ```
@@ -699,9 +699,6 @@ Slide in the text block from given direction into target position.
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
@@ -775,6 +772,9 @@ Slide in the text block from given direction into target position.
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.effects.blocks.text.slidein_example_0"
 }
 ```
@@ -792,9 +792,6 @@ Slide out the text block to given direction (until it's not visible).
 
 ```yaml
 {
-  "width": 640,
-  "height": 240,
-  "fps": 24,
   "frames": [
     {
       "type": "plugins.core.frames.image",
@@ -868,6 +865,9 @@ Slide out the text block to given direction (until it's not visible).
       ]
     }
   ],
+  "width": 640,
+  "height": 240,
+  "fps": 24,
   "output_path": "example/generated/plugins.core.effects.blocks.text.slideout_example_0"
 }
 ```

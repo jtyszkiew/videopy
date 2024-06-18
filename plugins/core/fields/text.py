@@ -15,6 +15,11 @@ class Field(AbstractField):
             name=self.name,
         )
 
+    def get_value(self):
+        return {
+            "text": self.widget.value
+        }
+
 
 class FieldFactory(AbstractFieldFactory):
     def from_yml(self, field_yml, name, form):

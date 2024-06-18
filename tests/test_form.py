@@ -16,10 +16,6 @@ class TestAbstractField(unittest.TestCase):
         self.field.widget.value = "some value"
         self.field.widget.validate = MagicMock(return_value=ValidationResult.success())
 
-    def test_get_value(self):
-        value = self.field.get_value()
-        self.assertEqual(value, "some value")
-
     def test_validate_success(self):
         result = self.field.validate()
         self.assertTrue(result.is_valid)

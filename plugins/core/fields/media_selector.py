@@ -15,8 +15,10 @@ class IsMediaFileValidator(Validator):
         self.extensions = extensions
         self.required = required
 
-    def validate(self, value: str) -> ValidationResult:
-        if (value == "" or value is None) and self.required is False:
+    def validate(self, value: dict) -> ValidationResult:
+        value = value['path']
+
+        if not value and self.required is False:
             return self.success()
 
         ext = get_file_extension(value)
@@ -43,6 +45,11 @@ class Field(AbstractField):
             validators=[IsMediaFileValidator(self.configuration['extensions'], self.required)],
             validate_on=["submitted"],
         )
+
+    def get_value(self):
+        return {
+            "path": self.widget.value
+        }
 
 
 class FieldFactory(AbstractFieldFactory):

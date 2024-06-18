@@ -1,3 +1,5 @@
+from moviepy.editor import TextClip
+
 def get_position_with_padding(position, clip_size, padding_percent, bg_width, bg_height):
     clip_width, clip_height = clip_size
     padding_x = clip_width * padding_percent / 100
@@ -41,3 +43,7 @@ def transform_position(position, frame, block, margin=0):
         pos_y = frame_height - block_height - margin
 
     return (pos_x, pos_y)
+
+
+def load_fonts():
+    return TextClip("fonts").list('font')

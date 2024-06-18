@@ -3,18 +3,18 @@ form:
     directory:
       label: "Directory"
       type: "plugins.core.fields.directory"
-      description: "Directory containing images"
+      description: "Directory from which the images will be taken"
       required: true
-    resolution:
-      type: "plugins.core.fields.resolution"
-      description: "Resolution of the video"
-      label: "Resolution"
+    display:
+      type: "plugins.core.fields.display"
+      description: "Settings for displaying the video"
+      label: "Resolution / FPS Settings"
       required: true
-    fps:
-      type: "plugins.core.fields.fps"
-      label: "FPS"
+    font:
+      type: "plugins.core.fields.font"
+      description: "Font settings for the video"
+      label: "Font family / size / color"
       required: true
-      description: "Frames per second"
     frame_duration:
       type: "plugins.core.fields.timer"
       description: "Duration of each frame in seconds"
@@ -33,10 +33,10 @@ form:
       type: "plugins.core.fields.text"
       description: "Title will be shown on first frame in [center,top]"
       required: false
-    output_path:
-      label: "Output Path"
-      type: "plugins.core.fields.output_path"
-      description: "Output path should be built of directory and file name"
+    output:
+      label: "Output"
+      type: "plugins.core.fields.output"
+      description: "Output path should be built of directory, file name and extension"
       required: true
 script: "plugins.core.scenarios.images_dir_to_video.images_dir_to_video"
 description: |

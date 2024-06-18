@@ -5,14 +5,15 @@ from plugins.core.compilers.use_source import UseSourceCompiler
 from plugins.core.compilers.use_target import UseTargetCompiler
 from plugins.core.loaders.yaml import yaml_file_loader
 from plugins.core.templates.load_effects_template import load_effects_template
-
-__EFFECT_RESIZE_CENTER_CROP = {"type": f"plugins.core.effects.frames.resize", "configuration": {"mode": "center_crop"}}
-
-__BASIC_SCENARIO = {"width": 640, "height": 240, "fps": 24}
-__BASIC_DURATION = {"duration": 2}
-__BASIC_IMAGE = "example/assets/image/1.jpg"
+from videopy.utils.utils import load_fonts
 
 __PLUGIN_PREFIX = "plugins.core"
+__EFFECT_RESIZE_CENTER_CROP = {"type": f"{__PLUGIN_PREFIX}.effects.frames.resize",
+                               "configuration": {"mode": "center_crop"}}
+__BASIC_SCENARIO = {"width": 640, "height": 240, "fps": 24}
+__BASIC_IMAGE = "example/assets/image/1.jpg"
+__HELLO_WORLD_TEXT = {"content": "Hello, World!", "color": "white", }
+__MINIMAL_DURATION = {"duration": 0.1}
 
 
 def register_scenarios(scenarios):
@@ -36,13 +37,10 @@ def register_frames(frames):
                 "name": "Showing Image as Frame",
                 "description": "This example shows how to display an image as a frame.",
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": {"duration": 0.1},
+                            "time": __MINIMAL_DURATION,
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP]
                         }
@@ -80,6 +78,11 @@ def register_frames(frames):
             }
         }
     }
+
+    for frame in frames.values():
+        if frame.get('examples', None):
+            for example in frame['examples']:
+                example['scenario'].update(__BASIC_SCENARIO)
 
 
 def register_blocks(blocks):
@@ -130,28 +133,19 @@ def register_blocks(blocks):
                     "Don't forget to use some display effect on text block to make it visible. (write, typewrite, etc.)"
                 ],
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": {"duration": 0.1},
+                            "time": __MINIMAL_DURATION,
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": {"duration": 0.1},
+                                    "time": __MINIMAL_DURATION,
                                     "position": ["center", "center"],
-                                    "configuration": {
-                                        "content": "Hello, World!",
-                                        "color": "white",
-                                    },
-                                    "effects": [
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": {"duration": 0.1}},
-                                    ]
+                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "effects": [__effect_write()]
                                 }
                             ]
                         },
@@ -171,6 +165,11 @@ def register_blocks(blocks):
         }
     }
 
+    for block in blocks.values():
+        if block.get('examples', None):
+            for example in block['examples']:
+                example['scenario'].update(__BASIC_SCENARIO)
+
 
 def register_effects(effects):
     # BLOCKS / TEXT / WRITE
@@ -184,28 +183,19 @@ def register_effects(effects):
                 "name": "Write Effect On Text Block",
                 "description": "This example shows how to add write effect on text block.",
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": {"duration": 0.1},
+                            "time": __MINIMAL_DURATION,
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": {"duration": 0.1},
+                                    "time": __MINIMAL_DURATION,
                                     "position": ["center", "center"],
-                                    "configuration": {
-                                        "content": "Hello, World!",
-                                        "color": "white",
-                                    },
-                                    "effects": [
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": {"duration": 0.1}},
-                                    ]
+                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "effects": [__effect_write()]
                                 }
                             ]
                         }
@@ -235,9 +225,6 @@ def register_effects(effects):
                 "name": "Typewrite Effect On Text Block",
                 "description": "This example shows how to add typewrite effect on text block.",
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
@@ -249,14 +236,8 @@ def register_effects(effects):
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
                                     "time": {"duration": 1},
                                     "position": ["center", "center"],
-                                    "configuration": {
-                                        "content": "Hello, World!",
-                                        "color": "white",
-                                    },
-                                    "effects": [
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.typewrite",
-                                         "time": {"duration": 1}},
-                                    ]
+                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "effects": [__effect_typewrite()]
                                 }
                             ]
                         }
@@ -268,7 +249,7 @@ def register_effects(effects):
 
     # BLOCKS / TEXT / BACKGROUND
     effects[f"{__PLUGIN_PREFIX}.effects.blocks.text.background"] = {
-        "description": "Adds background to the frame.",
+        "description": "Adds background to the block.",
         "renders_on": {
             "block": ["text"]
         },
@@ -297,32 +278,19 @@ def register_effects(effects):
                 "name": "Background Effect On Text Block",
                 "description": "This example shows how to add background effect on text block.",
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": {"duration": 0.1},
+                            "time": __MINIMAL_DURATION,
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": {"duration": 0.1},
+                                    "time": __MINIMAL_DURATION,
                                     "position": ["center", "center"],
-                                    "configuration": {
-                                        "content": "Hello, World!",
-                                        "color": "white",
-                                    },
-                                    "effects": [
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": {"duration": 0.1}},
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
-                                         "time": {"duration": 0.1},
-                                         "configuration": {"color": [0, 0, 0], "border_radius": 10},
-                                         }
-                                    ]
+                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "effects": [__effect_write(), __effect_background()]
                                 }
                             ]
                         }
@@ -351,9 +319,6 @@ def register_effects(effects):
                 "name": "Fade In Effect On Text Block",
                 "description": "This example shows how to add fade in effect on text block.",
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
@@ -365,20 +330,8 @@ def register_effects(effects):
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
                                     "time": {"duration": 1},
                                     "position": ["center", "center"],
-                                    "configuration": {
-                                        "content": "Hello, World!",
-                                        "color": "white",
-                                    },
-                                    "effects": [
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": {"duration": 1}},
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
-                                         "time": {"duration": 1},
-                                         "configuration": {"color": [0, 0, 0], "border_radius": 10},
-                                         },
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.fadein",
-                                         "time": {"duration": 1}}
-                                    ]
+                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "effects": [__effect_write(1), __effect_background(1), __effect_fadein(1)]
                                 }
                             ]
                         }
@@ -407,9 +360,6 @@ def register_effects(effects):
                 "name": "Fade Out Effect On Text Block",
                 "description": "This example shows how to add fade out effect on text block.",
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
@@ -421,20 +371,8 @@ def register_effects(effects):
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
                                     "time": {"duration": 1},
                                     "position": ["center", "center"],
-                                    "configuration": {
-                                        "content": "Hello, World!",
-                                        "color": "white",
-                                    },
-                                    "effects": [
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": {"duration": 1}},
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
-                                         "time": {"duration": 1},
-                                         "configuration": {"color": [0, 0, 0], "border_radius": 10},
-                                         },
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.fadeout",
-                                         "time": {"duration": 1}}
-                                    ]
+                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "effects": [__effect_write(1), __effect_background(1), __effect_fadeout(1)]
                                 }
                             ]
                         }
@@ -469,9 +407,6 @@ def register_effects(effects):
                 "name": "Text Block Slide In Effect",
                 "description": "This example shows how to add slide in effect on text block.",
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
@@ -483,20 +418,8 @@ def register_effects(effects):
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
                                     "time": {"duration": 1},
                                     "position": ["center", "center"],
-                                    "configuration": {
-                                        "content": "Hello, World!",
-                                        "color": "white",
-                                    },
-                                    "effects": [
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": {"duration": 1}},
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
-                                         "time": {"duration": 1},
-                                         "configuration": {"color": [0, 0, 0], "border_radius": 10},
-                                         },
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.slidein",
-                                         "configuration": {"slide_from": "top"}, "time": {"duration": 0.5}}
-                                    ]
+                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "effects": [__effect_write(1), __effect_background(1), __effect_slidein(0.5)]
                                 }
                             ]
                         }
@@ -531,9 +454,6 @@ def register_effects(effects):
                 "name": "Text Block Slide Out Effect",
                 "description": "This example shows how to add slide out effect on text block.",
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
@@ -545,20 +465,8 @@ def register_effects(effects):
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
                                     "time": {"duration": 1},
                                     "position": ["center", "center"],
-                                    "configuration": {
-                                        "content": "Hello, World!",
-                                        "color": "white",
-                                    },
-                                    "effects": [
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write",
-                                         "time": {"duration": 1}},
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background",
-                                         "time": {"duration": 1},
-                                         "configuration": {"color": [0, 0, 0], "border_radius": 10},
-                                         },
-                                        {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.slideout",
-                                         "configuration": {"slide_to": "bottom"}, "time": {"duration": 0.5}}
-                                    ]
+                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "effects": [__effect_write(1), __effect_background(1), __effect_slideout(0.5)]
                                 }
                             ]
                         }
@@ -609,17 +517,14 @@ def register_effects(effects):
                 "name": "Fade In effect on frame",
                 "description": "This example shows how to add fade in effect on frame.",
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [
                                 __EFFECT_RESIZE_CENTER_CROP,
-                                {"type": f"{__PLUGIN_PREFIX}.effects.frames.fadein", "time": {"duration": 1}}
+                                {"type": f"{__PLUGIN_PREFIX}.effects.frames.fadein", "time": {"duration": 0.5}}
                             ]
                         }
                     ]
@@ -647,17 +552,14 @@ def register_effects(effects):
                 "name": "Fade Out effect on frame",
                 "description": "This example shows how to add fade out effect on frame.",
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __BASIC_DURATION,
+                            "time": {"duration": 1},
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [
                                 __EFFECT_RESIZE_CENTER_CROP,
-                                {"type": f"{__PLUGIN_PREFIX}.effects.frames.fadeout", "time": {"duration": 1}}
+                                {"type": f"{__PLUGIN_PREFIX}.effects.frames.fadeout", "time": {"duration": 0.5}}
                             ]
                         }
                     ]
@@ -706,13 +608,10 @@ def register_effects(effects):
                 "name": "Resize Effect - Fit",
                 "description": "This example shows how to add 'fit' resize effect on frame.",
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": {"duration": 0.1},
+                            "time": __MINIMAL_DURATION,
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [
                                 {"type": f"{__PLUGIN_PREFIX}.effects.frames.resize", "configuration": {"mode": "fit"}},
@@ -725,13 +624,10 @@ def register_effects(effects):
                 "name": "Resize Effect - Center crop",
                 "description": "This example shows how to add 'center_crop' resize effect on frame.",
                 "scenario": {
-                    "width": 640,
-                    "height": 240,
-                    "fps": 24,
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": {"duration": 0.1},
+                            "time": __MINIMAL_DURATION,
                             "configuration": {"file_path": __BASIC_IMAGE},
                             "effects": [__EFFECT_RESIZE_CENTER_CROP]
                         }
@@ -770,18 +666,41 @@ def register_effects(effects):
         }
     }
 
+    for effects in effects.values():
+        if effects.get('examples', None):
+            for example in effects['examples']:
+                example['scenario'].update(__BASIC_SCENARIO)
+
 
 def register_fields(fields):
     fields[f"{__PLUGIN_PREFIX}.fields.directory"] = {
         "description": "The path to the directory.",
     }
 
-    fields[f"{__PLUGIN_PREFIX}.fields.output_path"] = {
+    fields[f"{__PLUGIN_PREFIX}.fields.output"] = {
         "description": "The path to the output file.",
+        "configuration": {
+            "directory": {
+                "required": False,
+                "type": "str",
+                "description": "Directory to where save the video."
+            },
+            "file_name": {
+                "required": False,
+                "type": "str",
+                "description": "How output file should be named"
+            },
+            "extensions": {
+                "required": False,
+                "type": "list",
+                "description": "Extension of the output file.",
+                "default": ["mp4", "avi", "gif"]
+            }
+        }
     }
 
-    fields[f"{__PLUGIN_PREFIX}.fields.resolution"] = {
-        "description": "Video resolution selector.",
+    fields[f"{__PLUGIN_PREFIX}.fields.display"] = {
+        "description": "Video resolution / fps selector.",
         "configuration": {
             "resolutions": {
                 "required": False,
@@ -791,13 +710,7 @@ def register_fields(fields):
                 ],
                 "type": "list",
                 "description": "List of resolutions to choose from."
-            }
-        }
-    }
-
-    fields[f"{__PLUGIN_PREFIX}.fields.fps"] = {
-        "description": "Video FPS selector.",
-        "configuration": {
+            },
             "fps": {
                 "required": False,
                 "default": {
@@ -810,6 +723,30 @@ def register_fields(fields):
                 },
                 "type": "list",
                 "description": "List of fps to choose from."
+            }
+        }
+    }
+
+    fields[f"{__PLUGIN_PREFIX}.fields.font"] = {
+        "description": "Font configuration.",
+        "configuration": {
+            "fonts": {
+                "required": False,
+                "default": load_fonts(),
+                "type": "list",
+                "description": "List of fonts to choose from."
+            },
+            "sizes": {
+                "required": False,
+                "default": range(5, 100),
+                "type": "list",
+                "description": "List of sizes to choose from."
+            },
+            "colors": {
+                "required": False,
+                "default": ["black", "white"],
+                "type": "list",
+                "description": "List of colors to choose from."
             }
         }
     }
@@ -857,3 +794,38 @@ def register(hooks):
     hooks.register_hook("videopy.modules.forms.fields.register", register_fields)
 
     hooks.register_hook("videopy.scenario.frame.block.effects.before_load", load_effects_template)
+
+
+def __effect_write(duration=0.1):
+    return {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.write", "time": {"duration": duration}}
+
+
+def __effect_typewrite(duration=1):
+    return {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.typewrite", "time": {"duration": duration}}
+
+
+def __effect_background(duration=0.1):
+    return {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.background", "time": {"duration": duration},
+            "configuration": {"color": [0, 0, 0], "border_radius": 10}}
+
+
+def __effect_fadein(duration=1):
+    return {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.fadein", "time": {"duration": duration}}
+
+
+def __effect_fadeout(duration=1):
+    return {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.fadeout", "time": {"duration": duration}}
+
+
+def __effect_slidein(duration=0.5):
+    return {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.slidein", "configuration": {"slide_from": "top"},
+            "time": {"duration": duration}}
+
+
+def __effect_slideout(duration=0.5):
+    return {"type": f"{__PLUGIN_PREFIX}.effects.blocks.text.slideout", "configuration": {"slide_to": "bottom"},
+            "time": {"duration": duration}}
+
+
+def __effect_resize(mode="fit"):
+    return {"type": f"{__PLUGIN_PREFIX}.effects.frames.resize", "configuration": {"mode": mode}}

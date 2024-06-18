@@ -4,7 +4,7 @@ from videopy.form import Form
 from videopy.hooks import Hooks
 from videopy.module_validators import validate_frame, validate_block, validate_effect, validate_file_loader, \
     validate_compiler, validate_scenario
-from videopy.utils.file import get_file_extension, get_file_name_without_extension
+from videopy.utils.file import get_file_extension
 from videopy.utils.loader import Loader
 from videopy.utils.logger import Logger
 from videopy.scenario import ScenarioFactory

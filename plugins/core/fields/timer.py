@@ -57,7 +57,12 @@ class Field(AbstractField):
         self.widget.styles.height = 3
 
     def get_value(self):
-        return self.widget.get_combined_time()
+        return {
+            "hours": self.widget.hours.value,
+            "minutes": self.widget.minutes.value,
+            "seconds": self.widget.seconds.value,
+            "combined_time_in_seconds": self.widget.get_combined_time(),
+        }
 
 
 class FieldFactory(AbstractFieldFactory):

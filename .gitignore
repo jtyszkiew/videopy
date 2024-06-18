@@ -5,3 +5,5 @@ out
 outputs
 .coverage
 ./assets
+plugins
+!plugins/core

@@ -12,13 +12,14 @@ class Script(AbstractScript):
         super().__init__(scenario_yml)
 
     def run(self, hooks, data):
-        images, directory = self.__find_images_and_texts(data['directory'])
-        resolution = data['resolution']
-        fps = data['fps']
-        output_path = f"{data['output_path']}.mp4"
-        frame_duration = data['frame_duration']
+        images, directory = self.__find_images_and_texts(data['directory']['directory'])
+        resolution = data['display']['resolution']
+        fps = data['display']['fps']
+        output_path = f"{data['output']['directory']}/{data['output']['file_name']}.{data['output']['extension']}"
+        frame_duration = data['frame_duration']['combined_time_in_seconds']
         audio = data.get('audio', None)
-        title = data.get('title', None)
+        title = data['title']['text'] if data.get('title', None) else None
+        font = data['font']
 
         self.set_width(int(resolution[0]))
         self.set_height(int(resolution[1]))
@@ -43,11 +44,11 @@ class Script(AbstractScript):
         for index, (image, text) in enumerate(images.items()):
             blocks = []
 
-            if audio:
+            if audio is not None:
                 blocks.append({
                     "type": "plugins.core.blocks.audio",
                     "configuration": {
-                        "file_path": audio
+                        "file_path": audio['path']
                     },
                     "time": {
                         "duration": frame_duration
@@ -77,6 +78,9 @@ class Script(AbstractScript):
                     "position": ['center', resolution[1] * 10 / 100],
                     "configuration": {
                         "content": title,
+                        "size": font.get('size', 50),
+                        "font": font.get('font', 'Arial'),
+                        "color": font.get('color', [255, 255, 255])
                     },
                     "effects": [
                         {
@@ -112,6 +116,9 @@ class Script(AbstractScript):
                     "position": ['center', resolution[1] - (resolution[1] * 20 / 100)],
                     "configuration": {
                         "content": text_content,
+                        "size": font.get('size', 50),
+                        "font": font.get('font', 'Arial'),
+                        "color": font.get('color', [255, 255, 255])
                     },
                     "effects": [
                         {
@@ -159,14 +166,6 @@ class Script(AbstractScript):
         self.say_info(f"Found <<{len(images)}>> images in directory <<{directory}>>")
 
         return images, directory
-
-    def __get_resolution(self, resolution):
-        return resolution.split('x')
-
-    def __get_output_path(self, resolution, fps):
-        output_path = self.ask("Enter the output path of the video",
-                               f"outputs/output_{resolution}_{fps}.mp4")
-        return output_path
 
     def __find_images(self, directory):
         images = []

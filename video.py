@@ -33,7 +33,7 @@ def run(scenario_name: Annotated[str, typer.Argument(
         scenario_file: Annotated[
             str, typer.Option(help="If you don't want to use auto discovered scenarios use this option")] = None,
         scenario_data: Annotated[str, typer.Option(help="Data to pass to scenario")] = None,
-        scenario_content: Annotated[str, typer.Option(help="You can use this option insted of yaml file")] = None):
+        scenario_content: Annotated[str, typer.Option(help="You can use this option instead of yaml file")] = None):
     run_scenario(scenario_name, scenario_file, scenario_content, "info",
                  json.loads(scenario_data) if scenario_data else None)
 
@@ -244,6 +244,7 @@ def __display_configuration_table(module: str, concrete_module_name: str):
 
     console.print(table)
 
+
 def __print_example_container(md_file, key, module):
     if module.get('examples', None):
         md_file = __print_example_header(md_file, key, module)
@@ -255,6 +256,7 @@ def __print_example_container(md_file, key, module):
             md_file = __print_example(md_file, key, module, example, index, example.get('tips', []))
 
     return md_file
+
 
 def __print_example_header(md_file, key, frame):
     md_file += f"## Type: {key}\n"
