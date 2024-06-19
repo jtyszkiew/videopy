@@ -2,6 +2,7 @@ import sys
 
 from moviepy.editor import concatenate_videoclips, concatenate_audioclips
 
+from videopy.utils.file import get_file_extension
 from videopy.utils.logger import Logger
 
 
@@ -28,7 +29,7 @@ class Scenario:
     def add_audio(self, audio):
         self.audio.append(audio)
 
-    def render(self, format="mp4"):
+    def render(self):
         Logger.debug(f"Rendering scenario with <<{len(self.frames)}>> frames "
                      f"with a total time of <<{self.total_time}>> seconds")
 
@@ -56,8 +57,10 @@ class Scenario:
             audio = concatenate_audioclips(self.audio)
             final_video = final_video.set_audio(audio)
 
+        format = get_file_extension(self.output_path)
+
         if format == "gif":
-            final_video.write_gif(f"{self.output_path}.gif", fps=self.fps)
+            final_video.write_gif(self.output_path, fps=self.fps)
         else:
             final_video.write_videofile(self.output_path, fps=self.fps)
 

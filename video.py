@@ -1,5 +1,7 @@
 import json
+import os
 
+import yaml
 from typing_extensions import Annotated
 
 import typer
@@ -18,6 +20,8 @@ from videopy.utils.logger import Logger, LoggerProvider
 
 app = typer.Typer()
 console = Console()
+
+__EXAMPLES_OUTPUT_DIR = "outputs/examples"
 
 
 def log(self, message):
@@ -179,6 +183,10 @@ def helpers(helper_name: Annotated[str, typer.Argument(help="Helper to show info
 
     if helper_name == "examples":
         print("Starting to generate examples")
+
+        if not os.path.exists(__EXAMPLES_OUTPUT_DIR):
+            os.makedirs(__EXAMPLES_OUTPUT_DIR)
+
         hooks = Hooks()
         Loader.load_plugins("plugins", hooks)
         md_file = ""
@@ -192,20 +200,43 @@ def helpers(helper_name: Annotated[str, typer.Argument(help="Helper to show info
         hooks.run_hook("videopy.modules.compilers.register", compilers)
         hooks.run_hook("videopy.modules.forms.fields.register", fields)
 
-        md_file += "# [Frames] \n"
+        md_file += "# Table of contents\n"
+        md_file += "- [Frames](#frames)\n"
+        for key, frame in frames.items():
+            replaced_key = key.replace(".", "")
+            md_file += f"  - [{key}](#{replaced_key})\n"
+
+        md_file += "- [Frame Effects](#frame-effects)\n"
+        for key, effect in effects.items():
+            if 'frame' in effect['renders_on']:
+                replaced_key = key.replace(".", "")
+                md_file += f"  - [{key}](#{replaced_key})\n"
+
+        md_file += "- [Blocks](#blocks)\n"
+        for key, block in blocks.items():
+            replaced_key = key.replace(".", "")
+            md_file += f"  - [{key}](#{replaced_key})\n"
+
+        md_file += "- [Block Effects](#block-effects)\n"
+        for key, effect in effects.items():
+            if 'block' in effect['renders_on']:
+                replaced_key = key.replace(".", "")
+                md_file += f"  - [{key}](#{replaced_key})\n"
+
+        md_file += "# Frames \n"
         for key, frame in frames.items():
             md_file = __print_example_container(md_file, key, frame)
 
-        md_file += "# [Frame Effects] \n"
+        md_file += "# Frame Effects \n"
         for key, effect in effects.items():
             if 'frame' in effect['renders_on']:
                 md_file = __print_example_container(md_file, key, effect)
 
-        md_file += "# [Blocks] \n"
+        md_file += "# Blocks \n"
         for key, block in blocks.items():
             md_file = __print_example_container(md_file, key, block)
 
-        md_file += "# [Blocks Effects] \n"
+        md_file += "# Blocks Effects \n"
         for key, effect in effects.items():
             if 'block' in effect['renders_on']:
                 md_file = __print_example_container(md_file, key, effect)
@@ -246,20 +277,32 @@ def __display_configuration_table(module: str, concrete_module_name: str):
 
 
 def __print_example_container(md_file, key, module):
-    if module.get('examples', None):
-        md_file = __print_example_header(md_file, key, module)
+    md_file = __print_example_header(md_file, key, module)
 
+    if module.get('examples', None):
         for index, example in enumerate(module['examples']):
-            module['examples'][index]['scenario']['output_path'] = f"example/generated/{key}_example_{index}"
-            run_scenario(scenario_content=module['examples'][index]['scenario'], format="gif")
+            module['examples'][index]['scenario']['output_path'] = f"{__EXAMPLES_OUTPUT_DIR}/{key}_example_{index}.gif"
+            run_scenario(scenario_content=module['examples'][index]['scenario'])
 
             md_file = __print_example(md_file, key, module, example, index, example.get('tips', []))
+
+    if module.get('configuration', None):
+        configuration = module['configuration']
+        table = "| Configuration | Description | Type | Required | Default Value |\n| --- | --- | --- | --- | --- |\n"
+
+        for key, value in configuration.items():
+            default_value = str(value.get('default', 'None'))
+            table += f"| {key} | {value['description']} | {value['type']} | {'Yes' if value['required'] else 'No'} | {default_value} |\n"
+
+        md_file += f"<details><summary>Configuration</summary>\n\n{table}\n\n</details>\n\n"
+
+    md_file += "\n---\n"
 
     return md_file
 
 
 def __print_example_header(md_file, key, frame):
-    md_file += f"## Type: {key}\n"
+    md_file += f"## {key}\n"
     md_file += f"{frame['description']}\n"
 
     return md_file
@@ -270,12 +313,12 @@ def __print_example(md_file, key, frame, example, index, tips=None):
         tips = []
 
     md_file += f"### Example: {example['name']}\n"
-    md_file += f"![{key} - {frame['description']} - Example {index}](example/generated/{key}_example_{index}.gif)\n"
+    md_file += f"![{key} - {frame['description']} - Example {index}]({__EXAMPLES_OUTPUT_DIR}/{key}_example_{index}.gif)\n"
     md_file += f">{example['description']}\n\n"
     for tip in tips:
         md_file += f"> {tip}\n\n"
     md_file += "\n"
-    md_file += f"<details><summary>Example code</summary>\n\n```yaml\n{json.dumps(example['scenario'], indent=2)}\n```\n\n</details>\n\n"
+    md_file += f"<details><summary>Example code</summary>\n\n```yaml\n{yaml.dump(example['scenario'], sort_keys=False)}\n```\n\n</details>\n\n"
 
     return md_file
 

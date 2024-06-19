@@ -46,8 +46,7 @@ def run_scenario(
         scenario_file: str = None,
         scenario_content: dict = None,
         log_level: str = "info",
-        scenario_data=None,
-        format: str = "mp4"
+        scenario_data=None
 ):
     Logger.set_level(log_level)
 
@@ -130,7 +129,7 @@ def run_scenario(
                 block.add_effect(__create_effect(modules, effect_yml))
 
         scenario.add_frame(frame)
-    scenario.render(format)
+    scenario.render()
 
 
 def __create_effect(modules, effect_yml):

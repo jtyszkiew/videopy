@@ -8,12 +8,14 @@ from plugins.core.templates.load_effects_template import load_effects_template
 from videopy.utils.utils import load_fonts
 
 __PLUGIN_PREFIX = "plugins.core"
-__EFFECT_RESIZE_CENTER_CROP = {"type": f"{__PLUGIN_PREFIX}.effects.frames.resize",
-                               "configuration": {"mode": "center_crop"}}
-__BASIC_SCENARIO = {"width": 640, "height": 240, "fps": 24}
-__BASIC_IMAGE = "example/assets/image/1.jpg"
-__HELLO_WORLD_TEXT = {"content": "Hello, World!", "color": "white", }
-__MINIMAL_DURATION = {"duration": 0.1}
+__PLUGIN_PREFIX_INDEX = __PLUGIN_PREFIX.replace(".", "")
+__EXAMPLES_EFFECT_RESIZE_CENTER_CROP = {"type": f"{__PLUGIN_PREFIX}.effects.frames.resize",
+                                        "configuration": {"mode": "center_crop"}}
+__EXAMPLES_BASIC_SCENARIO = {"width": 640, "height": 240, "fps": 24}
+__EXAMPLES_BASIC_IMAGE = "example/assets/image/1.jpg"
+__EXAMPLES_BASIC_VIDEO = "example/assets/video/BigBuckBunny_640x240.mp4"
+__EXAMPLES_HELLO_WORLD_TEXT = {"content": "Hello, World!", "color": "white"}
+__EXAMPLES_MINIMAL_DURATION = {"duration": 0.1}
 
 
 def register_scenarios(scenarios):
@@ -24,7 +26,8 @@ def register_scenarios(scenarios):
 
 def register_frames(frames):
     frames[f"{__PLUGIN_PREFIX}.frames.image"] = {
-        "description": "This frame will display an image.",
+        "description": "Image frame will use image passed in `configuration.file_path` as background. You can build "
+                       "blocks on top of it.",
         "configuration": {
             "file_path": {
                 "description": "The path to the image.",
@@ -35,14 +38,20 @@ def register_frames(frames):
         "examples": [
             {
                 "name": "Showing Image as Frame",
-                "description": "This example shows how to display an image as a frame.",
+                "description": f"Example is showing how to set image as a frame, as the image size don't match the "
+                               f"scenario size ({__EXAMPLES_BASIC_SCENARIO['width']}x{__EXAMPLES_BASIC_SCENARIO['height']}), "
+                               f"it will additionally use the "
+                               f"[{__PLUGIN_PREFIX}.effects.frames.resize](#{__PLUGIN_PREFIX_INDEX}effectsframesresize)"
+                               f" effect to center crop it.",
+                "tips": [f"Example have a duration of {__EXAMPLES_MINIMAL_DURATION['duration']} seconds for test "
+                         f"purposes and generation speed. In real life you probably want a longer duration."],
                 "scenario": {
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __MINIMAL_DURATION,
-                            "configuration": {"file_path": __BASIC_IMAGE},
-                            "effects": [__EFFECT_RESIZE_CENTER_CROP]
+                            "time": __EXAMPLES_MINIMAL_DURATION,
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
+                            "effects": [__EXAMPLES_EFFECT_RESIZE_CENTER_CROP]
                         }
                     ]
                 },
@@ -76,13 +85,35 @@ def register_frames(frames):
                 "default": True,
                 "required": False
             }
-        }
+        },
+        "examples": [
+            {
+                "name": "Showing Video as Frame",
+                "description": f"Example is showing how to set video as a frame, as the video size don't match the "
+                               f"scenario size ({__EXAMPLES_BASIC_SCENARIO['width']}x{__EXAMPLES_BASIC_SCENARIO['height']}), "
+                               f"it will additionally use the "
+                               f"[{__PLUGIN_PREFIX}.effects.frames.resize](#{__PLUGIN_PREFIX_INDEX}effectsframesresize)"
+                               f" effect to center crop it.",
+                "tips": [f"Example have a duration of 1 seconds for test purposes and generation speed. In real life "
+                         f"you probably want a longer duration."],
+                "scenario": {
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.video",
+                            "time": {"duration": 1},
+                            "configuration": {"file_path": __EXAMPLES_BASIC_VIDEO},
+                            "effects": [__EXAMPLES_EFFECT_RESIZE_CENTER_CROP]
+                        }
+                    ]
+                },
+            }
+        ]
     }
 
     for frame in frames.values():
         if frame.get('examples', None):
             for example in frame['examples']:
-                example['scenario'].update(__BASIC_SCENARIO)
+                example['scenario'].update(__EXAMPLES_BASIC_SCENARIO)
 
 
 def register_blocks(blocks):
@@ -127,24 +158,27 @@ def register_blocks(blocks):
         },
         "examples": [
             {
-                "name": "Showing Text as Block",
+                "name": "Showing Text",
                 "description": "This example shows how to display text as a block.",
                 "tips": [
-                    "Don't forget to use some display effect on text block to make it visible. (write, typewrite, etc.)"
+                    "This block doesn't show anything by default.",
+                    "Don't forget to use some display effect on text block to make it visible. "
+                    f"([{__PLUGIN_PREFIX}.effects.block.text.write]({__PLUGIN_PREFIX_INDEX}effectsblocktextwrite), "
+                    f"[{__PLUGIN_PREFIX}.effects.block.text.typewrite]({__PLUGIN_PREFIX_INDEX}effectsblocktexttypewrite))."
                 ],
                 "scenario": {
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __MINIMAL_DURATION,
-                            "configuration": {"file_path": __BASIC_IMAGE},
-                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "time": __EXAMPLES_MINIMAL_DURATION,
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
+                            "effects": [__EXAMPLES_EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": __MINIMAL_DURATION,
+                                    "time": __EXAMPLES_MINIMAL_DURATION,
                                     "position": ["center", "center"],
-                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "configuration": __EXAMPLES_HELLO_WORLD_TEXT,
                                     "effects": [__effect_write()]
                                 }
                             ]
@@ -168,7 +202,7 @@ def register_blocks(blocks):
     for block in blocks.values():
         if block.get('examples', None):
             for example in block['examples']:
-                example['scenario'].update(__BASIC_SCENARIO)
+                example['scenario'].update(__EXAMPLES_BASIC_SCENARIO)
 
 
 def register_effects(effects):
@@ -181,20 +215,24 @@ def register_effects(effects):
         "examples": [
             {
                 "name": "Write Effect On Text Block",
-                "description": "This example shows how to add write effect on text block.",
+                "description": "This is basic effect to display any text. It will write the text on the block.",
+                "tips": [
+                  "No configuration is accepted, as this effect inherits the configuration from "  
+                  f"[{__PLUGIN_PREFIX}.blocks.text](#{__PLUGIN_PREFIX_INDEX}blockstext).",
+                ],
                 "scenario": {
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __MINIMAL_DURATION,
-                            "configuration": {"file_path": __BASIC_IMAGE},
-                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "time": __EXAMPLES_MINIMAL_DURATION,
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
+                            "effects": [__EXAMPLES_EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": __MINIMAL_DURATION,
+                                    "time": __EXAMPLES_MINIMAL_DURATION,
                                     "position": ["center", "center"],
-                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "configuration": __EXAMPLES_HELLO_WORLD_TEXT,
                                     "effects": [__effect_write()]
                                 }
                             ]
@@ -229,14 +267,14 @@ def register_effects(effects):
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
                             "time": {"duration": 1},
-                            "configuration": {"file_path": __BASIC_IMAGE},
-                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
+                            "effects": [__EXAMPLES_EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
                                     "time": {"duration": 1},
                                     "position": ["center", "center"],
-                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "configuration": __EXAMPLES_HELLO_WORLD_TEXT,
                                     "effects": [__effect_typewrite()]
                                 }
                             ]
@@ -281,15 +319,15 @@ def register_effects(effects):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __MINIMAL_DURATION,
-                            "configuration": {"file_path": __BASIC_IMAGE},
-                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "time": __EXAMPLES_MINIMAL_DURATION,
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
+                            "effects": [__EXAMPLES_EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
-                                    "time": __MINIMAL_DURATION,
+                                    "time": __EXAMPLES_MINIMAL_DURATION,
                                     "position": ["center", "center"],
-                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "configuration": __EXAMPLES_HELLO_WORLD_TEXT,
                                     "effects": [__effect_write(), __effect_background()]
                                 }
                             ]
@@ -306,14 +344,6 @@ def register_effects(effects):
         "renders_on": {
             "block": ["text"]
         },
-        "configuration": {
-            "duration": {
-                "description": "The duration of the fade in. It's the time from the left side of block timeline.",
-                "type": "float",
-                "default": 1,
-                "required": False
-            }
-        },
         "examples": [
             {
                 "name": "Fade In Effect On Text Block",
@@ -323,14 +353,14 @@ def register_effects(effects):
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
                             "time": {"duration": 1},
-                            "configuration": {"file_path": __BASIC_IMAGE},
-                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
+                            "effects": [__EXAMPLES_EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
                                     "time": {"duration": 1},
                                     "position": ["center", "center"],
-                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "configuration": __EXAMPLES_HELLO_WORLD_TEXT,
                                     "effects": [__effect_write(1), __effect_background(1), __effect_fadein(1)]
                                 }
                             ]
@@ -347,14 +377,6 @@ def register_effects(effects):
         "renders_on": {
             "block": ["text"]
         },
-        "configuration": {
-            "duration": {
-                "description": "The duration of the fade in. It's the time from the right side of block timeline.",
-                "type": "float",
-                "default": 1,
-                "required": False
-            }
-        },
         "examples": [
             {
                 "name": "Fade Out Effect On Text Block",
@@ -364,14 +386,14 @@ def register_effects(effects):
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
                             "time": {"duration": 1},
-                            "configuration": {"file_path": __BASIC_IMAGE},
-                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
+                            "effects": [__EXAMPLES_EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
                                     "time": {"duration": 1},
                                     "position": ["center", "center"],
-                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "configuration": __EXAMPLES_HELLO_WORLD_TEXT,
                                     "effects": [__effect_write(1), __effect_background(1), __effect_fadeout(1)]
                                 }
                             ]
@@ -389,12 +411,6 @@ def register_effects(effects):
             "block": ["text"]
         },
         "configuration": {
-            "duration": {
-                "description": "The duration of the slide in. It's the time from the left side of block timeline.",
-                "type": "float",
-                "default": 1,
-                "required": False
-            },
             "slide_from": {
                 "description": "The direction of the slide in.",
                 "type": "str",
@@ -411,14 +427,14 @@ def register_effects(effects):
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
                             "time": {"duration": 1},
-                            "configuration": {"file_path": __BASIC_IMAGE},
-                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
+                            "effects": [__EXAMPLES_EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
                                     "time": {"duration": 1},
                                     "position": ["center", "center"],
-                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "configuration": __EXAMPLES_HELLO_WORLD_TEXT,
                                     "effects": [__effect_write(1), __effect_background(1), __effect_slidein(0.5)]
                                 }
                             ]
@@ -436,12 +452,6 @@ def register_effects(effects):
             "block": ["text"]
         },
         "configuration": {
-            "duration": {
-                "description": "The duration of the slide out. It's the time from the right side of block timeline.",
-                "type": "float",
-                "default": 1,
-                "required": False
-            },
             "slide_to": {
                 "description": "The direction of the slide out.",
                 "type": "str",
@@ -458,14 +468,14 @@ def register_effects(effects):
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
                             "time": {"duration": 1},
-                            "configuration": {"file_path": __BASIC_IMAGE},
-                            "effects": [__EFFECT_RESIZE_CENTER_CROP],
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
+                            "effects": [__EXAMPLES_EFFECT_RESIZE_CENTER_CROP],
                             "blocks": [
                                 {
                                     "type": f"{__PLUGIN_PREFIX}.blocks.text",
                                     "time": {"duration": 1},
                                     "position": ["center", "center"],
-                                    "configuration": __HELLO_WORLD_TEXT,
+                                    "configuration": __EXAMPLES_HELLO_WORLD_TEXT,
                                     "effects": [__effect_write(1), __effect_background(1), __effect_slideout(0.5)]
                                 }
                             ]
@@ -504,26 +514,20 @@ def register_effects(effects):
         "renders_on": {
             "frame": ["image"],
         },
-        "configuration": {
-            "duration": {
-                "description": "The duration of the fade in. It's the time from the left side of frame timeline.",
-                "type": "float",
-                "default": 1,
-                "required": False
-            }
-        },
         "examples": [
             {
                 "name": "Fade In effect on frame",
-                "description": "This example shows how to add fade in effect on frame.",
+                "description": "Effect will slowly fade in the frame content.",
+                "tips": [f"This effect ignores the `time.start` parameter, as it always starts from the beginning "
+                         f"of the frame."],
                 "scenario": {
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
                             "time": {"duration": 1},
-                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
                             "effects": [
-                                __EFFECT_RESIZE_CENTER_CROP,
+                                __EXAMPLES_EFFECT_RESIZE_CENTER_CROP,
                                 {"type": f"{__PLUGIN_PREFIX}.effects.frames.fadein", "time": {"duration": 0.5}}
                             ]
                         }
@@ -539,26 +543,20 @@ def register_effects(effects):
         "renders_on": {
             "frame": ["image"],
         },
-        "configuration": {
-            "duration": {
-                "description": "The duration of the fade in. It's the time from the right side of frame timeline.",
-                "type": "float",
-                "default": 1,
-                "required": False
-            }
-        },
         "examples": [
             {
                 "name": "Fade Out effect on frame",
-                "description": "This example shows how to add fade out effect on frame.",
+                "description": "Effect will slowly fade out the frame content.",
+                "tips": [f"This effect ignores the `time.start` parameter, as it always starts from the "
+                         f"(`frame.time.duration` - `effect.time.duration`) (right side) of the frame."],
                 "scenario": {
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
                             "time": {"duration": 1},
-                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
                             "effects": [
-                                __EFFECT_RESIZE_CENTER_CROP,
+                                __EXAMPLES_EFFECT_RESIZE_CENTER_CROP,
                                 {"type": f"{__PLUGIN_PREFIX}.effects.frames.fadeout", "time": {"duration": 0.5}}
                             ]
                         }
@@ -611,8 +609,8 @@ def register_effects(effects):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __MINIMAL_DURATION,
-                            "configuration": {"file_path": __BASIC_IMAGE},
+                            "time": __EXAMPLES_MINIMAL_DURATION,
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
                             "effects": [
                                 {"type": f"{__PLUGIN_PREFIX}.effects.frames.resize", "configuration": {"mode": "fit"}},
                             ]
@@ -627,9 +625,9 @@ def register_effects(effects):
                     "frames": [
                         {
                             "type": f"{__PLUGIN_PREFIX}.frames.image",
-                            "time": __MINIMAL_DURATION,
-                            "configuration": {"file_path": __BASIC_IMAGE},
-                            "effects": [__EFFECT_RESIZE_CENTER_CROP]
+                            "time": __EXAMPLES_MINIMAL_DURATION,
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
+                            "effects": [__EXAMPLES_EFFECT_RESIZE_CENTER_CROP]
                         }
                     ]
                 },
@@ -669,7 +667,7 @@ def register_effects(effects):
     for effects in effects.values():
         if effects.get('examples', None):
             for example in effects['examples']:
-                example['scenario'].update(__BASIC_SCENARIO)
+                example['scenario'].update(__EXAMPLES_BASIC_SCENARIO)
 
 
 def register_fields(fields):
