@@ -2,107 +2,74 @@
 
 ![Example of videopy](./example/output/readme.gif)
 
+
+
 <details><summary>Scenario for example above</summary>
 
 ```yaml
+
 width: 640
 height: 240
 fps: 24
 output_path: example/output/readme.gif
 frames:
   - type: plugins.core.frames.image
-    time:
-      duration: 5
-    configuration:
-      file_path: example/assets/image/readme.png
+    time: { duration: 5 }
+    configuration: { file_path: example/assets/image/readme.png }
     effects:
       - type: plugins.core.effects.frames.resize
-        configuration:
-          mode: center_crop
+        configuration: { mode: center_crop }
+
     blocks:
       - type: plugins.core.blocks.text
-        time:
-          duration: 1
+        time: { duration: 1 }
         position: [center, center]
-        configuration:
-          content: Hello from videopy!
-          color: white
-          font: Roboto-Bold
-          size: 50
-          margin: 30
-          padding: 20
+        configuration: &content { content: "Hello from videopy!", color: white, font: Roboto-Bold, size: 30, margin: 30, padding: 20 }
         effects:
           - type: plugins.core.effects.blocks.text.write
-            time:
-              duration: 1
+            time: { duration: 1 }
+
           - type: plugins.core.effects.blocks.text.background
-            time:
-              duration: 1
-            configuration:
-              color: [0, 0, 0]
-              border_radius: 10
-              opacity: 1
+            time: { duration: 1 }
+            configuration: &background { color: [0, 0, 0], border_radius: 10, opacity: 1 }
+
           - type: plugins.core.effects.blocks.text.slidein
-            configuration:
-              slide_from: top
-            time:
-              duration: 0.5
+            configuration: { slide_from: top }
+            time: { duration: 0.5 }
+
       - type: plugins.core.blocks.text
-        time:
-          duration: 1
-          start: 1
+        time: { duration: 1, start: 1 }
         position: [center, center]
-        configuration:
-          content: This is example scenario
-          color: white
-          font: Roboto-Bold
-          size: 30
-          margin: 30
-          padding: 20
+        configuration:  { <<: *content, content: "This is example scenario" }
         effects:
           - type: plugins.core.effects.blocks.text.write
-            time:
-              duration: 1
+            time: { duration: 1 }
+
           - type: plugins.core.effects.blocks.text.background
-            time:
-              duration: 1
-            configuration:
-              color: [0, 0, 0]
-              border_radius: 10
-              opacity: 1
+            time: { duration: 1 }
+            configuration: { <<: *background }
+
           - type: plugins.core.effects.blocks.text.fadein
-            configuration:
-              slide_from: top
-            time:
-              duration: 0.5
+            time: { duration: 0.5 }
+            configuration: { slide_from: top }
+
       - type: plugins.core.blocks.text
-        time:
-          duration: 2
-          start: 2
+        time: { duration: 2, start: 2 }
         position: [center, center]
-        configuration:
-          content: Yeah, you can generate gifs too!
-          color: white
-          font: Roboto-Bold
-          size: 30
-          margin: 30
-          padding: 20
+        configuration: { <<: *content, content: "Yeah, you can generate gifs too!" }
         effects:
           - type: plugins.core.effects.blocks.text.write
-            time:
-              duration: 2
+            time: { duration: 2 }
+
           - type: plugins.core.effects.blocks.text.background
-            time:
-              duration: 2
-            configuration:
-              color: [0, 0, 0]
-              border_radius: 10
+            time: { duration: 2 }
+            configuration: { <<: *background }
+
           - type: plugins.core.effects.blocks.text.fadein
-            time:
-              duration: 0.5
+            time: { duration: 0.5 }
+
           - type: plugins.core.effects.blocks.text.fadeout
-            time:
-              duration: 0.5
+            time: { duration: 0.5 }
 ```
 
 </details>
