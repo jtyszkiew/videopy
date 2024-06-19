@@ -6,8 +6,6 @@ VideoPy is an application built on top of the moviepy library, designed to strea
 through the use of YAML files. By defining video scenarios in YAML, VideoPy allows users to automate common video
 creation tasks, making it accessible even to those with minimal programming experience.
 
-You can jump to the [Examples](#examples) section to see some examples of how to use VideoPy.
-
 > **Info**: I just started this project, and it's in the early stages of development. I'm planning to add many more features
 but I already found it useful for my personal needs, so I'm sharing it with community, maybe someone will
 find it useful too.
