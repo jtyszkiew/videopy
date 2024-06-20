@@ -12,262 +12,167 @@ frames:
   ## Each frame can have multiple blocks that are shown in the frame (for example text)
   #####
   - type: "plugins.core.frames.image"
-    time:
-      duration: 5
-    configuration:
-      file_path: "example/assets/image/1.jpg"
+    time: &frame_duration { duration: 5 }
+    configuration: { file_path: "example/assets/image/1.jpg" }
+    #####
+    ## Effects can also be applied to the frame
+    #####
+    effects: &frame_effects
+      - type: "plugins.core.effects.frames.resize"
+        configuration: { mode: "center_crop" }
+
+      - type: "plugins.core.effects.frames.fadein"
+        time: { duration: 1 }
     blocks:
       #####
       ## Blocks are elements that are shown in the frame (for example text)
       #####
       - type: "plugins.core.blocks.text"
         position: [ center, bottom ]
-        time:
-          start: 1
-          duration: 4
-        configuration:
-          content: "This is description for image 1"
-          size: 30
+        time: { start: 1, duration: 4 }
+        configuration: { content: "This is description for image 1", size: 30 }
         effects:
           #####
           ## Effects are animations that are applied to the block
           #####
           - type: "plugins.core.effects.blocks.text.write"
-            time:
-              duration: 4
+            time: { duration: 4 }
+
           - type: "plugins.core.effects.blocks.text.background"
-            time:
-              duration: 4
-            configuration:
-              color: [ 255, 255, 255 ]
+            time: { duration: 4 }
+            configuration: &background { color: [ 255, 255, 255 ] }
+
           - type: "plugins.core.effects.blocks.text.fadein"
-            time:
-              duration: 2
+            time: { duration: 2 }
+
           - type: "plugins.core.effects.blocks.text.fadeout"
-            time:
-              duration: 1
+            time: { duration: 1 }
+
           - type: "plugins.core.effects.blocks.text.slidein"
-            time:
-              duration: 1
-            configuration:
-              slide_from: "bottom"
+            time: { duration: 1 }
+            configuration: { slide_from: "bottom" }
+
       - type: "plugins.core.blocks.audio"
-        time:
-          duration: 5
-        configuration:
-          #####
-          ## Epic Trailer Background Music by Migfus20 -- https://freesound.org/s/560454/ -- License: Attribution 4.0
-          #####
-          file_path: "example/assets/audio/epic_sound.mp3"
+        time: { duration: 5 }
+        configuration: { file_path: "example/assets/audio/sound.wav" }
         effects:
           - type: "plugins.core.effects.blocks.audio.play"
-            time:
-              duration: 5
-    #####
-    ## Effects can also be applied to the frame
-    #####
-    effects:
-      - type: "plugins.core.effects.frames.resize"
-        configuration:
-          mode: "center_crop"
-      - type: "plugins.core.effects.frames.fadein"
-        time:
-          duration: 1
+            time: { duration: 5 }
+
   - type: "plugins.core.frames.image"
-    time:
-      duration: 5
-    configuration:
-      file_path: "example/assets/image/2.jpg"
+    time: *frame_duration
+    configuration: { file_path: "example/assets/image/2.jpg" }
+    effects: *frame_effects
     blocks:
       - type: "plugins.core.blocks.text"
         position: [ center, top ]
-        time:
-          duration: 5
-        configuration:
-          content: "Text can be displayed anywhere in video"
-          size: 30
+        time: { duration: 5 }
+        configuration: { content: "Text can be displayed anywhere in video", size: 30 }
         effects:
           - type: "plugins.template"
-            configuration:
-              file_path: "example/template.yml"
-              name: "example"
+            configuration: { file_path: "example/template.yml", name: "example" }
+
           - type: "plugins.core.effects.blocks.text.fadeout"
-            time:
-              duration: 1
+            time: { duration: 1 }
       - type: "plugins.core.blocks.text"
         position: [ center, bottom ]
-        time:
-          start: 3
-          duration: 2
-        configuration:
-          content: "As many times you want :)"
-          size: 30
+        time: { start: 3, duration: 2 }
+        configuration: { content: "As many times you want :)", size: 30 }
         effects:
           - type: "plugins.core.effects.blocks.text.write"
-            time:
-              duration: 2
+            time: { duration: 2 }
+
           - type: "plugins.core.effects.blocks.text.background"
-            time:
-              duration: 2
-            configuration:
-              color: [ 255, 255, 255 ]
+            time: { duration: 2 }
+            configuration: *background
+
           - type: "plugins.core.effects.blocks.text.fadein"
-            time:
-              duration: 1
+            time: { duration: 1 }
+
           - type: "plugins.core.effects.blocks.text.fadeout"
-            time:
-              duration: 1
+            time: { duration: 1 }
+
       - type: "plugins.core.blocks.audio"
-        time:
-          duration: 5
-        configuration:
-          #####
-          ## Epic Trailer Background Music by Migfus20 -- https://freesound.org/s/560454/ -- License: Attribution 4.0
-          #####
-          file_path: "example/assets/audio/epic_sound.mp3"
+        time: { duration: 5 }
+        configuration: { file_path: "example/assets/audio/sound.wav" }
         effects:
           - type: "plugins.core.effects.blocks.audio.play"
-            time:
-              duration: 5
-            configuration:
-              subclip_start: 5
-    effects:
-      - type: "plugins.core.effects.frames.resize"
-        configuration:
-          mode: "center_crop"
-      - type: "plugins.core.effects.frames.fadein"
-        time:
-          duration: 1
+            time: { duration: 5 }
+            configuration: { subclip_start: 5 }
+
   - type: "plugins.core.frames.image"
-    time:
-      duration: 5
-    configuration:
-      file_path: "example/assets/image/3.jpg"
+    time: *frame_duration
+    configuration: { file_path: "example/assets/image/3.jpg" }
+    effects: *frame_effects
     blocks:
       - type: "plugins.core.blocks.text"
         position: [ left, center ]
-        time:
-          duration: 5
-        configuration:
-          content: "Define position using words or pixels"
-          size: 30
+        time: { duration: 5 }
+        configuration: { content: "Define position using words or pixels", size: 30 }
         effects:
           - type: "plugins.template"
-            configuration:
-              file_path: "example/template.yml"
-              name: "example"
+            configuration: { file_path: "example/template.yml", name: "example" }
+
           - type: "plugins.core.effects.blocks.text.slidein"
-            time:
-              duration: 0.5
-            configuration:
-              slide_from: "top"
+            time: { duration: 0.5 }
+            configuration: { slide_from: "top" }
+
           - type: "plugins.core.effects.blocks.text.slideout"
-            time:
-              duration: 0.5
-            configuration:
-              slide_to: "bottom"
+            time: { duration: 0.5 }
+            configuration: { slide_to: "bottom" }
+
       - type: "plugins.core.blocks.audio"
-        time:
-          duration: 5
-        configuration:
-          #####
-          ## Epic Trailer Background Music by Migfus20 -- https://freesound.org/s/560454/ -- License: Attribution 4.0
-          #####
-          file_path: "example/assets/audio/epic_sound.mp3"
+        time: { duration: 5 }
+        configuration: { file_path: "example/assets/audio/sound.wav" }
         effects:
           - type: "plugins.core.effects.blocks.audio.play"
-            time:
-              duration: 5
-            configuration:
-              subclip_start: 10
-    effects:
-      - type: "plugins.core.effects.frames.resize"
-        configuration:
-          mode: "center_crop"
-      - type: "plugins.core.effects.frames.fadein"
-        time:
-          duration: 1
+            time: { duration: 5 }
+            configuration: { subclip_start: 10 }
+
   - type: "plugins.core.frames.image"
-    time:
-      duration: 5
-    configuration:
-      file_path: "example/assets/image/4.jpg"
+    time: *frame_duration
+    configuration: { file_path: "example/assets/image/4.jpg" }
+    effects: *frame_effects
     blocks:
       - type: "plugins.core.blocks.text"
         position: [ center, bottom ]
-        time:
-          duration: 5
-        configuration:
-          content: "Add the \\n to break the line \n anywhere you like"
-          size: 30
+        time: { duration: 5 }
+        configuration: { content: "Add the \\n to break the line \n anywhere you like", size: 30 }
         effects:
           - type: "plugins.template"
-            configuration:
-              file_path: "example/template.yml"
-              name: "example"
+            configuration: { file_path: "example/template.yml", name: "example" }
+
           - type: "plugins.core.effects.blocks.text.fadeout"
-            time:
-              duration: 1
+            time: { duration: 1 }
+
       - type: "plugins.core.blocks.audio"
-        time:
-          duration: 5
-        configuration:
-          #####
-          ## Epic Trailer Background Music by Migfus20 -- https://freesound.org/s/560454/ -- License: Attribution 4.0
-          #####
-          file_path: "example/assets/audio/epic_sound.mp3"
+        time: { duration: 5 }
+        configuration: { file_path: "example/assets/audio/sound.wav" }
         effects:
           - type: "plugins.core.effects.blocks.audio.play"
-            time:
-              duration: 5
-            configuration:
-              subclip_start: 15
-    effects:
-      - type: "plugins.core.effects.frames.resize"
-        configuration:
-          mode: "center_crop"
-      - type: "plugins.core.effects.frames.fadein"
-        time:
-          duration: 1
+            time: { duration: 5 }
+            configuration: { subclip_start: 15 }
+
   - type: "plugins.core.frames.image"
-    time:
-      duration: 5
-    configuration:
-      file_path: "example/assets/image/5.jpg"
+    time: *frame_duration
+    configuration: { file_path: "example/assets/image/5.jpg" }
+    effects: *frame_effects
     blocks:
       - type: "plugins.core.blocks.text"
         position: [ center, bottom ]
-        time:
-          duration: 5
-        configuration:
-          content: "Image 5"
-          size: 30
+        time: { duration: 5 }
+        configuration: { content: "Image 5", size: 30 }
         effects:
           - type: "plugins.template"
-            configuration:
-              file_path: "example/template.yml"
-              name: "example"
+            configuration: { file_path: "example/template.yml", name: "example" }
+
           - type: "plugins.core.effects.blocks.text.fadeout"
-            time:
-              duration: 1
+            time: { duration: 1 }
+
       - type: "plugins.core.blocks.audio"
-        time:
-          duration: 5
-        configuration:
-          #####
-          ## Epic Trailer Background Music by Migfus20 -- https://freesound.org/s/560454/ -- License: Attribution 4.0
-          #####
-          file_path: "example/assets/audio/epic_sound.mp3"
+        time: { duration: 5 }
+        configuration: { file_path: "example/assets/audio/sound.wav" }
         effects:
           - type: "plugins.core.effects.blocks.audio.play"
-            time:
-              duration: 5
-            configuration:
-              subclip_start: 20
-    effects:
-      - type: "plugins.core.effects.frames.resize"
-        configuration:
-          mode: "center_crop"
-      - type: "plugins.core.effects.frames.fadein"
-        time:
-          duration: 1
+            time: { duration: 5 }
+            configuration: { subclip_start: 20 }
