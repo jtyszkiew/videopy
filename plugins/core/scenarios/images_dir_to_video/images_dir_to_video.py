@@ -12,6 +12,8 @@ class Script(AbstractScript):
         super().__init__(scenario_yml)
 
     def run(self, hooks, data):
+        self.__validate_data(data)
+
         images, directory = self.__find_images_and_texts(data['directory']['directory'])
         resolution = data['display']['resolution']
         fps = data['display']['fps']
@@ -157,6 +159,34 @@ class Script(AbstractScript):
                 "effects": frame_effects,
                 "blocks": blocks
             })
+
+    def __validate_data(self, data):
+        if not data.get('directory', None):
+            raise ValueError("Directory is required")
+        elif data['directory'].get('directory', None) is None:
+            raise ValueError("Fields should pass data as subfields -> directory: {directory: '/path'}")
+
+        if not data.get('display', None):
+            raise ValueError("Display is required")
+        elif data['display'].get('resolution', None) is None:
+            raise ValueError("Fields should pass data as subfields -> display: {resolution: [1920, 1080], fps: 30}")
+
+        if not data.get('output', None):
+            raise ValueError("Output is required")
+        elif data['output'].get('directory', None) is None:
+            raise ValueError("Fields should pass data as subfields "
+                             "-> output: {directory: '/path', file_name: 'name', extension: 'mp4'}")
+
+        if not data.get('frame_duration', None):
+            raise ValueError("Frame duration is required")
+        elif data['frame_duration'].get('combined_time_in_seconds', None) is None:
+            raise ValueError("Fields should pass data as subfields -> frame_duration: {combined_time_in_seconds: 5}")
+
+        if not data.get('font', None):
+            raise ValueError("Font is required")
+        elif data['font'].get('font', None) is None:
+            raise ValueError(
+                "Fields should pass data as subfields -> font: {font: 'Arial', size: 50, color: [255, 255, 255]}")
 
     def __get_images(self, directory):
         images = self.__find_images(directory)

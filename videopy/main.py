@@ -1,6 +1,5 @@
 import json
 
-from videopy.form import Form
 from videopy.hooks import Hooks
 from videopy.module_validators import validate_frame, validate_block, validate_effect, validate_file_loader, \
     validate_compiler, validate_scenario
@@ -11,7 +10,7 @@ from videopy.scenario import ScenarioFactory
 
 
 def register_modules(hooks):
-    scenarios, blocks, effects, frames, file_loaders, compilers, fields = {}, {}, {}, {}, {}, {}, {}
+    scenarios, blocks, effects, frames, file_loaders, compilers = {}, {}, {}, {}, {}, {}
 
     hooks.run_hook("videopy.modules.frames.register", frames)
     for key, frame in frames.items():
@@ -36,9 +35,7 @@ def register_modules(hooks):
     for key, scenario in scenarios.items():
         validate_scenario(scenario)
 
-    hooks.run_hook("videopy.modules.forms.fields.register", fields)
-
-    return scenarios, blocks, effects, frames, file_loaders, compilers, fields
+    return scenarios, blocks, effects, frames, file_loaders, compilers
 
 
 def run_scenario(
@@ -54,60 +51,51 @@ def run_scenario(
         raise ValueError("You need to provide one of: --scenario-file, --scenario-name, --scenario-content")
 
     hooks = Hooks()
+    scenario_yml = None
 
     Loader.load_plugins("plugins", hooks)
 
-    scenarios, blocks, effects, frames, file_loaders, compilers, fields = register_modules(hooks)
+    scenarios, blocks, effects, frames, file_loaders, compilers = register_modules(hooks)
 
-    if scenario_file is None:
-        Logger.debug(f"Scenario file not provided, trying to auto discover scenario by name: <<{scenario_name}>>")
+    if scenario_name is not None:
+        Logger.debug(f"Loading scenario by name: <<{scenario_name}>>")
 
         for key, value in scenarios.items():
             if key == scenario_name:
                 scenario_file = value['file_path']
                 break
 
+    if scenario_file is not None:
+        Logger.debug(f"Loading scenario from file: <<{scenario_file}>>")
+        if file_loaders[get_file_extension(scenario_file)]:
+            Logger.debug(f"File loader for extension <<{get_file_extension(scenario_file)}>> found")
+
+            scenario_yml = file_loaders[get_file_extension(scenario_file)](scenario_file)
+        else:
+            raise ValueError(f"File loader for extension [{get_file_extension(scenario_file)}] not found")
+    elif scenario_content is not None:
+        Logger.debug(f"Loading scenario from content")
+        scenario_yml = scenario_content
+
+    if scenario_yml is None:
+        raise ValueError("Scenario not found")
+
     modules = {
         "blocks": blocks,
         "effects": effects,
         "frames": frames,
-        "fields": fields,
     }
 
-    if scenario_content is None:
-        if file_loaders[get_file_extension(scenario_file)]:
-            scenario_yml = file_loaders[get_file_extension(scenario_file)](scenario_file)
-        else:
-            raise ValueError(f"File loader for extension [{get_file_extension(scenario_file)}] not found")
-    else:
-        scenario_yml = scenario_content
-
-    form = None
-
-    if "form" in scenario_yml and scenario_data is None:
-        form = Form()
-
-        for key, value in scenario_yml["form"]["fields"].items():
-            field = __create_field(modules, key, value, form)
-            form.add_field(field)
-
-        form.render()
+    hooks.run_hook("videopy.scenario.before_render", modules, scenario_yml, scenario_data)
 
     if "script" in scenario_yml:
-        if scenario_data is None and form is not None:
-            form_input_data = {}
-            for field in form.fields:
-                form_input_data[field.name] = field.get_value()
-        elif scenario_data is not None:
-            form_input_data = scenario_data
-
         script = Loader.load_script(scenario_yml["script"])(scenario_yml)
 
         Logger.info(f"Used the following data to run the scenario:")
-        Logger.raw(json.dumps(json.dumps(form_input_data)))
+        Logger.raw(json.dumps(json.dumps(scenario_data)))
         Logger.info("Use the data above with <<--scenario-data>> option to run the scenario with the same data again")
 
-        script.do_run(hooks, form_input_data)
+        script.do_run(hooks, scenario_data)
 
     scenario = ScenarioFactory.from_yml(modules, scenario_yml, hooks, compilers)
 
@@ -161,15 +149,3 @@ def __create_frame(modules, frame_yml, scenario):
     factory = Loader.get_frame_factory(frame_type)
 
     return factory().from_yml(frame_yml, scenario)
-
-
-def __create_field(modules, name, field_yml, form):
-    field_type = field_yml['type']
-    field_yml['configuration'] = field_yml['configuration'] if 'configuration' in field_yml else {}
-
-    if 'configuration' in modules['fields'][field_type]:
-        Loader.load_defaults(field_yml['configuration'], modules['fields'][field_type]['configuration'])
-
-    factory = Loader.get_field_factory(field_type)
-
-    return factory().from_yml(field_yml, name, form)

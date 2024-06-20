@@ -5,7 +5,6 @@ from plugins.core.compilers.use_source import UseSourceCompiler
 from plugins.core.compilers.use_target import UseTargetCompiler
 from plugins.core.loaders.yaml import yaml_file_loader
 from plugins.core.templates.load_effects_template import load_effects_template
-from videopy.utils.utils import load_fonts
 
 __PLUGIN_PREFIX = "plugins.core"
 __PLUGIN_PREFIX_INDEX = __PLUGIN_PREFIX.replace(".", "")
@@ -217,8 +216,8 @@ def register_effects(effects):
                 "name": "Write Effect On Text Block",
                 "description": "This is basic effect to display any text. It will write the text on the block.",
                 "tips": [
-                  "No configuration is accepted, as this effect inherits the configuration from "  
-                  f"[{__PLUGIN_PREFIX}.blocks.text](#{__PLUGIN_PREFIX_INDEX}blockstext).",
+                    "No configuration is accepted, as this effect inherits the configuration from "
+                    f"[{__PLUGIN_PREFIX}.blocks.text](#{__PLUGIN_PREFIX_INDEX}blockstext).",
                 ],
                 "scenario": {
                     "frames": [
@@ -670,106 +669,6 @@ def register_effects(effects):
                 example['scenario'].update(__EXAMPLES_BASIC_SCENARIO)
 
 
-def register_fields(fields):
-    fields[f"{__PLUGIN_PREFIX}.fields.directory"] = {
-        "description": "The path to the directory.",
-    }
-
-    fields[f"{__PLUGIN_PREFIX}.fields.output"] = {
-        "description": "The path to the output file.",
-        "configuration": {
-            "directory": {
-                "required": False,
-                "type": "str",
-                "description": "Directory to where save the video."
-            },
-            "file_name": {
-                "required": False,
-                "type": "str",
-                "description": "How output file should be named"
-            },
-            "extensions": {
-                "required": False,
-                "type": "list",
-                "description": "Extension of the output file.",
-                "default": ["mp4", "avi", "gif"]
-            }
-        }
-    }
-
-    fields[f"{__PLUGIN_PREFIX}.fields.display"] = {
-        "description": "Video resolution / fps selector.",
-        "configuration": {
-            "resolutions": {
-                "required": False,
-                "default": [
-                    "1920x1080", "1280x720", "720x480", "640x480", "320x240",
-                    "1080x1920", "720x1280", "480x720", "480x640", "240x320"
-                ],
-                "type": "list",
-                "description": "List of resolutions to choose from."
-            },
-            "fps": {
-                "required": False,
-                "default": {
-                    "24 (Movie)": 24,
-                    "25 (PAL / SECAM)": 25,
-                    "30 (NTSC)": 30,
-                    "50 (HDTV PAL)": 50,
-                    "60 (HDTV NTSC)": 60,
-                    "120 (HFR)": 120
-                },
-                "type": "list",
-                "description": "List of fps to choose from."
-            }
-        }
-    }
-
-    fields[f"{__PLUGIN_PREFIX}.fields.font"] = {
-        "description": "Font configuration.",
-        "configuration": {
-            "fonts": {
-                "required": False,
-                "default": load_fonts(),
-                "type": "list",
-                "description": "List of fonts to choose from."
-            },
-            "sizes": {
-                "required": False,
-                "default": range(5, 100),
-                "type": "list",
-                "description": "List of sizes to choose from."
-            },
-            "colors": {
-                "required": False,
-                "default": ["black", "white"],
-                "type": "list",
-                "description": "List of colors to choose from."
-            }
-        }
-    }
-
-    fields[f"{__PLUGIN_PREFIX}.fields.text"] = {
-        "description": "Simple text input",
-    }
-
-    fields[f"{__PLUGIN_PREFIX}.fields.timer"] = {
-        "description": "Time input with hours, minutes and seconds."
-    }
-
-    fields[f"{__PLUGIN_PREFIX}.fields.media_selector"] = {
-        "description": "Media selector",
-        "configuration": {
-            "extensions": {
-                "required": False,
-                "type": "str",
-                "description": "Only provided extensions will be allowed to provide as the field value.",
-                "default": ""
-            },
-        }
-    }
-
-
 def register_file_loaders(file_loaders):
     file_loaders["yml"] = yaml_file_loader
 
@@ -789,7 +688,6 @@ def register(hooks):
     hooks.register_hook("videopy.modules.effects.register", register_effects)
     hooks.register_hook("videopy.modules.file_loaders.register", register_file_loaders)
     hooks.register_hook("videopy.modules.compilers.register", register_compilers)
-    hooks.register_hook("videopy.modules.forms.fields.register", register_fields)
 
     hooks.register_hook("videopy.scenario.frame.block.effects.before_load", load_effects_template)
 

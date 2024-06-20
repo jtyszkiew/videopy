@@ -4,7 +4,6 @@ import sys
 
 from videopy.block import AbstractBlockFactory
 from videopy.effect import AbstractEffectFactory
-from videopy.form import AbstractFieldFactory
 from videopy.frame import AbstractFrameFactory
 from videopy.script import AbstractScript
 from videopy.utils.logger import Logger
@@ -12,7 +11,6 @@ from videopy.utils.logger import Logger
 FRAME_FACTORY_CLASS_NAME = "FrameFactory"
 BLOCK_FACTORY_CLASS_NAME = "BlockFactory"
 EFFECT_FACTORY_CLASS_NAME = "EffectFactory"
-FIELD_FACTORY_CLASS_NAME = "FieldFactory"
 
 
 class Loader:
@@ -50,17 +48,6 @@ class Loader:
             raise ValueError(f"Factory {factory} is not an instance of EffectFactory")
 
         Logger.trace(f"Registered effect factory: <<{factory}>>")
-
-        return factory
-
-    def get_field_factory(package):
-        package = importlib.import_module(package)
-        factory = getattr(package, FIELD_FACTORY_CLASS_NAME)
-
-        if not issubclass(factory, AbstractFieldFactory):
-            raise ValueError(f"Factory {factory} is not an instance of FieldFactory")
-
-        Logger.trace(f"Registered field factory: <<{factory}>>")
 
         return factory
 
