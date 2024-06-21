@@ -74,7 +74,7 @@ frames:
 
 </details>
 
-If you have any questions: ![Discord](https://img.shields.io/discord/1247236122203914250?label=Discord)
+If you have any questions: [![Discord](https://img.shields.io/discord/1247236122203914250.svg?label=Discord)](https://discord.gg/8rprPUDW34)
 ## What is VideoPy?
 
 VideoPy is an application built on top of the moviepy library, designed to streamline the process of creating videos
