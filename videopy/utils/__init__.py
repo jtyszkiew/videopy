@@ -2,6 +2,7 @@ from moviepy.editor import ImageClip
 from PIL import Image, ImageDraw
 import numpy as np
 
+
 def rounded_background(width, height, color, radius):
     # Create an image with rounded corners
     image = Image.new("RGBA", (width, height), (0, 0, 0, 0))

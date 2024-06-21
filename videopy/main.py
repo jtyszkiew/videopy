@@ -42,8 +42,8 @@ def run_scenario(
         scenario_name: str = None,
         scenario_file: str = None,
         scenario_content: dict = None,
+        scenario_data=None,
         log_level: str = "info",
-        scenario_data=None
 ):
     Logger.set_level(log_level)
 

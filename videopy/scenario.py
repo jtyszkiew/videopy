@@ -1,5 +1,3 @@
-import sys
-
 from moviepy.editor import concatenate_videoclips, concatenate_audioclips
 
 from videopy.utils.file import get_file_extension
@@ -74,7 +72,16 @@ class Scenario:
 
 
 class ScenarioFactory:
+
     @staticmethod
     def from_yml(modules_yml, scenario_yml, hooks, compilers):
-        return Scenario(modules_yml, scenario_yml, hooks, compilers, scenario_yml['output_path'],
-                        scenario_yml['width'], scenario_yml['height'], scenario_yml['fps'])
+        return Scenario(
+            modules_yml=modules_yml,
+            scenario_yml=scenario_yml,
+            hooks=hooks,
+            compilers=compilers,
+            output_path=scenario_yml['output_path'],
+            width=scenario_yml['width'],
+            height=scenario_yml['height'],
+            fps=scenario_yml['fps']
+        )

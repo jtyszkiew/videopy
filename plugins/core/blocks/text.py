@@ -3,7 +3,7 @@ from moviepy.editor import TextClip
 from videopy.block import AbstractBlock, AbstractBlockFactory
 from videopy.compilation import Compilation
 from videopy.utils.time import Time
-from videopy.utils.utils import get_position_with_padding, transform_position
+from videopy.utils.utils import transform_position
 
 
 class Block(AbstractBlock):

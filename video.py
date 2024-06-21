@@ -8,7 +8,6 @@ import typer
 from rich.table import Table
 from rich.console import Console
 from rich import print
-from rich.markdown import Markdown
 
 from moviepy.editor import TextClip
 
@@ -30,21 +29,37 @@ def log(self, message):
 
 Logger.provider = type('RichLoggerProvider', (LoggerProvider,), {'print': log})()
 
-
-@app.command()
-def run(scenario_name: Annotated[str, typer.Argument(
-    help="Scenario name to use, if you want to use your own need to provide with --scenario-file option.")] = None,
-        scenario_file: Annotated[
-            str, typer.Option(help="If you don't want to use auto discovered scenarios use this option")] = None,
-        scenario_data: Annotated[str, typer.Option(help="Data to pass to scenario")] = None,
-        scenario_content: Annotated[str, typer.Option(help="You can use this option instead of yaml file")] = None):
-    run_scenario(scenario_name, scenario_file, scenario_content, "info",
-                 json.loads(scenario_data) if scenario_data else None)
+__H_SCENARIO_NAME = "Provide scenario name from registry (added through plugins)"
+__H_SCENARIO_FILE = "Provide file path containing scenario in yaml format"
+__H_SCENARIO_CONTENT = "Provide the scenario as json"
+__H_SCENARIO_DATA = "Data to pass to scenario"
+__H_FRAME_NAME = "Frame to show info about."
+__H_BLOCK_NAME = "Block to show info about."
+__H_EFFECT_NAME = "Effect to show info about."
 
 
 @app.command()
-def scenario(scenario_name: Annotated[str, typer.Argument(
-    help="Scenario name to use, if you want to use your own need to provide with --scenario-file option.")]):
+def run(input_name: Annotated[str, typer.Option(help=__H_SCENARIO_NAME)] = None,
+        input_file: Annotated[str, typer.Option(help=__H_SCENARIO_FILE)] = None,
+        input_content: Annotated[str, typer.Option(help=__H_SCENARIO_CONTENT)] = None,
+        data: Annotated[str, typer.Option(help=__H_SCENARIO_DATA)] = None,
+        ctx: typer.Context = typer.Context
+        ):
+    if input_name is None and input_file is None and data is None:
+        typer.echo(ctx.get_help())
+        raise typer.Exit()
+
+    run_scenario(
+        scenario_name=input_name,
+        scenario_file=input_file,
+        scenario_content=input_content,
+        scenario_data=json.loads(data) if data else None,
+        log_level="info",
+    )
+
+
+@app.command()
+def scenarios(scenario_name: Annotated[str, typer.Argument(help=__H_SCENARIO_NAME)] = None):
     hooks = Hooks()
     scenarios, file_loaders = {}, {}
 
@@ -52,128 +67,79 @@ def scenario(scenario_name: Annotated[str, typer.Argument(
     hooks.run_hook("videopy.modules.scenarios.register", scenarios)
     hooks.run_hook("videopy.modules.file_loaders.register", file_loaders)
 
-    for key, value in scenarios.items():
-        if key == scenario_name:
+    console = Console()
+
+    if scenario_name is None:
+        table = Table("Name", "Description", show_lines=True)
+
+        for key, value in scenarios.items():
             if file_loaders[get_file_extension(value['file_path'])]:
                 scenario_yml = file_loaders[get_file_extension(value['file_path'])](value['file_path'])
             else:
-                raise ValueError(f"File loader for extension [{get_file_extension(value['file_path'])}] not found")
+                raise ValueError(f"File loader for extension [{get_file_extension(value)}] not found")
 
-            console = Console()
-            console.print(Markdown(f"# Description"))
-            console.print(Markdown(f"{scenario_yml['description']}"))
-            console.print(Markdown(f"# Configuration"))
+            table.add_row(key, scenario_yml['description'] if 'description' in scenario_yml else "No description")
 
-            form = scenario_yml.get('form', None)
-            fields = form.get('fields', None) if form else None
-
-            if form is not None and fields is not None:
-                table = Table(
-                    "Configuration",
-                    "Description",
-                    "Type",
-                    "Required",
-                    "Default Value",
-                    show_lines=True,
-                    title=f"{scenario_name}",
-                    title_style="bold cyan"
-                )
-
-                for key, value in scenario_yml['form']['fields'].items():
-                    default_value = str(value.get('default', 'None'))
-                    table.add_row(
-                        key,
-                        value['description'],
-                        value['type'], "Yes" if value['required'] else "No",
-                        default_value
-                    )
-
-                console.print(table)
+        console.print(table)
+    else:
+        raise NotImplementedError("Not implemented yet")
 
 
 @app.command()
-def scenarios():
-    hooks = Hooks()
-    scenarios, file_loaders = {}, {}
-
-    Loader.load_plugins("plugins", hooks)
-    hooks.run_hook("videopy.modules.scenarios.register", scenarios)
-    hooks.run_hook("videopy.modules.file_loaders.register", file_loaders)
-
-    table = Table("Name", "Description", show_lines=True)
-
-    for key, value in scenarios.items():
-        if file_loaders[get_file_extension(value['file_path'])]:
-            scenario_yml = file_loaders[get_file_extension(value['file_path'])](value['file_path'])
-        else:
-            raise ValueError(f"File loader for extension [{get_file_extension(value)}] not found")
-
-        table.add_row(key, scenario_yml['description'] if 'description' in scenario_yml else "No description")
-
-    console.print(table)
-
-
-@app.command()
-def frames():
+def frames(frame_name: Annotated[str, typer.Argument(help=__H_FRAME_NAME)] = None):
     hooks = Hooks()
     frames = {}
 
-    Loader.load_plugins("plugins", hooks)
-    hooks.run_hook("videopy.modules.frames.register", frames)
+    if frame_name is None:
+        Loader.load_plugins("plugins", hooks)
+        hooks.run_hook("videopy.modules.frames.register", frames)
 
-    table = Table("Name", "Description", show_lines=True)
+        table = Table("Name", "Description", show_lines=True)
 
-    for key, value in frames.items():
-        table.add_row(key, value['description'])
+        for key, value in frames.items():
+            table.add_row(key, value['description'])
 
-    console.print(table)
-
-
-@app.command()
-def frame(frame_name: Annotated[str, typer.Argument(help="Frame to show info about.")]):
-    __display_configuration_table("frames", frame_name)
+        console.print(table)
+    else:
+        __display_configuration_table("frames", frame_name)
 
 
 @app.command()
-def blocks():
+def blocks(block_name: Annotated[str, typer.Argument(help=__H_BLOCK_NAME)] = None):
     hooks = Hooks()
     blocks = {}
 
-    Loader.load_plugins("plugins", hooks)
-    hooks.run_hook("videopy.modules.blocks.register", blocks)
+    if block_name is None:
+        Loader.load_plugins("plugins", hooks)
+        hooks.run_hook("videopy.modules.blocks.register", blocks)
 
-    table = Table("Name", "Description", show_lines=True)
+        table = Table("Name", "Description", show_lines=True)
 
-    for key, value in blocks.items():
-        table.add_row(key, value['description'])
+        for key, value in blocks.items():
+            table.add_row(key, value['description'])
 
-    console.print(table)
-
-
-@app.command()
-def block(block_name: Annotated[str, typer.Argument(help="Effect to show info about.")]):
-    __display_configuration_table("blocks", block_name)
+        console.print(table)
+    else:
+        __display_configuration_table("blocks", block_name)
 
 
 @app.command()
-def effects():
+def effects(effect_name: Annotated[str, typer.Argument(help=__H_EFFECT_NAME)] = None):
     hooks = Hooks()
     effects = {}
 
-    Loader.load_plugins("plugins", hooks)
-    hooks.run_hook("videopy.modules.effects.register", effects)
+    if effect_name is None:
+        Loader.load_plugins("plugins", hooks)
+        hooks.run_hook("videopy.modules.effects.register", effects)
 
-    table = Table("Name", "Description", "Renders On", show_lines=True)
+        table = Table("Name", "Description", "Renders On", show_lines=True)
 
-    for key, value in effects.items():
-        table.add_row(key, value['description'], ', '.join(value['renders_on']))
+        for key, value in effects.items():
+            table.add_row(key, value['description'], ', '.join(value['renders_on']))
 
-    console.print(table)
-
-
-@app.command()
-def effect(effect_name: Annotated[str, typer.Argument(help="Effect to show info about.")]):
-    __display_configuration_table("effects", effect_name)
+        console.print(table)
+    else:
+        __display_configuration_table("effects", effect_name)
 
 
 @app.command()
@@ -253,27 +219,30 @@ def __display_configuration_table(module: str, concrete_module_name: str):
     Loader.load_plugins("plugins", hooks)
     hooks.run_hook(f"videopy.modules.{module}.register", modules)
 
-    table = Table(
-        "Configuration",
-        "Description",
-        "Type",
-        "Required",
-        "Default Value",
-        show_lines=True,
-        title=f"{concrete_module_name}: {modules[concrete_module_name]['description']}",
-        title_style="bold cyan"
-    )
-
-    for key, value in modules[concrete_module_name]['configuration'].items():
-        default_value = str(value.get('default', 'None'))
-        table.add_row(
-            key,
-            value['description'],
-            value['type'], "Yes" if value['required'] else "No",
-            default_value
+    if 'configuration' in modules[concrete_module_name]:
+        table = Table(
+            "Configuration",
+            "Description",
+            "Type",
+            "Required",
+            "Default Value",
+            show_lines=True,
+            title=f"{concrete_module_name}: {modules[concrete_module_name]['description']}",
+            title_style="bold cyan"
         )
 
-    console.print(table)
+        for key, value in modules[concrete_module_name]['configuration'].items():
+            default_value = str(value.get('default', 'None'))
+            table.add_row(
+                key,
+                value['description'],
+                value['type'], "Yes" if value['required'] else "No",
+                default_value
+            )
+
+        console.print(table)
+    else:
+        console.print(f"No configuration found for {concrete_module_name}")
 
 
 def __print_example_container(md_file, key, module):

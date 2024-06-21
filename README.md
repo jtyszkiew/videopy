@@ -135,7 +135,7 @@ pip install -r requirements.txt
 3. Run the application using
 
 ```shell
-python videopy.py run --scenario-file example/scenario.yml
+python videopy.py run --input-file example/scenario.yml
 ```
 
 > More installation options coming in the future
@@ -179,7 +179,7 @@ python video.py frames
 To get more information about a specific frame use:
 
 ```shell
-python video.py frame __frame_name__
+python video.py frames __frame_name__
 ```
 
 ## Blocks
@@ -193,7 +193,7 @@ python video.py blocks
 To get more information about a specific block use:
 
 ```shell
-python video.py block __block_name__
+python video.py blocks __block_name__
 ```
 
 ## Effects
@@ -207,7 +207,7 @@ python video.py effects
 To get more information about a specific effect use:
 
 ```shell
-python video.py effect __effect_name__
+python video.py effects __effect_name__
 ```
 
 > Each of the commands above will display a table containing information about given module.

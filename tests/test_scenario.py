@@ -10,6 +10,7 @@ from videopy.utils.time import Time
 
 
 class TestScenario(unittest.TestCase):
+
     def test_scenario_factory_should_create_scenario_with_given_data(self):
         scenario = {
             "output_path": "video_yml.output.mp4",
@@ -28,9 +29,10 @@ class TestScenario(unittest.TestCase):
         assert len(scenario.audio) == 0
         assert scenario.total_time == 0
 
-    def test_scenario_should_call_frame_render_method(self):
+    @patch('moviepy.video.VideoClip.VideoClip.write_videofile')
+    def test_scenario_should_call_frame_render_method(self, mock_write_videofile):
         scenario = {
-            "output_path": "video_yml.output.mp4",
+            "output_path": "videopy.output.mp4",
             "width": 1920,
             "height": 1080,
             "fps": 24,
@@ -45,3 +47,5 @@ class TestScenario(unittest.TestCase):
             scenario.render()
 
             mock_render.assert_called_once_with(0)
+
+        mock_write_videofile.assert_called_once_with("videopy.output.mp4", fps=24)
