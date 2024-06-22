@@ -5,8 +5,7 @@ from videopy.utils.logger import Logger
 
 
 class Scenario:
-    def __init__(self, modules_yml, scenario_yml, hooks, compilers,
-                 output_path="video_yml.output.mp4", width=1920, height=1080, fps=24):
+    def __init__(self, registry, scenario_yml, hooks, output_path="videopy.mp4", width=1920, height=1080, fps=24):
         self.frames = []
         self.audio = []
         self.total_time = 0
@@ -15,9 +14,8 @@ class Scenario:
         self.output_path = output_path
         self.size = (width, height)
         self.fps = fps
-        self.modules_yml = modules_yml
+        self.registry = registry
         self.scenario_yml = scenario_yml
-        self.compilers = compilers
 
     def add_frame(self, frame):
         self.total_time += frame.time.start + frame.time.duration
@@ -62,24 +60,15 @@ class Scenario:
         else:
             final_video.write_videofile(self.output_path, fps=self.fps)
 
-    def get_compiler(self, name):
-        compiler = self.compilers[name]
-
-        if compiler is None:
-            raise ValueError(f"Compiler [{name}] not found")
-
-        return compiler
-
 
 class ScenarioFactory:
 
     @staticmethod
-    def from_yml(modules_yml, scenario_yml, hooks, compilers):
+    def from_yml(modules_yml, scenario_yml, hooks):
         return Scenario(
-            modules_yml=modules_yml,
+            registry=modules_yml,
             scenario_yml=scenario_yml,
             hooks=hooks,
-            compilers=compilers,
             output_path=scenario_yml['output_path'],
             width=scenario_yml['width'],
             height=scenario_yml['height'],

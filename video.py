@@ -50,9 +50,9 @@ def run(input_name: Annotated[str, typer.Option(help=__H_SCENARIO_NAME)] = None,
         raise typer.Exit()
 
     run_scenario(
-        scenario_name=input_name,
-        scenario_file=input_file,
-        scenario_content=input_content,
+        input_name=input_name,
+        input_file=input_file,
+        input_content=input_content,
         scenario_data=json.loads(data) if data else None,
         log_level="info",
     )
@@ -251,7 +251,7 @@ def __print_example_container(md_file, key, module):
     if module.get('examples', None):
         for index, example in enumerate(module['examples']):
             module['examples'][index]['scenario']['output_path'] = f"{__EXAMPLES_OUTPUT_DIR}/{key}_example_{index}.gif"
-            run_scenario(scenario_content=module['examples'][index]['scenario'])
+            run_scenario(input_content=module['examples'][index]['scenario'])
 
             md_file = __print_example(md_file, key, module, example, index, example.get('tips', []))
 

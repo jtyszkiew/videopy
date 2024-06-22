@@ -5,12 +5,17 @@ from videopy.frame import AbstractFrame
 from moviepy.editor import TextClip
 
 from videopy.hooks import Hooks
+from videopy.module import Registry
 from videopy.scenario import ScenarioFactory
 
 
 def create_dummy_scenario(compiler=None):
     if compiler is None:
         compiler = DummyCompiler()
+
+    registry = Registry()
+
+    registry.add_compiler("dummy", compiler)
 
     scenario = {
         "output_path": "video_yml.output.mp4",
@@ -20,7 +25,7 @@ def create_dummy_scenario(compiler=None):
         "debug": False
     }
 
-    return ScenarioFactory.from_yml([], scenario, Hooks(), {'dummy': compiler})
+    return ScenarioFactory.from_yml(registry, scenario, Hooks())
 
 
 class DummyFrame(AbstractFrame):

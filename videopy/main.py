@@ -1,92 +1,92 @@
 import json
 
 from videopy.hooks import Hooks
-from videopy.module_validators import validate_frame, validate_block, validate_effect, validate_file_loader, \
-    validate_compiler, validate_scenario
+from videopy.module import Registry
+from videopy.renderer import Renderer
 from videopy.utils.file import get_file_extension
 from videopy.utils.loader import Loader
 from videopy.utils.logger import Logger
-from videopy.scenario import ScenarioFactory
 
-
-def register_modules(hooks):
-    scenarios, blocks, effects, frames, file_loaders, compilers = {}, {}, {}, {}, {}, {}
-
-    hooks.run_hook("videopy.modules.frames.register", frames)
-    for key, frame in frames.items():
-        validate_frame(frame)
-
-    hooks.run_hook("videopy.modules.blocks.register", blocks)
-    for key, block in blocks.items():
-        validate_block(block)
-
-    hooks.run_hook("videopy.modules.effects.register", effects)
-    for key, effect in effects.items():
-        validate_effect(effect)
-
-    hooks.run_hook("videopy.modules.file_loaders.register", file_loaders)
-    validate_file_loader(file_loaders)
-
-    hooks.run_hook("videopy.modules.compilers.register", compilers)
-    for key, compiler in compilers.items():
-        validate_compiler(compiler)
-
-    hooks.run_hook("videopy.modules.scenarios.register", scenarios)
-    for key, scenario in scenarios.items():
-        validate_scenario(scenario)
-
-    return scenarios, blocks, effects, frames, file_loaders, compilers
+HOOK_SCENARIOS_REGISTER = "videopy.modules.scenarios.register"
+HOOK_FRAMES_REGISTER = "videopy.modules.frames.register"
+HOOK_BLOCKS_REGISTER = "videopy.modules.blocks.register"
+HOOK_EFFECTS_REGISTER = "videopy.modules.effects.register"
+HOOK_FILE_LOADERS_REGISTER = "videopy.modules.file_loaders.register"
+HOOK_COMPILERS_REGISTER = "videopy.modules.compilers.register"
 
 
 def run_scenario(
-        scenario_name: str = None,
-        scenario_file: str = None,
-        scenario_content: dict = None,
+        input_name: str = None,
+        input_file: str = None,
+        input_content: dict = None,
         scenario_data=None,
         log_level: str = "info",
 ):
     Logger.set_level(log_level)
 
-    if scenario_file is None and scenario_name is None and scenario_content is None:
-        raise ValueError("You need to provide one of: --scenario-file, --scenario-name, --scenario-content")
+    if input_file is None and input_name is None and input_content is None:
+        raise ValueError("You need to provide one of: input_file, input_name, input_content")
 
     hooks = Hooks()
+    registry = Registry()
     scenario_yml = None
 
     Loader.load_plugins("plugins", hooks)
 
-    scenarios, blocks, effects, frames, file_loaders, compilers = register_modules(hooks)
+    frames = {}
+    hooks.run_hook(HOOK_FRAMES_REGISTER, frames)
+    for key, frame in frames.items():
+        registry.add_frame(key, frame)
 
-    if scenario_name is not None:
-        Logger.debug(f"Loading scenario by name: <<{scenario_name}>>")
+    blocks = {}
+    hooks.run_hook(HOOK_BLOCKS_REGISTER, blocks)
+    for key, block in blocks.items():
+        registry.add_block(key, block)
 
-        for key, value in scenarios.items():
-            if key == scenario_name:
-                scenario_file = value['file_path']
+    effects = {}
+    hooks.run_hook(HOOK_EFFECTS_REGISTER, effects)
+    for key, effect in effects.items():
+        registry.add_effect(key, effect)
+
+    file_loaders = {}
+    hooks.run_hook(HOOK_FILE_LOADERS_REGISTER, file_loaders)
+    for key, file_loader in file_loaders.items():
+        registry.add_file_loader(key, file_loader)
+
+    compilers = {}
+    hooks.run_hook(HOOK_COMPILERS_REGISTER, compilers)
+    for key, compiler in compilers.items():
+        registry.add_compiler(key, compiler)
+
+    scenarios = {}
+    hooks.run_hook(HOOK_SCENARIOS_REGISTER, scenarios)
+    for key, scenario in scenarios.items():
+        registry.add_scenario(key, scenario)
+
+    if input_name is not None:
+        Logger.debug(f"Loading scenario by name: <<{input_name}>>")
+
+        for key, value in registry.scenarios.items():
+            if key == input_name:
+                input_file = value['file_path']
                 break
 
-    if scenario_file is not None:
-        Logger.debug(f"Loading scenario from file: <<{scenario_file}>>")
-        if file_loaders[get_file_extension(scenario_file)]:
-            Logger.debug(f"File loader for extension <<{get_file_extension(scenario_file)}>> found")
+    if input_file is not None:
+        Logger.debug(f"Loading scenario from file: <<{input_file}>>")
+        if registry.file_loaders[get_file_extension(input_file)]:
+            Logger.debug(f"File loader for extension <<{get_file_extension(input_file)}>> found")
 
-            scenario_yml = file_loaders[get_file_extension(scenario_file)](scenario_file)
+            scenario_yml = registry.file_loaders[get_file_extension(input_file)](input_file)
         else:
-            raise ValueError(f"File loader for extension [{get_file_extension(scenario_file)}] not found")
-    elif scenario_content is not None:
+            raise ValueError(f"File loader for extension [{get_file_extension(input_file)}] not found")
+    elif input_content is not None:
         Logger.debug(f"Loading scenario from content")
-        scenario_yml = scenario_content
+        scenario_yml = input_content
 
     if scenario_yml is None:
         raise ValueError("Scenario not found")
 
-    modules = {
-        "blocks": blocks,
-        "effects": effects,
-        "frames": frames,
-    }
-
-    hooks.run_hook("videopy.scenario.before_render", modules, scenario_yml, scenario_data)
+    hooks.run_hook("videopy.scenario.before_render", registry, scenario_yml, scenario_data)
 
     if "script" in scenario_yml:
         script = Loader.load_script(scenario_yml["script"])(scenario_yml)
@@ -97,55 +97,4 @@ def run_scenario(
 
         script.do_run(hooks, scenario_data)
 
-    scenario = ScenarioFactory.from_yml(modules, scenario_yml, hooks, compilers)
-
-    for frame_yml in scenario_yml['frames']:
-        frame = __create_frame(modules, frame_yml, scenario)
-
-        # Set up effects
-        for effect_yml in frame_yml.get('effects', []):
-            frame.add_effect(__create_effect(modules, effect_yml))
-
-        # Set up blocks
-        for block_yml in frame_yml.get('blocks', []):
-            block = __create_block(modules, block_yml, frame)
-
-            frame.add_block(block)
-
-            hooks.run_hook("videopy.scenario.frame.block.effects.before_load", block_yml['effects'], file_loaders)
-            for effect_yml in block_yml.get('effects', []):
-                block.add_effect(__create_effect(modules, effect_yml))
-
-        scenario.add_frame(frame)
-    scenario.render()
-
-
-def __create_effect(modules, effect_yml):
-    effect_type = effect_yml['type']
-    effect_yml['configuration'] = effect_yml['configuration'] if 'configuration' in effect_yml else {}
-    modules['effects'][effect_type]['configuration'] = modules['effects'][effect_type][
-        'configuration'] if 'configuration' in modules['effects'][effect_type] else {}
-
-    Loader.load_defaults(effect_yml['configuration'], modules['effects'][effect_type]['configuration'])
-
-    effect_factory = Loader.get_effect_factory(effect_type)
-
-    return effect_factory().from_yml(effect_yml)
-
-
-def __create_block(modules, block_yml, frame):
-    block_type = block_yml['type']
-    block_yml['configuration'] = block_yml['configuration'] if 'configuration' in block_yml else {}
-
-    Loader.load_defaults(block_yml['configuration'], modules['blocks'][block_type]['configuration'])
-
-    block_factory = Loader.get_block_factory(block_type)
-
-    return block_factory().from_yml(block_yml, modules['blocks'][block_type], frame)
-
-
-def __create_frame(modules, frame_yml, scenario):
-    frame_type = frame_yml['type']
-    factory = Loader.get_frame_factory(frame_type)
-
-    return factory().from_yml(frame_yml, scenario)
+    Renderer(scenario_yml, registry, hooks).render()

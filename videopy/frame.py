@@ -69,7 +69,7 @@ class AbstractFrame:
                 if not issubclass(type(compilation), Compilation):
                     raise InvalidTypeError(f"Effect of type [{effect.type}] did not return a compilation")
 
-                result = self.scenario.get_compiler(compilation.mode).compile(compilation)
+                result = self.scenario.registry.compilers[compilation.mode].compile(compilation)
 
                 if result is None:
                     raise NoneValueError(f"Effect of type [{effect.type}] did not return a clip")
@@ -90,7 +90,7 @@ class AbstractFrame:
             if not issubclass(type(compilation), Compilation):
                 raise InvalidTypeError(f"Block of type [{block.get_type()}] did not return a compilation")
 
-            result = self.scenario.get_compiler(compilation.mode).compile(compilation)
+            result = self.scenario.registry.compilers[compilation.mode].compile(compilation)
 
             if result is None:
                 raise NoneValueError(f"Block of type [{block.get_type()}] did not return a clip")

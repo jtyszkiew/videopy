@@ -53,7 +53,7 @@ class AbstractBlock:
                 if not issubclass(type(compilation), Compilation):
                     raise InvalidTypeError(f"Effect of type [{effect.type}] did not return a compilation")
 
-                result = self.frame.scenario.get_compiler(compilation.mode).compile(compilation)
+                result = self.frame.scenario.registry.compilers[compilation.mode].compile(compilation)
 
                 Logger.debug(f"Rendering <<effect>> of type <<{effect.type}>> "
                              f"on <<block>> of type <<{self.get_type()}>>")
