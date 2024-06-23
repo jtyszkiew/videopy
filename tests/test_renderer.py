@@ -6,7 +6,6 @@ from videopy.module import Registry
 from videopy.renderer import Renderer, HOOK_FRAME_EFFECT_BL
 
 
-
 class TestRenderer(unittest.TestCase):
 
     def setUp(self):

@@ -4,7 +4,7 @@ fps: 24
 output_path: example/output/readme.gif
 frames:
   - type: plugins.core.frames.image
-    time: { duration: 5 }
+    time: { duration: 6 }
     configuration: { file_path: example/assets/image/readme.png }
     effects:
       - type: plugins.core.effects.frames.resize
@@ -12,51 +12,28 @@ frames:
 
     blocks:
       - type: plugins.core.blocks.text
-        time: { duration: 1 }
+        time: { start: "{loop_index*2}", duration: "2" }
         position: [center, center]
-        configuration: &content { content: "Hello from videopy!", color: white, font: Roboto-Bold, size: 30, margin: 30, padding: 20 }
+        configuration: { content: "{content}", color: white, font: Roboto-Bold, size: 30, margin: 30, padding: 20 }
+        loop:
+          - { content: "Hello from videopy!" }
+          - { content: "This is example scenario" }
+          - { content: "Yeah, you can generate gifs too!" }
         effects:
           - type: plugins.core.effects.blocks.text.write
-            time: { duration: 1 }
+            time: { duration: 2 }
 
           - type: plugins.core.effects.blocks.text.background
-            time: { duration: 1 }
-            configuration: &background { color: [0, 0, 0], border_radius: 10, opacity: 1 }
+            time: { duration: 2 }
+            configuration: { color: [0, 0, 0], border_radius: 10, opacity: 1 }
+
+          - type: plugins.core.effects.blocks.text.fadein
+            time: { duration: 0.5 }
 
           - type: plugins.core.effects.blocks.text.slidein
             configuration: { slide_from: top }
             time: { duration: 0.5 }
 
-      - type: plugins.core.blocks.text
-        time: { duration: 1, start: 1 }
-        position: [center, center]
-        configuration:  { <<: *content, content: "This is example scenario" }
-        effects:
-          - type: plugins.core.effects.blocks.text.write
-            time: { duration: 1 }
-
-          - type: plugins.core.effects.blocks.text.background
-            time: { duration: 1 }
-            configuration: { <<: *background }
-
-          - type: plugins.core.effects.blocks.text.fadein
-            time: { duration: 0.5 }
-            configuration: { slide_from: top }
-
-      - type: plugins.core.blocks.text
-        time: { duration: 2, start: 2 }
-        position: [center, center]
-        configuration: { <<: *content, content: "Yeah, you can generate gifs too!" }
-        effects:
-          - type: plugins.core.effects.blocks.text.write
-            time: { duration: 2 }
-
-          - type: plugins.core.effects.blocks.text.background
-            time: { duration: 2 }
-            configuration: { <<: *background }
-
-          - type: plugins.core.effects.blocks.text.fadein
-            time: { duration: 0.5 }
-
-          - type: plugins.core.effects.blocks.text.fadeout
+          - type: plugins.core.effects.blocks.text.slideout
+            configuration: { slide_to: bottom }
             time: { duration: 0.5 }

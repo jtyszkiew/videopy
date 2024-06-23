@@ -1,0 +1,47 @@
+output_path: "outputs/example.mp4"
+width: 640
+height: 960
+fps: 24
+frames:
+  - type: "plugins.core.frames.image"
+    time: &frame_duration { duration: 5 }
+    configuration: { file_path: "example/assets/image/{image}" }
+    loop:
+      - { image: 1.jpg, title: "First image" }
+      - { image: 2.jpg, title: "Second image" }
+      - { image: 3.jpg, title: "Third image" }
+    effects: &frame_effects
+      - type: "plugins.core.effects.frames.resize"
+        configuration: { mode: "center_crop" }
+
+      - type: "plugins.core.effects.frames.fadein"
+        time: { duration: 1 }
+    blocks:
+      - type: "plugins.core.blocks.text"
+        position: [ center, bottom ]
+        time: { start: 1, duration: 4 }
+        configuration: { content: "{title}", size: 30 }
+        effects:
+          - type: "plugins.core.effects.blocks.text.write"
+            time: { duration: 4 }
+
+          - type: "plugins.core.effects.blocks.text.background"
+            time: { duration: 4 }
+            configuration: &background { color: [ 255, 255, 255 ] }
+
+          - type: "plugins.core.effects.blocks.text.fadein"
+            time: { duration: 2 }
+
+          - type: "plugins.core.effects.blocks.text.fadeout"
+            time: { duration: 1 }
+
+          - type: "plugins.core.effects.blocks.text.slidein"
+            time: { duration: 1 }
+            configuration: { slide_from: "bottom" }
+
+      - type: "plugins.core.blocks.audio"
+        time: { duration: 5 }
+        configuration: { file_path: "example/assets/audio/sound.wav" }
+        effects:
+          - type: "plugins.core.effects.blocks.audio.play"
+            time: { duration: 5 }

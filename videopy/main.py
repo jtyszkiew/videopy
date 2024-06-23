@@ -3,6 +3,7 @@ import json
 from videopy.hooks import Hooks
 from videopy.module import Registry
 from videopy.renderer import Renderer
+from videopy.template import Template
 from videopy.utils.file import get_file_extension
 from videopy.utils.loader import Loader
 from videopy.utils.logger import Logger
@@ -97,4 +98,5 @@ def run_scenario(
 
         script.do_run(hooks, scenario_data)
 
+    Template(scenario_yml, hooks).process()
     Renderer(scenario_yml, registry, hooks).render()
