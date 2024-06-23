@@ -1,12 +1,10 @@
-import sys
-
 from plugins.core.compilers.compose import ComposeCompiler
 from plugins.core.compilers.concacenate import ConcatenateCompiler
 from plugins.core.compilers.ignore import IgnoreCompiler
 from plugins.core.compilers.use_source import UseSourceCompiler
 from plugins.core.compilers.use_target import UseTargetCompiler
 from plugins.core.loaders.yaml import yaml_file_loader
-from plugins.core.param.loop import LoopParamHandler
+from plugins.core.params.loop import LoopParamHandler
 from plugins.core.templates.load_effects_template import load_effects_template
 
 __PLUGIN_PREFIX = "plugins.core"

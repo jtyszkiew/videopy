@@ -1,9 +1,11 @@
 .idea
 venv
-/**/__pycache__
 out
 outputs
 .coverage
 ./assets
-plugins
+plugins/*
 !plugins/core
+!plugins/core/**
+
+/**/__pycache__
