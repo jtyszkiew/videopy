@@ -8,7 +8,6 @@ from videopy.compilation import Compilation
 from videopy.exception import DurationNotMatchedError, NoneValueError, InvalidTypeError
 from videopy.frame import AbstractFrameFactory, AbstractFrame
 from videopy.utils.time import Time
-from moviepy.editor import TextClip
 
 
 class TestAbstractFrame(unittest.TestCase):
@@ -55,7 +54,7 @@ class TestAbstractFrame(unittest.TestCase):
         scenario = create_dummy_scenario()
         frame = DummyFrame(Time(0, 5), scenario)
         effect = DummyFrameEffect('plugins.core.effects.blocks.text.dummy', Time(0, 5))
-        effect_result = Compilation(TextClip("dummy").set_duration(5), TextClip("dummy").set_duration(5), "dummy")
+        effect_result = Compilation(EmptyClip(), EmptyClip(), "dummy")
 
         frame.add_effect(effect)
 
@@ -103,7 +102,7 @@ class TestAbstractFrame(unittest.TestCase):
         scenario = create_dummy_scenario(DummyCompilerReturningNone())
         frame = DummyFrame(Time(0, 5), scenario)
         effect = DummyFrameEffect('plugins.core.effects.frames.text.dummy', Time(0, 5))
-        effect_result = Compilation(TextClip("dummy").set_duration(5), "dummy", mode="dummy")
+        effect_result = Compilation(EmptyClip(), "dummy", mode="dummy")
 
         frame.add_effect(effect)
 
@@ -133,11 +132,16 @@ class TestAbstractFrame(unittest.TestCase):
         with self.assertRaises(InvalidTypeError):
             frame.do_render(0)
 
-    def test_effect_duration_after_render_is_checked(self):
+    @patch("moviepy.editor.TextClip")
+    def test_rendered_effect_duration_check(self, mock_text_clip):
+        mock_text_clip = mock_text_clip.return_value
+        mock_text_clip.duration = 8
+
         scenario = create_dummy_scenario()
         frame = DummyFrame(Time(0, 5), scenario)
         effect = DummyFrameEffect('plugins.core.effects.frames.text.dummy', Time(0, 5))
-        effect_result = Compilation(TextClip("dummy").set_duration(5), TextClip("dummy").set_duration(6), "dummy")
+
+        effect_result = Compilation(source=mock_text_clip, target=mock_text_clip, mode="dummy")
 
         frame.add_effect(effect)
 
@@ -150,7 +154,7 @@ class TestAbstractFrame(unittest.TestCase):
         scenario = create_dummy_scenario(DummyCompilerReturningNone())
         frame = DummyFrame(Time(0, 5), scenario)
         block = DummyBlock(Time(0, 5), scenario, frame)
-        compilation = Compilation(TextClip("dummy").set_duration(5), TextClip("dummy").set_duration(5), "dummy")
+        compilation = Compilation(EmptyClip(), EmptyClip(), "dummy")
 
         frame.add_block(block)
 
@@ -171,11 +175,15 @@ class TestAbstractFrame(unittest.TestCase):
                 frame.do_render(0)
                 mock_render.assert_called_once()
 
-    def test_rendered_block_duration_is_checked(self):
+    @patch("moviepy.editor.TextClip")
+    def test_rendered_block_duration_is_checked(self, mock_text_clip):
+        mock_text_clip = mock_text_clip.return_value
+        mock_text_clip.duration = 8
+
         scenario = create_dummy_scenario()
         frame = DummyFrame(Time(0, 5), scenario)
         block = DummyBlock(Time(0, 5), scenario, frame)
-        compilation = Compilation(TextClip("dummy").set_duration(5), TextClip("dummy").set_duration(6), "dummy")
+        compilation = Compilation(source=mock_text_clip, target=mock_text_clip, mode="dummy")
 
         frame.add_block(block)
 

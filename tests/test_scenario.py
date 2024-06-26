@@ -4,7 +4,6 @@ from unittest.mock import patch
 from tests.utils.dummies import DummyFrame
 from videopy.hooks import Hooks
 from videopy.scenario import ScenarioFactory
-from moviepy.editor import TextClip
 
 from videopy.utils.time import Time
 
@@ -30,7 +29,11 @@ class TestScenario(unittest.TestCase):
         assert scenario.total_time == 0
 
     @patch('moviepy.video.VideoClip.VideoClip.write_videofile')
-    def test_scenario_should_call_frame_render_method(self, mock_write_videofile):
+    @patch("moviepy.editor.TextClip")
+    def test_scenario_should_call_frame_render_method(self, mock_text_clip, mock_write_videofile, ):
+        mock_text_clip = mock_text_clip.return_value
+        mock_text_clip.duration = 1
+
         scenario = {
             "output_path": "videopy.output.mp4",
             "width": 1920,
@@ -42,7 +45,7 @@ class TestScenario(unittest.TestCase):
         scenario = ScenarioFactory.from_yml([], scenario, Hooks())
         frame = DummyFrame(Time(0, 1), scenario)
 
-        with patch.object(DummyFrame, "render", return_value=TextClip("dummy").set_duration(1)) as mock_render:
+        with patch.object(DummyFrame, "render", return_value=mock_text_clip) as mock_render:
             scenario.add_frame(frame)
             scenario.render()
 
