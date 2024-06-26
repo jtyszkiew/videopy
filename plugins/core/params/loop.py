@@ -8,8 +8,8 @@ class LoopParamHandler(AbstractParamHandler):
     def __init__(self):
         super().__init__("loop", ["frame", "block", "effect"])
 
-    def handle(self, parent_obj, current_obj):
-        loop_items = current_obj[self.name]
+    def handle(self, parent_obj, current_obj, param_data):
+        loop_items = param_data
 
         if isinstance(parent_obj, list):
             index = parent_obj.index(current_obj)

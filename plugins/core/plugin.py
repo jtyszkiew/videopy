@@ -5,7 +5,10 @@ from plugins.core.compilers.use_source import UseSourceCompiler
 from plugins.core.compilers.use_target import UseTargetCompiler
 from plugins.core.loaders.yaml import yaml_file_loader
 from plugins.core.params.loop import LoopParamHandler
+from plugins.core.params.math import MathParamHandler
+from plugins.core.params.when import WhenParamHandler
 from plugins.core.templates.load_effects_template import load_effects_template
+from videopy.template import HOOK_TEMPLATE_PARAM_PRE_HANDLER_REGISTER, HOOK_TEMPLATE_PARAM_POST_HANDLER_REGISTER
 
 __PLUGIN_PREFIX = "plugins.core"
 __PLUGIN_PREFIX_INDEX = __PLUGIN_PREFIX.replace(".", "")
@@ -682,8 +685,13 @@ def register_compilers(compilers):
     compilers["ignore"] = IgnoreCompiler()
 
 
-def register_param_handlers(param_handlers):
-    param_handlers["loop"] = LoopParamHandler()
+def register_param_pre_handlers(param_pre_handlers):
+    param_pre_handlers["loop"] = LoopParamHandler()
+    param_pre_handlers["math"] = MathParamHandler()
+
+
+def register_param_post_handlers(param_post_handlers):
+    param_post_handlers["when"] = WhenParamHandler()
 
 
 def register(hooks):
@@ -693,7 +701,8 @@ def register(hooks):
     hooks.register_hook("videopy.modules.effects.register", register_effects)
     hooks.register_hook("videopy.modules.file_loaders.register", register_file_loaders)
     hooks.register_hook("videopy.modules.compilers.register", register_compilers)
-    hooks.register_hook("videopy.template.handlers.register", register_param_handlers)
+    hooks.register_hook(HOOK_TEMPLATE_PARAM_PRE_HANDLER_REGISTER, register_param_pre_handlers)
+    hooks.register_hook(HOOK_TEMPLATE_PARAM_POST_HANDLER_REGISTER, register_param_post_handlers)
 
     hooks.register_hook("videopy.scenario.frame.block.effects.before_load", load_effects_template)
 

@@ -1,20 +1,21 @@
-# VideoPy
+<div align="center">
+<img src="https://github.com/jtyszkiew/videopy/blob/main/example/output/readme.gif?raw=true" alt="videopy">
+    
+**videopy** - video creation using YAML files
 
-![Example of videopy](./example/output/readme.gif)
-
-
+[![Discord](https://img.shields.io/discord/1247236122203914250.svg?label=Discord)](https://discord.gg/8rprPUDW34)
+</div>
 
 <details><summary>Scenario for example above</summary>
 
 ```yaml
-
 width: 640
 height: 240
 fps: 24
 output_path: example/output/readme.gif
 frames:
   - type: plugins.core.frames.image
-    time: { duration: 5 }
+    time: { duration: 6 }
     configuration: { file_path: example/assets/image/readme.png }
     effects:
       - type: plugins.core.effects.frames.resize
@@ -22,59 +23,44 @@ frames:
 
     blocks:
       - type: plugins.core.blocks.text
-        time: { duration: 1 }
         position: [center, center]
-        configuration: &content { content: "Hello from videopy!", color: white, font: Roboto-Bold, size: 30, margin: 30, padding: 20 }
+        loop:
+          - { content: "Hello from videopy!" }
+          - { content: "This is example scenario" }
+          - { content: "Yeah, you can generate gifs too!" }
+        configuration: { content: "{content}", color: white, font: Roboto-Bold, size: 30, margin: 30, padding: 20 }
+        math: { name: "start", calculate: "loop_index * 2" }
+        time: { start: "{math_start}", duration: "2" }
         effects:
           - type: plugins.core.effects.blocks.text.write
-            time: { duration: 1 }
+            time: { duration: 2 }
 
           - type: plugins.core.effects.blocks.text.background
-            time: { duration: 1 }
-            configuration: &background { color: [0, 0, 0], border_radius: 10, opacity: 1 }
+            time: { duration: 2 }
+            configuration: { color: [0, 0, 0], border_radius: 10, opacity: 1 }
+
+          - type: plugins.core.effects.blocks.text.fadein
+            time: { duration: 0.5 }
 
           - type: plugins.core.effects.blocks.text.slidein
             configuration: { slide_from: top }
             time: { duration: 0.5 }
+            when: "block.loop_index == 0"
 
-      - type: plugins.core.blocks.text
-        time: { duration: 1, start: 1 }
-        position: [center, center]
-        configuration:  { <<: *content, content: "This is example scenario" }
-        effects:
-          - type: plugins.core.effects.blocks.text.write
-            time: { duration: 1 }
-
-          - type: plugins.core.effects.blocks.text.background
-            time: { duration: 1 }
-            configuration: { <<: *background }
-
-          - type: plugins.core.effects.blocks.text.fadein
-            time: { duration: 0.5 }
-            configuration: { slide_from: top }
-
-      - type: plugins.core.blocks.text
-        time: { duration: 2, start: 2 }
-        position: [center, center]
-        configuration: { <<: *content, content: "Yeah, you can generate gifs too!" }
-        effects:
-          - type: plugins.core.effects.blocks.text.write
-            time: { duration: 2 }
-
-          - type: plugins.core.effects.blocks.text.background
-            time: { duration: 2 }
-            configuration: { <<: *background }
-
-          - type: plugins.core.effects.blocks.text.fadein
-            time: { duration: 0.5 }
-
-          - type: plugins.core.effects.blocks.text.fadeout
+          - type: plugins.core.effects.blocks.text.slideout
+            configuration: { slide_to: bottom }
             time: { duration: 0.5 }
 ```
 
 </details>
 
-If you have any questions: [![Discord](https://img.shields.io/discord/1247236122203914250.svg?label=Discord)](https://discord.gg/8rprPUDW34)
+## Table of contents
+- [What is VideoPy?](#what-is-videopy)
+- [How to start with VideoPy?](#how-to-start-with-videopy)
+- [How it works?](#how-it-works)
+- [Why Use VideoPy?](#why-use-videopy)
+- [Installation](#installation)
+
 ## What is VideoPy?
 
 VideoPy is an application built on top of the moviepy library, designed to streamline the process of creating videos
@@ -122,9 +108,9 @@ stateDiagram
 - Automate repetitive video creation tasks, reducing the need for advanced video editing software.
 - Create custom scripts in Python that generate YAML scenario files, offering flexibility for more advanced users.
 
-# Installation
+## Installation
 
-## Git
+### Git
 
 1. Clone the repository
 2. Install the required dependencies using
@@ -141,9 +127,9 @@ python videopy.py run --input-file example/scenario.yml
 
 > More installation options coming in the future
 
-# Modules
+## Modules
 
-## What's a module?
+### What's a module?
 
 Modules are the building blocks of VideoPy scenarios. They define the different components that make up a video, such as
 frames, blocks, effects, and more. Each module has a specific purpose and can be combined to create video scenarios.
@@ -169,7 +155,7 @@ To get more information about a specific scenario use:
 python video.py scenario __scenario_name__
 ```
 
-## Frames
+### Frames
 
 To list available frames use:
 
@@ -183,7 +169,7 @@ To get more information about a specific frame use:
 python video.py frames __frame_name__
 ```
 
-## Blocks
+### Blocks
 
 To list available blocks use:
 
@@ -197,7 +183,7 @@ To get more information about a specific block use:
 python video.py blocks __block_name__
 ```
 
-## Effects
+### Effects
 
 To list available effects use:
 

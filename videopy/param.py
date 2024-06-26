@@ -16,5 +16,11 @@ class AbstractParamHandler:
         self.handles = handles
 
     @abstractmethod
-    def handle(self, parent_obj, current_obj):
+    def handle(self, parent_context, container_context, param_context):
+        """ Handle the param data.
+
+        :param parent_context: The parent context of the param data.
+        :param container_context: The parent context of the param data.
+        :param param_context: The param data.
+        """
         pass

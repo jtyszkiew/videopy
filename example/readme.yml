@@ -12,13 +12,14 @@ frames:
 
     blocks:
       - type: plugins.core.blocks.text
-        time: { start: "{loop_index*2}", duration: "2" }
         position: [center, center]
-        configuration: { content: "{content}", color: white, font: Roboto-Bold, size: 30, margin: 30, padding: 20 }
         loop:
           - { content: "Hello from videopy!" }
           - { content: "This is example scenario" }
           - { content: "Yeah, you can generate gifs too!" }
+        configuration: { content: "{content}", color: white, font: Roboto-Bold, size: 30, margin: 30, padding: 20 }
+        math: { name: "start", calculate: "loop_index * 2" }
+        time: { start: "{math_start}", duration: "2" }
         effects:
           - type: plugins.core.effects.blocks.text.write
             time: { duration: 2 }
@@ -33,6 +34,7 @@ frames:
           - type: plugins.core.effects.blocks.text.slidein
             configuration: { slide_from: top }
             time: { duration: 0.5 }
+            when: "block.loop_index == 0"
 
           - type: plugins.core.effects.blocks.text.slideout
             configuration: { slide_to: bottom }

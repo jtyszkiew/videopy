@@ -43,6 +43,10 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id001
+        scenario: {}
+  vars: *id001
 width: 640
 height: 240
 fps: 24
@@ -85,6 +89,10 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id001
+        scenario: {}
+  vars: *id001
 width: 640
 height: 240
 fps: 24
@@ -131,10 +139,16 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id001
+        scenario: {}
   - type: plugins.core.effects.frames.fadein
     time:
       duration: 0.5
+    vars:
+      frame: *id001
     configuration: {}
+  vars: *id001
 width: 640
 height: 240
 fps: 24
@@ -168,10 +182,16 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id001
+        scenario: {}
   - type: plugins.core.effects.frames.fadeout
     time:
       duration: 0.5
+    vars:
+      frame: *id001
     configuration: {}
+  vars: *id001
 width: 640
 height: 240
 fps: 24
@@ -217,6 +237,10 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: fit
+    vars:
+      frame: &id001
+        scenario: {}
+  vars: *id001
 width: 640
 height: 240
 fps: 24
@@ -244,6 +268,10 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id001
+        scenario: {}
+  vars: *id001
 width: 640
 height: 240
 fps: 24
@@ -304,6 +332,9 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id002
+        scenario: {}
   blocks:
   - type: plugins.core.blocks.text
     time: *id001
@@ -321,7 +352,12 @@ frames:
     - type: plugins.core.effects.blocks.text.write
       time:
         duration: 0.1
+      vars:
+        block: &id003
+          frame: *id002
       configuration: {}
+    vars: *id003
+  vars: *id002
 width: 640
 height: 240
 fps: 24
@@ -383,6 +419,9 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id002
+        scenario: {}
   blocks:
   - type: plugins.core.blocks.text
     time: *id001
@@ -400,7 +439,12 @@ frames:
     - type: plugins.core.effects.blocks.text.write
       time:
         duration: 0.1
+      vars:
+        block: &id003
+          frame: *id002
       configuration: {}
+    vars: *id003
+  vars: *id002
 width: 640
 height: 240
 fps: 24
@@ -432,6 +476,9 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id001
+        scenario: {}
   blocks:
   - type: plugins.core.blocks.text
     time:
@@ -450,8 +497,13 @@ frames:
     - type: plugins.core.effects.blocks.text.typewrite
       time:
         duration: 1
+      vars:
+        block: &id002
+          frame: *id001
       configuration:
         duration_per_char: 0
+    vars: *id002
+  vars: *id001
 width: 640
 height: 240
 fps: 24
@@ -492,6 +544,9 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id002
+        scenario: {}
   blocks:
   - type: plugins.core.blocks.text
     time: *id001
@@ -509,6 +564,9 @@ frames:
     - type: plugins.core.effects.blocks.text.write
       time:
         duration: 0.1
+      vars:
+        block: &id003
+          frame: *id002
       configuration: {}
     - type: plugins.core.effects.blocks.text.background
       time:
@@ -520,6 +578,10 @@ frames:
         - 0
         border_radius: 10
         opacity: 1
+      vars:
+        block: *id003
+    vars: *id003
+  vars: *id002
 width: 640
 height: 240
 fps: 24
@@ -562,6 +624,9 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id001
+        scenario: {}
   blocks:
   - type: plugins.core.blocks.text
     time:
@@ -580,6 +645,9 @@ frames:
     - type: plugins.core.effects.blocks.text.write
       time:
         duration: 1
+      vars:
+        block: &id002
+          frame: *id001
       configuration: {}
     - type: plugins.core.effects.blocks.text.background
       time:
@@ -591,10 +659,16 @@ frames:
         - 0
         border_radius: 10
         opacity: 1
+      vars:
+        block: *id002
     - type: plugins.core.effects.blocks.text.fadein
       time:
         duration: 1
+      vars:
+        block: *id002
       configuration: {}
+    vars: *id002
+  vars: *id001
 width: 640
 height: 240
 fps: 24
@@ -626,6 +700,9 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id001
+        scenario: {}
   blocks:
   - type: plugins.core.blocks.text
     time:
@@ -644,6 +721,9 @@ frames:
     - type: plugins.core.effects.blocks.text.write
       time:
         duration: 1
+      vars:
+        block: &id002
+          frame: *id001
       configuration: {}
     - type: plugins.core.effects.blocks.text.background
       time:
@@ -655,10 +735,16 @@ frames:
         - 0
         border_radius: 10
         opacity: 1
+      vars:
+        block: *id002
     - type: plugins.core.effects.blocks.text.fadeout
       time:
         duration: 1
+      vars:
+        block: *id002
       configuration: {}
+    vars: *id002
+  vars: *id001
 width: 640
 height: 240
 fps: 24
@@ -690,6 +776,9 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id001
+        scenario: {}
   blocks:
   - type: plugins.core.blocks.text
     time:
@@ -708,6 +797,9 @@ frames:
     - type: plugins.core.effects.blocks.text.write
       time:
         duration: 1
+      vars:
+        block: &id002
+          frame: *id001
       configuration: {}
     - type: plugins.core.effects.blocks.text.background
       time:
@@ -719,11 +811,17 @@ frames:
         - 0
         border_radius: 10
         opacity: 1
+      vars:
+        block: *id002
     - type: plugins.core.effects.blocks.text.slidein
       configuration:
         slide_from: top
       time:
         duration: 0.5
+      vars:
+        block: *id002
+    vars: *id002
+  vars: *id001
 width: 640
 height: 240
 fps: 24
@@ -764,6 +862,9 @@ frames:
   - type: plugins.core.effects.frames.resize
     configuration:
       mode: center_crop
+    vars:
+      frame: &id001
+        scenario: {}
   blocks:
   - type: plugins.core.blocks.text
     time:
@@ -782,6 +883,9 @@ frames:
     - type: plugins.core.effects.blocks.text.write
       time:
         duration: 1
+      vars:
+        block: &id002
+          frame: *id001
       configuration: {}
     - type: plugins.core.effects.blocks.text.background
       time:
@@ -793,11 +897,17 @@ frames:
         - 0
         border_radius: 10
         opacity: 1
+      vars:
+        block: *id002
     - type: plugins.core.effects.blocks.text.slideout
       configuration:
         slide_to: bottom
       time:
         duration: 0.5
+      vars:
+        block: *id002
+    vars: *id002
+  vars: *id001
 width: 640
 height: 240
 fps: 24
