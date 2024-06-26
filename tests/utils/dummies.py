@@ -1,4 +1,5 @@
 from videopy.block import AbstractBlock
+from videopy.clip.empty import EmptyClip
 from videopy.compilation import AbstractCompiler, Compilation
 from videopy.effect import AbstractFrameEffect, AbstractBlockEffect
 from videopy.frame import AbstractFrame
@@ -37,7 +38,7 @@ class DummyFrame(AbstractFrame):
         return "dummy"
 
     def render(self, relative_start_time):
-        return TextClip("dummy").set_duration(5)
+        return EmptyClip()
 
 
 class DummyFrameEffect(AbstractFrameEffect):
@@ -52,7 +53,7 @@ class DummyFrameEffect(AbstractFrameEffect):
 class DummyBlockEffect(AbstractBlockEffect):
 
     def render_on_block(self, clip):
-        return Compilation(TextClip("dummy").set_duration(5), TextClip("dummy").set_duration(5), "dummy")
+        return Compilation(EmptyClip(), EmptyClip(), "dummy")
 
 
 class DummyBlock(AbstractBlock):

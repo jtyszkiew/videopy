@@ -3,6 +3,7 @@ from unittest.mock import Mock, patch
 
 from tests.utils.dummies import DummyFrameEffect, DummyFrame, create_dummy_scenario, DummyBlock, DummyBlockEffect, \
     DummyCompilerReturningNone
+from videopy.clip.empty import EmptyClip
 from videopy.compilation import Compilation
 from videopy.exception import DurationNotMatchedError, NoneValueError, InvalidTypeError
 from videopy.frame import AbstractFrameFactory, AbstractFrame
@@ -62,12 +63,13 @@ class TestAbstractFrame(unittest.TestCase):
             frame.do_render(0)
             mock_render.assert_called_once()
 
-    def test_block_do_render_is_called(self):
+    @patch('moviepy.editor.CompositeVideoClip')
+    def test_block_do_render_is_called(self, mock_composite):
         scenario = create_dummy_scenario()
         frame = DummyFrame(Time(0, 5), scenario)
         effect = DummyBlockEffect('plugins.core.effects.blocks.text.dummy', Time(0, 5))
         block = DummyBlock(Time(0, 5), [0, 0], frame)
-        block_result = Compilation(TextClip("dummy").set_duration(5), TextClip("dummy").set_duration(5), "dummy")
+        block_result = Compilation(EmptyClip(), EmptyClip(), "dummy")
 
         block.add_effect(effect)
         frame.add_block(block)

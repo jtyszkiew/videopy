@@ -1,14 +1,9 @@
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
-from tests.utils.dummies import DummyFrame, create_dummy_scenario, DummyFrameEffect, DummyBlockEffect, DummyBlock, \
-    DummyCompilerReturningNone
-from videopy.block import AbstractBlockFactory, AbstractBlock
-from videopy.compilation import Compilation
-from videopy.exception import NoneValueError, InvalidTypeError, DurationNotMatchedError
+from tests.utils.dummies import DummyFrameEffect, DummyBlockEffect
+from videopy.clip.empty import EmptyClip
 from videopy.utils.time import Time
-
-from moviepy.editor import TextClip
 
 
 class TestEffect(unittest.TestCase):
@@ -23,7 +18,7 @@ class TestEffect(unittest.TestCase):
 
     def test_abstract_frame_effect_is_calling_render_on_frame(self):
         effect = DummyFrameEffect('dummy', Time(0, 5))
-        clip = TextClip("dummy").set_duration(5)
+        clip = EmptyClip()
 
         with patch.object(DummyFrameEffect, "render_on_frame", return_value=clip) as mock_render:
             effect.render_on_frame(clip)
@@ -31,7 +26,7 @@ class TestEffect(unittest.TestCase):
 
     def test_abstract_block_effect_is_calling_render_on_block(self):
         effect = DummyBlockEffect('dummy', Time(0, 5))
-        clip = TextClip("dummy").set_duration(5)
+        clip = EmptyClip()
 
         with patch.object(DummyBlockEffect, "render_on_block", return_value=clip) as mock_render:
             effect.render_on_block(clip)

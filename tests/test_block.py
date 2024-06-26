@@ -4,6 +4,7 @@ from unittest.mock import Mock, patch
 from tests.utils.dummies import DummyFrame, create_dummy_scenario, DummyFrameEffect, DummyBlockEffect, DummyBlock, \
     DummyCompilerReturningNone
 from videopy.block import AbstractBlockFactory, AbstractBlock
+from videopy.clip.empty import EmptyClip
 from videopy.compilation import Compilation
 from videopy.exception import NoneValueError, InvalidTypeError, DurationNotMatchedError
 from videopy.utils.time import Time
@@ -51,7 +52,7 @@ class TestBlock(unittest.TestCase):
         frame = DummyFrame(Time(0, 5), scenario)
         block = DummyBlock(Time(0, 5), scenario, frame)
         effect = DummyBlockEffect('plugins.core.effects.blocks.text.dummy', Time(0, 5))
-        effect_result = Compilation(TextClip("dummy").set_duration(5), TextClip("dummy").set_duration(5), "dummy")
+        effect_result = Compilation(EmptyClip(), EmptyClip(), "dummy")
 
         block.add_effect(effect)
 
@@ -89,7 +90,7 @@ class TestBlock(unittest.TestCase):
         frame = DummyFrame(Time(0, 5), scenario)
         block = DummyBlock(Time(0, 5), scenario, frame)
         effect = DummyBlockEffect('plugins.core.effects.blocks.text.dummy', Time(0, 5))
-        effect_result = Compilation(TextClip("dummy").set_duration(5), "dummy", mode="dummy")
+        effect_result = Compilation(EmptyClip(), "dummy", mode="dummy")
 
         block.add_effect(effect)
 
@@ -109,12 +110,17 @@ class TestBlock(unittest.TestCase):
         with self.assertRaises(InvalidTypeError):
             block.do_render()
 
-    def test_rendered_effect_duration_check(self):
+    @patch("moviepy.editor.TextClip")
+    def test_rendered_effect_duration_check(self, mock_text_clip):
+        mock_text_clip = mock_text_clip.return_value
+        mock_text_clip.duration = 8
+
         scenario = create_dummy_scenario()
         frame = DummyFrame(Time(0, 5), scenario)
         block = DummyBlock(Time(0, 5), scenario, frame)
         effect = DummyBlockEffect('plugins.core.effects.blocks.text.dummy', Time(0, 5))
-        effect_result = Compilation(TextClip("dummy").set_duration(5), TextClip("dummy").set_duration(6), "dummy")
+
+        effect_result = Compilation(source=mock_text_clip, target=mock_text_clip, mode="dummy")
 
         block.add_effect(effect)
 

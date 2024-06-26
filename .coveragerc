@@ -1,6 +1,7 @@
 [run]
     include =
         videopy/*
+        plugins/core
 
     omit =
         /**/__init__.py

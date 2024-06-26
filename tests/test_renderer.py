@@ -67,7 +67,7 @@ class TestRenderer(unittest.TestCase):
         mock_get_frame_factory.assert_called_once_with('frame_type')
         mock_frame_factory().from_yml.assert_called_once_with(self.scenario_yml['frames'][0], mock_scenario)
         mock_get_effect_factory.assert_called_with('effect_type')
-        self.assertEquals(mock_effect_factory().from_yml.call_count, 2)
+        self.assertEqual(mock_effect_factory().from_yml.call_count, 2)
         mock_effect_factory().from_yml.assert_called_with(self.scenario_yml['frames'][0]['effects'][0])
         mock_get_block_factory.assert_called_once_with('block_type')
         mock_block_factory().from_yml.assert_called_once_with(self.scenario_yml['frames'][0]['blocks'][0],
