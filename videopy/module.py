@@ -1,7 +1,7 @@
 from videopy.compilation import AbstractCompiler
 
 types = ['str', 'float', 'bool', 'int', 'select', 'color', 'file', 'image', 'video', 'audio', 'datetime', 'date',
-         'time']
+         'time', 'tuple']
 
 
 class Registry:

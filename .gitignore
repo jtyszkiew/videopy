@@ -4,6 +4,7 @@ out
 outputs
 .coverage
 ./assets
+example.md
 plugins/*
 !plugins/core
 !plugins/core/**

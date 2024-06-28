@@ -17,6 +17,7 @@ __EXAMPLES_EFFECT_RESIZE_CENTER_CROP = {"type": f"{__PLUGIN_PREFIX}.effects.fram
 __EXAMPLES_BASIC_SCENARIO = {"width": 640, "height": 240, "fps": 24}
 __EXAMPLES_BASIC_IMAGE = "example/assets/image/1.jpg"
 __EXAMPLES_BASIC_VIDEO = "example/assets/video/BigBuckBunny_640x240.mp4"
+__EXAMPLES_LOGO = "example/assets/image/logo.png"
 __EXAMPLES_HELLO_WORLD_TEXT = {"content": "Hello, World!", "color": "white"}
 __EXAMPLES_MINIMAL_DURATION = {"duration": 0.1}
 
@@ -191,6 +192,101 @@ def register_blocks(blocks):
             }
         ]
     }
+    blocks[f"{__PLUGIN_PREFIX}.blocks.image"] = {
+        "description": "This block will display image.",
+        "configuration": {
+            "file_path": {
+                "description": "Path to the image file to show.",
+                "type": "str",
+                "required": True
+            },
+            "width": {
+                "description": "Width of the image. Use -1 to keep the original width.",
+                "type": "int",
+                "default": -1,
+                "required": False
+            },
+            "height": {
+                "description": "Height of the image. Use -1 to keep the original height.",
+                "type": "int",
+                "default": -1,
+                "required": False
+            }
+        },
+        "examples": [
+            {
+                "name": "Showing Image",
+                "description": "This example shows how to display image as a block.",
+                "tips": [
+                    "This block doesn't show anything by default.",
+                    "Don't forget to use some display effect on text block to make it visible. "
+                    f"([{__PLUGIN_PREFIX}.effects.block.image.display]({__PLUGIN_PREFIX_INDEX}effectsblockimagedisplay)"
+                ],
+                "scenario": {
+                    "frames": [
+                        {
+                            "type": f"{__PLUGIN_PREFIX}.frames.image",
+                            "time": __EXAMPLES_MINIMAL_DURATION,
+                            "configuration": {"file_path": __EXAMPLES_BASIC_IMAGE},
+                            "effects": [__EXAMPLES_EFFECT_RESIZE_CENTER_CROP],
+                            "blocks": [
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.image",
+                                    "time": __EXAMPLES_MINIMAL_DURATION,
+                                    "position": ["center", "center"],
+                                    "configuration": {"file_path": __EXAMPLES_LOGO, "width": 40, "height": 40},
+                                    "effects": [__effect_display()]
+                                },
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.image",
+                                    "time": __EXAMPLES_MINIMAL_DURATION,
+                                    "position": ["left", "top"],
+                                    "configuration": {"file_path": __EXAMPLES_LOGO, "width": 100, "height": 100},
+                                    "effects": [__effect_display()]
+                                },
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.image",
+                                    "time": __EXAMPLES_MINIMAL_DURATION,
+                                    "position": ["right", "top"],
+                                    "configuration": {"file_path": __EXAMPLES_LOGO, "width": 100, "height": 100},
+                                    "effects": [__effect_display()]
+                                },
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.image",
+                                    "time": __EXAMPLES_MINIMAL_DURATION,
+                                    "position": ["center", "top"],
+                                    "configuration": {"file_path": __EXAMPLES_LOGO, "width": 100, "height": 100},
+                                    "effects": [__effect_display()]
+                                },
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.image",
+                                    "time": __EXAMPLES_MINIMAL_DURATION,
+                                    "position": ["left", "bottom"],
+                                    "configuration": {"file_path": __EXAMPLES_LOGO, "width": 100, "height": 100},
+                                    "effects": [__effect_display()]
+                                },
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.image",
+                                    "time": __EXAMPLES_MINIMAL_DURATION,
+                                    "position": ["right", "bottom"],
+                                    "configuration": {"file_path": __EXAMPLES_LOGO, "width": 100, "height": 100},
+                                    "effects": [__effect_display()]
+                                },
+                                {
+                                    "type": f"{__PLUGIN_PREFIX}.blocks.image",
+                                    "time": __EXAMPLES_MINIMAL_DURATION,
+                                    "position": ["center", "bottom"],
+                                    "configuration": {"file_path": __EXAMPLES_LOGO, "width": 100, "height": 100},
+                                    "effects": [__effect_display()]
+                                },
+                            ]
+                        },
+                    ]
+                },
+            }
+        ]
+    }
+
     blocks[f"{__PLUGIN_PREFIX}.blocks.audio"] = {
         "description": "This is base block to manage audio on frame",
         "configuration": {
@@ -511,6 +607,15 @@ def register_effects(effects):
         }
     }
 
+    # BLOCKS / IMAGE / DISPLAY
+    effects[f"{__PLUGIN_PREFIX}.effects.blocks.image.display"] = {
+        "description": "This is basic effect for displaying image.",
+        "renders_on": {
+            "block": ["image"]
+        },
+        "configuration": {}
+    }
+
     # FRAMES / FADEIN
     effects[f"{__PLUGIN_PREFIX}.effects.frames.fadein"] = {
         "description": "Fade in the frame.",
@@ -740,3 +845,7 @@ def __effect_slideout(duration=0.5):
 
 def __effect_resize(mode="fit"):
     return {"type": f"{__PLUGIN_PREFIX}.effects.frames.resize", "configuration": {"mode": mode}}
+
+
+def __effect_display(duration=0.1):
+    return {"type": f"{__PLUGIN_PREFIX}.effects.blocks.image.display", "time": {"duration": duration}}
