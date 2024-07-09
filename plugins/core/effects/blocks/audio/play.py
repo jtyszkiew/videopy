@@ -2,6 +2,7 @@ from moviepy.editor import AudioFileClip
 
 from videopy.compilation import Compilation
 from videopy.effect import AbstractEffectFactory, AbstractBlockEffect
+from videopy.module import AbstractModuleDefinition
 from videopy.utils.time import Time
 
 
@@ -41,3 +42,75 @@ class EffectFactory(AbstractEffectFactory):
         configuration = effect_yml.get('configuration', {})
 
         return Effect(Time(time.get('start', 0), time.get('duration', 0)), configuration)
+
+
+class AudioPlayEffectModuleDefinition(AbstractModuleDefinition):
+    PLUGIN_PREFIX = "plugins.core"
+    PLUGIN_PREFIX_INDEX = PLUGIN_PREFIX.replace(".", "")
+
+    EXAMPLE_DURATION = 1
+
+    @staticmethod
+    def get_description():
+        return "Play audio on block."
+
+    @staticmethod
+    def get_configuration():
+        return {
+            "subclip_start": {
+                "description": "Setting the subclip will start the audio from the given time.",
+                "type": "float",
+                "default": 0,
+                "required": False,
+            },
+            "cut_to_block_duration": {
+                "description": "If audio is longer than block duration, cut it to block duration.",
+                "type": "bool",
+                "default": True,
+                "required": False
+            }
+        }
+
+    @staticmethod
+    def get_renders_on() -> dict:
+        return {
+            "block": ["audio"]
+        }
+
+    @staticmethod
+    def get_examples():
+        return [
+            {
+                "name": "Write Effect On Text Block",
+                "description": "This is basic effect to display any text. It will write the text on the block.",
+                "tips": [
+                    "No configuration is accepted, as this effect inherits the configuration from "
+                    f"[{AudioPlayEffectModuleDefinition.PLUGIN_PREFIX}.blocks.text](#{AudioPlayEffectModuleDefinition.PLUGIN_PREFIX_INDEX}blockstext).",
+                ],
+                "scenario": {
+                    "width": 640, "height": 240, "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{AudioPlayEffectModuleDefinition.PLUGIN_PREFIX}.frames.image",
+                            "time": {"duration": AudioPlayEffectModuleDefinition.EXAMPLE_DURATION},
+                            "configuration": {"file_path": "example/assets/image/1.jpg"},
+                            "effects": [
+                                {"type": f"{AudioPlayEffectModuleDefinition.PLUGIN_PREFIX}.effects.frames.resize",
+                                 "configuration": {"mode": "center_crop"}}],
+                            "blocks": [
+                                {
+                                    "type": f"{AudioPlayEffectModuleDefinition.PLUGIN_PREFIX}.blocks.text",
+                                    "time": {"duration": AudioPlayEffectModuleDefinition.EXAMPLE_DURATION},
+                                    "position": ["center", "center"],
+                                    "configuration": {"content": "Hello, World!", "color": "white"},
+                                    "effects": [{
+                                        "type": f"{AudioPlayEffectModuleDefinition.PLUGIN_PREFIX}.effects.blocks.text.write",
+                                        "time": {"duration": AudioPlayEffectModuleDefinition.EXAMPLE_DURATION}
+                                    }]
+                                }
+                            ]
+                        }
+                    ]
+                },
+            }
+        ]

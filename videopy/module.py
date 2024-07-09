@@ -1,3 +1,5 @@
+from abc import abstractmethod
+
 from videopy.compilation import AbstractCompiler
 
 types = ['str', 'float', 'bool', 'int', 'select', 'color', 'file', 'image', 'video', 'audio', 'datetime', 'date',
@@ -74,24 +76,48 @@ class Validator:
 
     @staticmethod
     def validate_frame(frame):
-        if 'description' not in frame:
-            raise ValueError("Frame description is required")
-        if 'configuration' in frame:
-            Validator.validate_configuration(frame['configuration'])
+        if not issubclass(type(frame), AbstractModuleDefinition):
+            if 'description' not in frame:
+                raise ValueError("Frame description is required")
+            if 'configuration' in frame:
+                Validator.validate_configuration(frame['configuration'])
+        else:
+            if frame.get_description() is None or frame.get_description() == "":
+                raise ValueError("Frame description is required")
+            if frame.get_configuration() is None:
+                Validator.validate_configuration(frame['configuration'])
+            if frame.get_examples() is None or len(frame.get_examples()) == 0:
+                raise ValueError("Frame examples are required")
 
     @staticmethod
     def validate_block(block):
-        if 'description' not in block:
-            raise ValueError("Block description is required")
-        if 'configuration' in block:
-            Validator.validate_configuration(block['configuration'])
+        if not issubclass(type(block), AbstractModuleDefinition):
+            if 'description' not in block:
+                raise ValueError("Block description is required")
+            if 'configuration' in block:
+                Validator.validate_configuration(block['configuration'])
+        else:
+            if block.get_description() is None or block.get_description() == "":
+                raise ValueError("Block description is required")
+            if block.get_configuration() is None:
+                Validator.validate_configuration(block['configuration'])
+            if block.get_examples() is None or len(block.get_examples()) == 0:
+                raise ValueError("Block examples are required")
 
     @staticmethod
     def validate_effect(effect):
-        if 'description' not in effect:
-            raise ValueError("Effect description is required")
-        if 'configuration' in effect:
-            Validator.validate_configuration(effect['configuration'])
+        if not issubclass(type(effect), AbstractModuleDefinition):
+            if 'description' not in effect:
+                raise ValueError("Effect description is required")
+            if 'configuration' in effect:
+                Validator.validate_configuration(effect['configuration'])
+        else:
+            if effect.get_description() is None or effect.get_description() == "":
+                raise ValueError("Effect description is required")
+            if effect.get_configuration() is None:
+                Validator.validate_configuration(effect['configuration'])
+            if effect.get_examples() is None or len(effect.get_examples()) == 0:
+                raise ValueError("Effect examples are required")
 
     @staticmethod
     def validate_file_loader(key, value):
@@ -102,3 +128,26 @@ class Validator:
     def validate_compiler(compiler):
         if not issubclass(type(compiler), AbstractCompiler):
             raise ValueError(f"Compiler {compiler} is not a subclass of AbstractCompiler")
+
+
+class AbstractModuleDefinition:
+
+    @staticmethod
+    @abstractmethod
+    def get_description() -> str:
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def get_configuration() -> dict:
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def get_examples() -> list:
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def get_renders_on() -> dict:
+        pass

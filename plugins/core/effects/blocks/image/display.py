@@ -2,6 +2,7 @@ from moviepy.editor import ImageClip
 
 from videopy.compilation import Compilation
 from videopy.effect import AbstractEffectFactory, AbstractBlockEffect
+from videopy.module import AbstractModuleDefinition
 from videopy.utils.time import Time
 
 from PIL import Image
@@ -42,3 +43,63 @@ class EffectFactory(AbstractEffectFactory):
         time = effect_yml.get('time', {})
 
         return Effect(Time(time.get('start', 0), time.get('duration', 0)))
+
+
+class ImageDisplayEffectModuleDefinition(AbstractModuleDefinition):
+    PLUGIN_PREFIX = "plugins.core"
+    PLUGIN_PREFIX_INDEX = PLUGIN_PREFIX.replace(".", "")
+
+    EXAMPLE_DURATION = 1
+
+    @staticmethod
+    def get_description():
+        return "This is basic effect for displaying image."
+
+    @staticmethod
+    def get_configuration():
+        return {}
+
+    @staticmethod
+    def get_renders_on() -> dict:
+        return {
+            "block": ["image"]
+        }
+
+    @staticmethod
+    def get_examples():
+        return [
+            {
+                "name": "Write Effect On Text Block",
+                "description": "This is basic effect to display any text. It will write the text on the block.",
+                "tips": [
+                    "No configuration is accepted, as this effect inherits the configuration from "
+                    f"[{ImageDisplayEffectModuleDefinition.PLUGIN_PREFIX}.blocks.text](#{ImageDisplayEffectModuleDefinition.PLUGIN_PREFIX_INDEX}blockstext).",
+                ],
+                "scenario": {
+                    "width": 640, "height": 240, "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{ImageDisplayEffectModuleDefinition.PLUGIN_PREFIX}.frames.image",
+                            "time": {"duration": ImageDisplayEffectModuleDefinition.EXAMPLE_DURATION},
+                            "configuration": {"file_path": "example/assets/image/1.jpg"},
+                            "effects": [
+                                {"type": f"{ImageDisplayEffectModuleDefinition.PLUGIN_PREFIX}.effects.frames.resize",
+                                 "configuration": {"mode": "center_crop"}}],
+                            "blocks": [
+                                {
+                                    "type": f"{ImageDisplayEffectModuleDefinition.PLUGIN_PREFIX}.blocks.image",
+                                    "time": {"duration": ImageDisplayEffectModuleDefinition.EXAMPLE_DURATION},
+                                    "position": ["center", "center"],
+                                    "configuration": {"file_path": "example/assets/image/logo.png", "width": 100,
+                                                      "height": 100},
+                                    "effects": [{
+                                        "type": f"{ImageDisplayEffectModuleDefinition.PLUGIN_PREFIX}.effects.blocks.image.display",
+                                        "time": {"duration": ImageDisplayEffectModuleDefinition.EXAMPLE_DURATION}
+                                    }]
+                                }
+                            ]
+                        }
+                    ]
+                },
+            }
+        ]

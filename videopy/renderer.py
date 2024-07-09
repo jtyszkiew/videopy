@@ -1,5 +1,5 @@
 from videopy.hooks import Hooks
-from videopy.module import Registry
+from videopy.module import Registry, AbstractModuleDefinition
 from videopy.scenario import ScenarioFactory
 from videopy.utils.loader import Loader
 
@@ -44,11 +44,12 @@ class Renderer:
 
     def __create_effect(self, effect_yml):
         effect_type = effect_yml['type']
-        effect_module = self.registry.effects[effect_type]
-        effect_yml['configuration'] = effect_yml['configuration'] if 'configuration' in effect_yml else {}
-        effect_module['configuration'] = effect_module['configuration'] if 'configuration' in effect_module else {}
+        module = self.registry.effects[effect_type]
+        module_configuration = self.__get_module_configuration(module)
 
-        Loader.load_defaults(effect_yml['configuration'], effect_module['configuration'])
+        effect_yml['configuration'] = effect_yml['configuration'] if 'configuration' in effect_yml else {}
+
+        Loader.load_defaults(effect_yml['configuration'], module_configuration)
 
         effect_factory = Loader.get_effect_factory(effect_type)
 
@@ -56,12 +57,18 @@ class Renderer:
 
     def __create_block(self, block_yml, frame):
         block_type = block_yml['type']
-        block_module = self.registry.blocks[block_type]
+        module = self.registry.blocks[block_type]
+        module_configuration = self.__get_module_configuration(module)
         block_yml['configuration'] = block_yml['configuration'] if 'configuration' in block_yml else {}
-        block_module['configuration'] = block_module['configuration'] if 'configuration' in block_module else {}
 
-        Loader.load_defaults(block_yml['configuration'], block_module['configuration'])
+        Loader.load_defaults(block_yml['configuration'], module_configuration)
 
         block_factory = Loader.get_block_factory(block_type)
 
-        return block_factory().from_yml(block_yml, block_module, frame)
+        return block_factory().from_yml(block_yml, module, frame)
+
+    def __get_module_configuration(self, module):
+        if issubclass(type(module), AbstractModuleDefinition):
+            return module.get_configuration()
+        else:
+            return module['configuration'] if 'configuration' in module else {}

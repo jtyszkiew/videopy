@@ -2,6 +2,7 @@ from moviepy.editor import TextClip, CompositeVideoClip
 
 from videopy.compilation import Compilation
 from videopy.effect import AbstractEffectFactory, AbstractBlockEffect
+from videopy.module import AbstractModuleDefinition
 from videopy.utils.time import Time
 
 
@@ -53,3 +54,65 @@ class EffectFactory(AbstractEffectFactory):
         time = effect_yml.get('time', {})
 
         return Effect(Time(time.get('start', 0), time.get('duration', 0)), configuration)
+
+
+class TextTypewriteEffectModuleDefinition(AbstractModuleDefinition):
+    PLUGIN_PREFIX = "plugins.core"
+    PLUGIN_PREFIX_INDEX = PLUGIN_PREFIX.replace(".", "")
+
+    EXAMPLE_DURATION = 1
+
+    @staticmethod
+    def get_description():
+        return "Type write text on a block. This is a base effect if you want to display text."
+
+    @staticmethod
+    def get_configuration():
+        return {
+            "duration_per_char": {
+                "type": "float",
+                "description": "Duration in seconds to display each character",
+                "default": 0,
+                "required": False
+            }
+        }
+
+    @staticmethod
+    def get_renders_on() -> dict:
+        return {
+            "block": ["text"]
+        }
+
+    @staticmethod
+    def get_examples() -> list:
+        return [
+            {
+                "name": "Typewrite Effect On Text Block",
+                "description": "This example shows how to add typewrite effect on text block.",
+                "scenario": {
+                    "width": 640, "height": 240, "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{TextTypewriteEffectModuleDefinition.PLUGIN_PREFIX}.frames.image",
+                            "time": {"duration": TextTypewriteEffectModuleDefinition.EXAMPLE_DURATION},
+                            "configuration": {"file_path": "example/assets/image/1.jpg"},
+                            "effects": [
+                                {"type": f"{TextTypewriteEffectModuleDefinition.PLUGIN_PREFIX}.effects.frames.resize",
+                                 "configuration": {"mode": "center_crop"}}],
+                            "blocks": [
+                                {
+                                    "type": f"{TextTypewriteEffectModuleDefinition.PLUGIN_PREFIX}.blocks.text",
+                                    "time": {"duration": TextTypewriteEffectModuleDefinition.EXAMPLE_DURATION},
+                                    "position": ["center", "center"],
+                                    "configuration": {"content": "Hello, World!", "color": "white"},
+                                    "effects": [{
+                                        "type": f"{TextTypewriteEffectModuleDefinition.PLUGIN_PREFIX}.effects.blocks.text.typewrite",
+                                        "time": {"duration": TextTypewriteEffectModuleDefinition.EXAMPLE_DURATION},
+                                    }]
+                                }
+                            ]
+                        }
+                    ]
+                },
+            }
+        ]

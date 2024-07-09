@@ -1,5 +1,6 @@
 from videopy.compilation import Compilation
 from videopy.effect import AbstractFrameEffect, AbstractEffectFactory
+from videopy.module import AbstractModuleDefinition
 from videopy.utils.time import Time
 
 
@@ -76,3 +77,72 @@ def center_crop(effect, clip):
 
 def default(effect, clip):
     return clip.resize(effect.frame.scenario.size)
+
+
+class FrameResizeEffectModuleDefinition(AbstractModuleDefinition):
+    PLUGIN_PREFIX = "plugins.core"
+    PLUGIN_PREFIX_INDEX = PLUGIN_PREFIX.replace(".", "")
+
+    EXAMPLE_DURATION = 1
+
+    @staticmethod
+    def get_description():
+        return "Resize the frame with given mode."
+
+    @staticmethod
+    def get_configuration():
+        return {
+            "mode": {
+                "description": "Mode of the resize effect.",
+                "type": "str",
+                "required": False,
+                "default": "default",
+            },
+        }
+
+    @staticmethod
+    def get_renders_on() -> dict:
+        return {
+            "frame": ["image"]
+        }
+
+    @staticmethod
+    def get_examples():
+        return [
+            {
+                "name": "Resize Effect - Fit",
+                "description": "This example shows how to add 'fit' resize effect on frame.",
+                "scenario": {
+                    "width": 640, "height": 240, "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{FrameResizeEffectModuleDefinition.PLUGIN_PREFIX}.frames.image",
+                            "time": {"duration": FrameResizeEffectModuleDefinition.EXAMPLE_DURATION},
+                            "configuration": {"file_path": "example/assets/image/1.jpg"},
+                            "effects": [
+                                {"type": f"{FrameResizeEffectModuleDefinition.PLUGIN_PREFIX}.effects.frames.resize",
+                                 "configuration": {"mode": "fit"}},
+                            ]
+                        }
+                    ]
+                },
+            },
+            {
+                "name": "Resize Effect - Center crop",
+                "description": "This example shows how to add 'center_crop' resize effect on frame.",
+                "scenario": {
+                    "width": 640, "height": 240, "fps": 24,
+                    "frames": [
+                        {
+                            "type": f"{FrameResizeEffectModuleDefinition.PLUGIN_PREFIX}.frames.image",
+                            "time": {"duration": FrameResizeEffectModuleDefinition.EXAMPLE_DURATION},
+                            "configuration": {"file_path": "example/assets/image/1.jpg"},
+                            "effects": [
+                                {"type": f"{FrameResizeEffectModuleDefinition.PLUGIN_PREFIX}.effects.frames.resize",
+                                 "configuration": {"mode": "center_crop"}},
+                            ]
+                        }
+                    ]
+                },
+            }
+        ]

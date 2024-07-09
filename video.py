@@ -13,6 +13,7 @@ from moviepy.editor import TextClip
 
 from videopy.hooks import Hooks
 from videopy.main import run_scenario
+from videopy.module import AbstractModuleDefinition
 from videopy.utils.file import get_file_extension
 from videopy.utils.loader import Loader
 from videopy.utils.logger import Logger, LoggerProvider
@@ -174,7 +175,7 @@ def helpers(helper_name: Annotated[str, typer.Argument(help="Helper to show info
 
         md_file += "- [Frame Effects](#frame-effects)\n"
         for key, effect in effects.items():
-            if 'frame' in effect['renders_on']:
+            if 'frame' in effect.get_renders_on():
                 replaced_key = key.replace(".", "")
                 md_file += f"  - [{key}](#{replaced_key})\n"
 
@@ -185,7 +186,7 @@ def helpers(helper_name: Annotated[str, typer.Argument(help="Helper to show info
 
         md_file += "- [Block Effects](#block-effects)\n"
         for key, effect in effects.items():
-            if 'block' in effect['renders_on']:
+            if 'block' in effect.get_renders_on():
                 replaced_key = key.replace(".", "")
                 md_file += f"  - [{key}](#{replaced_key})\n"
 
@@ -195,7 +196,7 @@ def helpers(helper_name: Annotated[str, typer.Argument(help="Helper to show info
 
         md_file += "# Frame Effects \n"
         for key, effect in effects.items():
-            if 'frame' in effect['renders_on']:
+            if 'frame' in effect.get_renders_on():
                 md_file = __print_example_container(md_file, key, effect)
 
         md_file += "# Blocks \n"
@@ -204,7 +205,7 @@ def helpers(helper_name: Annotated[str, typer.Argument(help="Helper to show info
 
         md_file += "# Blocks Effects \n"
         for key, effect in effects.items():
-            if 'block' in effect['renders_on']:
+            if 'block' in effect.get_renders_on():
                 md_file = __print_example_container(md_file, key, effect)
 
         with open("example.md", "w") as f:
@@ -247,16 +248,17 @@ def __display_configuration_table(module: str, concrete_module_name: str):
 
 def __print_example_container(md_file, key, module):
     md_file = __print_example_header(md_file, key, module)
+    examples = module.get_examples()
+    configuration = module.get_configuration()
 
-    if module.get('examples', None):
-        for index, example in enumerate(module['examples']):
-            module['examples'][index]['scenario']['output_path'] = f"{__EXAMPLES_OUTPUT_DIR}/{key}_example_{index}.gif"
-            run_scenario(input_content=module['examples'][index]['scenario'])
+    if examples:
+        for index, example in enumerate(examples):
+            examples[index]['scenario']['output_path'] = f"{__EXAMPLES_OUTPUT_DIR}/{key}_example_{index}.gif"
+            run_scenario(input_content=examples[index]['scenario'])
 
             md_file = __print_example(md_file, key, module, example, index, example.get('tips', []))
 
-    if module.get('configuration', None):
-        configuration = module['configuration']
+    if configuration:
         table = "| Configuration | Description | Type | Required | Default Value |\n| --- | --- | --- | --- | --- |\n"
 
         for key, value in configuration.items():
@@ -271,8 +273,10 @@ def __print_example_container(md_file, key, module):
 
 
 def __print_example_header(md_file, key, frame):
+    description = frame.get_description()
+
     md_file += f"## {key}\n"
-    md_file += f"{frame['description']}\n"
+    md_file += f"{description}\n"
 
     return md_file
 
@@ -281,8 +285,10 @@ def __print_example(md_file, key, frame, example, index, tips=None):
     if tips is None:
         tips = []
 
+    description = frame.get_description()
+
     md_file += f"### Example: {example['name']}\n"
-    md_file += f"![{key} - {frame['description']} - Example {index}]({__EXAMPLES_OUTPUT_DIR}/{key}_example_{index}.gif)\n"
+    md_file += f"![{key} - {description} - Example {index}]({__EXAMPLES_OUTPUT_DIR}/{key}_example_{index}.gif)\n"
     md_file += f">{example['description']}\n\n"
     for tip in tips:
         md_file += f"> {tip}\n\n"
