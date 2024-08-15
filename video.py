@@ -13,7 +13,6 @@ from moviepy.editor import TextClip
 
 from videopy.hooks import Hooks
 from videopy.main import run_scenario
-from videopy.module import AbstractModuleDefinition
 from videopy.utils.file import get_file_extension
 from videopy.utils.loader import Loader
 from videopy.utils.logger import Logger, LoggerProvider
@@ -38,6 +37,8 @@ __H_FRAME_NAME = "Frame to show info about."
 __H_BLOCK_NAME = "Block to show info about."
 __H_EFFECT_NAME = "Effect to show info about."
 
+current_dir = os.path.dirname(__file__)
+absolute_path = os.path.abspath(current_dir)
 
 @app.command()
 def run(input_name: Annotated[str, typer.Option(help=__H_SCENARIO_NAME)] = None,
@@ -64,7 +65,7 @@ def scenarios(scenario_name: Annotated[str, typer.Argument(help=__H_SCENARIO_NAM
     hooks = Hooks()
     scenarios, file_loaders = {}, {}
 
-    Loader.load_plugins("plugins", hooks)
+    Loader.load_plugins(f"{absolute_path}/plugins", hooks)
     hooks.run_hook("videopy.modules.scenarios.register", scenarios)
     hooks.run_hook("videopy.modules.file_loaders.register", file_loaders)
 
@@ -75,7 +76,7 @@ def scenarios(scenario_name: Annotated[str, typer.Argument(help=__H_SCENARIO_NAM
 
         for key, value in scenarios.items():
             if file_loaders[get_file_extension(value['file_path'])]:
-                scenario_yml = file_loaders[get_file_extension(value['file_path'])](value['file_path'])
+                scenario_yml = file_loaders[get_file_extension(value['file_path'])](f"{absolute_path}/{value['file_path']}")
             else:
                 raise ValueError(f"File loader for extension [{get_file_extension(value)}] not found")
 
@@ -92,13 +93,13 @@ def frames(frame_name: Annotated[str, typer.Argument(help=__H_FRAME_NAME)] = Non
     frames = {}
 
     if frame_name is None:
-        Loader.load_plugins("plugins", hooks)
+        Loader.load_plugins(f"{absolute_path}/plugins", hooks)
         hooks.run_hook("videopy.modules.frames.register", frames)
 
         table = Table("Name", "Description", show_lines=True)
 
         for key, value in frames.items():
-            table.add_row(key, value['description'])
+            table.add_row(key, value.get_description())
 
         console.print(table)
     else:
@@ -111,13 +112,13 @@ def blocks(block_name: Annotated[str, typer.Argument(help=__H_BLOCK_NAME)] = Non
     blocks = {}
 
     if block_name is None:
-        Loader.load_plugins("plugins", hooks)
+        Loader.load_plugins(f"{absolute_path}/plugins", hooks)
         hooks.run_hook("videopy.modules.blocks.register", blocks)
 
         table = Table("Name", "Description", show_lines=True)
 
         for key, value in blocks.items():
-            table.add_row(key, value['description'])
+            table.add_row(key, value.get_description())
 
         console.print(table)
     else:
@@ -130,13 +131,13 @@ def effects(effect_name: Annotated[str, typer.Argument(help=__H_EFFECT_NAME)] = 
     effects = {}
 
     if effect_name is None:
-        Loader.load_plugins("plugins", hooks)
+        Loader.load_plugins(f"{absolute_path}/plugins", hooks)
         hooks.run_hook("videopy.modules.effects.register", effects)
 
         table = Table("Name", "Description", "Renders On", show_lines=True)
 
         for key, value in effects.items():
-            table.add_row(key, value['description'], ', '.join(value['renders_on']))
+            table.add_row(key, value.get_description(), ', '.join(value.get_renders_on()))
 
         console.print(table)
     else:
@@ -155,7 +156,7 @@ def helpers(helper_name: Annotated[str, typer.Argument(help="Helper to show info
             os.makedirs(__EXAMPLES_OUTPUT_DIR)
 
         hooks = Hooks()
-        Loader.load_plugins("plugins", hooks)
+        Loader.load_plugins(f"{absolute_path}/plugins", hooks)
         md_file = ""
 
         blocks, effects, frames, file_loaders, compilers, fields = {}, {}, {}, {}, {}, {}
@@ -217,10 +218,10 @@ def __display_configuration_table(module: str, concrete_module_name: str):
     hooks = Hooks()
     modules = {}
 
-    Loader.load_plugins("plugins", hooks)
+    Loader.load_plugins(f"{absolute_path}/plugins", hooks)
     hooks.run_hook(f"videopy.modules.{module}.register", modules)
 
-    if 'configuration' in modules[concrete_module_name]:
+    if modules[concrete_module_name].get_configuration():
         table = Table(
             "Configuration",
             "Description",
@@ -228,16 +229,17 @@ def __display_configuration_table(module: str, concrete_module_name: str):
             "Required",
             "Default Value",
             show_lines=True,
-            title=f"{concrete_module_name}: {modules[concrete_module_name]['description']}",
+            title=f"{concrete_module_name}: {modules[concrete_module_name].get_description()}",
             title_style="bold cyan"
         )
 
-        for key, value in modules[concrete_module_name]['configuration'].items():
+        for key, value in modules[concrete_module_name].get_configuration().items():
             default_value = str(value.get('default', 'None'))
             table.add_row(
                 key,
                 value['description'],
-                value['type'], "Yes" if value['required'] else "No",
+                value['type'],
+                "Yes" if value['required'] else "No",
                 default_value
             )
 

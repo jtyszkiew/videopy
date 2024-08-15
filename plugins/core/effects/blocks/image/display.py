@@ -69,12 +69,8 @@ class ImageDisplayEffectModuleDefinition(AbstractModuleDefinition):
     def get_examples():
         return [
             {
-                "name": "Write Effect On Text Block",
-                "description": "This is basic effect to display any text. It will write the text on the block.",
-                "tips": [
-                    "No configuration is accepted, as this effect inherits the configuration from "
-                    f"[{ImageDisplayEffectModuleDefinition.PLUGIN_PREFIX}.blocks.text](#{ImageDisplayEffectModuleDefinition.PLUGIN_PREFIX_INDEX}blockstext).",
-                ],
+                "name": "Display image on image block",
+                "description": "This is basic effect to display any image.",
                 "scenario": {
                     "width": 640, "height": 240, "fps": 24,
                     "frames": [
